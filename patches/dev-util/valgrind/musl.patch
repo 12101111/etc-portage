@@ -1,0 +1,23 @@
+From: Paul Floyd <pjfloyd@wanadoo.fr>
+Date: Sat, 20 Mar 2021 07:51:52 +0000 (+0100)
+Subject: Add musl.supp to SUPP_FILES
+X-Git-Url: https://sourceware.org/git/?p=valgrind.git;a=commitdiff_plain;h=dde556d51f8226a6de564a00bf82536bb7042c54;hp=997b3b5b96b09e78e5f5ce8e70f23a2df3df696d
+
+Add musl.supp to SUPP_FILES
+---
+
+diff --git a/Makefile.am b/Makefile.am
+index f8c3fc58d7..66848afaa0 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -49,7 +49,8 @@ SUPP_FILES = \
+ 	darwin11.supp darwin12.supp darwin13.supp darwin14.supp darwin15.supp \
+ 	darwin16.supp darwin17.supp \
+ 	bionic.supp \
+-	solaris11.supp solaris12.supp
++	solaris11.supp solaris12.supp \
++	musl.supp
+ DEFAULT_SUPP_FILES = @DEFAULT_SUPP@
+ 
+ # We include all the base .supp files in the distribution, but not
+

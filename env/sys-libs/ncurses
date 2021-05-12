@@ -1,0 +1,1 @@
+export cf_cv_ld_searchpath="/lib /usr/lib"

@@ -1,0 +1,6 @@
+CFLAGS="${CFLAGS} -g"
+CXXFLAGS="${CXXFLAGS} -g"
+RUSTFLAGS="${RUSTFLAGS} -g"
+#FEATURES="nostrip compressdebug splitdebug installsources"
+FEATURES="nostrip installsources"
+PORTAGE_TMPDIR="/usr/obj"

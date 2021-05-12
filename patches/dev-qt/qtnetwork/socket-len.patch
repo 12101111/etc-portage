@@ -1,0 +1,15 @@
+--- a/mkspecs/linux-clang/qplatformdefs.h	2020-03-27 17:49:31.000000000 +0800
++++ b/mkspecs/linux-clang/qplatformdefs.h	2020-04-18 16:25:00.587351733 +0800
+@@ -81,11 +81,7 @@
+
+ #undef QT_SOCKLEN_T
+
+-#if defined(__GLIBC__) && (__GLIBC__ >= 2)
+ #define QT_SOCKLEN_T            socklen_t
+-#else
+-#define QT_SOCKLEN_T            int
+-#endif
+
+ #if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE >= 500)
+ #define QT_SNPRINTF             ::snprintf
+

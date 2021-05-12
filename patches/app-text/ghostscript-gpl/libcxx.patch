@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index ebdad5f..fcc7d23 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -857,7 +857,7 @@ if test x$with_tesseract != xno; then
+     else
+ 
+       save_cxxflags="$CXXFLAGS"
+-      cxxflags_to_try="-std=c++17 -stdlib=libstdc++"
++      cxxflags_to_try="-std=c++17"
+       CXXFLAGS_TO_USE=""
+ 
+       AC_MSG_CHECKING([supported C++ compiler flags])

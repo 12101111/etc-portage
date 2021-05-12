@@ -1,0 +1,186 @@
+diff --git a/ell/cert.c b/ell/cert.c
+index 141ea1c..0e9e7d6 100644
+--- a/ell/cert.c
++++ b/ell/cert.c
+@@ -446,12 +446,18 @@ static struct l_key *cert_try_link(struct l_cert *cert, struct l_keyring *ring)
+ 		return false;	\
+ 	} while (0)
+ 
++static void cert_keyring_cleanup(struct l_keyring **p)
++{
++	l_keyring_free(*p);
++}
++
+ LIB_EXPORT bool l_certchain_verify(struct l_certchain *chain,
+ 					struct l_queue *ca_certs,
+ 					const char **error)
+ {
+ 	struct l_keyring *ca_ring = NULL;
+-	_auto_(l_keyring_free) struct l_keyring *verify_ring = NULL;
++	L_AUTO_CLEANUP_VAR(struct l_keyring *, verify_ring,
++			cert_keyring_cleanup) = NULL;
+ 	struct l_cert *cert;
+ 	struct l_key *prev_key = NULL;
+ 	int verified = 0;
+diff --git a/ell/log.h b/ell/log.h
+index 924523b..49ed50c 100644
+--- a/ell/log.h
++++ b/ell/log.h
+@@ -79,12 +79,9 @@ void l_debug_add_section(struct l_debug_desc *start,
+ 					struct l_debug_desc *end);
+ 
+ #define l_debug_enable(pattern) do { \
+-_Pragma("GCC diagnostic push") \
+-_Pragma("GCC diagnostic ignored \"-Wredundant-decls\"") \
+ 	extern struct l_debug_desc __start___ell_debug[]; \
+ 	extern struct l_debug_desc __stop___ell_debug[]; \
+ 	l_debug_enable_full(pattern, __start___ell_debug, __stop___ell_debug); \
+-_Pragma("GCC diagnostic pop") \
+ } while (0)
+ 
+ void l_debug_disable(void);
+diff --git a/ell/missing.h b/ell/missing.h
+index 2a3e647..b5b6f89 100644
+--- a/ell/missing.h
++++ b/ell/missing.h
+@@ -71,9 +71,6 @@ static inline void explicit_bzero(void *s, size_t n)
+ #ifndef HAVE_RAWMEMCHR
+ static inline void *rawmemchr(const void *s, int c)
+ {
+-_Pragma("GCC diagnostic push")
+-_Pragma("GCC diagnostic ignored \"-Wstringop-overflow=\"")
+ 	return memchr(s, c, (size_t) -1);
+-_Pragma("GCC diagnostic pop")
+ }
+ #endif
+diff --git a/ell/tls.c b/ell/tls.c
+index c246f1f..7148aab 100644
+--- a/ell/tls.c
++++ b/ell/tls.c
+@@ -1888,11 +1888,15 @@ decode_error:
+ 			"ServerHello decode error");
+ }
+ 
++void l_certchain_cleanup(void *ptr) {
++	l_certchain_free(*(void **) ptr);
++}
++
+ static void tls_handle_certificate(struct l_tls *tls,
+ 					const uint8_t *buf, size_t len)
+ {
+ 	size_t total;
+-	_auto_(l_certchain_free) struct l_certchain *certchain = NULL;
++	L_AUTO_CLEANUP_VAR(struct l_certchain *, certchain, l_certchain_cleanup) = NULL;
+ 	struct l_cert *leaf;
+ 	size_t der_len;
+ 	const uint8_t *der;
+diff --git a/ell/useful.h b/ell/useful.h
+index 6de57de..cbb0e4a 100644
+--- a/ell/useful.h
++++ b/ell/useful.h
+@@ -51,14 +51,3 @@ static inline unsigned char bit_field(const unsigned char oct,
+ 	unsigned char mask = (1U << n_bits) - 1U;
+ 	return (oct >> start) & mask;
+ }
+-
+-#define __AUTODESTRUCT(var, func)			\
+-	void cleanup_ ## var(void *ptr)			\
+-	{ func(*(void **) ptr); }			\
+-	__attribute((cleanup(cleanup_ ## var)))
+-
+-#define _AUTODESTRUCT(var, func)			\
+-	__AUTODESTRUCT(var, func)
+-
+-#define _auto_(func)					\
+-	_AUTODESTRUCT(__COUNTER__, func)
+diff --git a/ell/util.h b/ell/util.h
+index bdf6935..6f811c8 100644
+--- a/ell/util.h
++++ b/ell/util.h
+@@ -36,11 +36,8 @@ extern "C" {
+ #endif
+ 
+ #define l_container_of(ptr, type, member) ({				\
+-_Pragma("GCC diagnostic push")						\
+-_Pragma("GCC diagnostic ignored \"-Wcast-align\"")			\
+ 		const __typeof__(((type *) 0)->member) *__mptr = (ptr);	\
+ 		(type *)((char *) __mptr - offsetof(type, member));	\
+-_Pragma("GCC diagnostic pop")						\
+ 	})
+ 
+ #define L_STRINGIFY(val) L_STRINGIFY_ARG(val)
+@@ -226,6 +223,9 @@ static inline void l_put_be64(uint64_t val, void *ptr)
+ 	L_PUT_UNALIGNED(L_CPU_TO_BE64(val), (uint64_t *) ptr);
+ }
+ 
++#define L_AUTO_CLEANUP_VAR(vartype,varname,destroy) \
++	vartype varname __attribute__((cleanup(destroy)))
++
+ #define L_AUTO_FREE_VAR(vartype,varname) \
+ 	vartype varname __attribute__((cleanup(auto_free)))
+ 
+diff --git a/src/ap.c b/src/ap.c
+index a0420ed..f564627 100644
+--- a/src/ap.c
++++ b/src/ap.c
+@@ -3295,13 +3295,17 @@ static struct l_dbus_message *ap_dbus_stop(struct l_dbus *dbus,
+ 	return NULL;
+ }
+ 
++void l_settings_cleanup(void *ptr) {
++	l_settings_free(*(void **) ptr);
++}
++
+ static struct l_dbus_message *ap_dbus_start_profile(struct l_dbus *dbus,
+ 						struct l_dbus_message *message,
+ 						void *user_data)
+ {
+ 	struct ap_if_data *ap_if = user_data;
+ 	const char *ssid;
+-	_auto_(l_settings_free) struct l_settings *config = NULL;
++	L_AUTO_CLEANUP_VAR(struct l_settings *, config, l_settings_cleanup) = NULL;
+ 	char *config_path;
+ 	int err;
+ 
+diff --git a/src/missing.h b/src/missing.h
+index 2cc80ae..cdbc727 100644
+--- a/src/missing.h
++++ b/src/missing.h
+@@ -31,9 +31,6 @@ static inline void explicit_bzero(void *s, size_t n)
+ #ifndef HAVE_RAWMEMCHR
+ static inline void *rawmemchr(const void *s, int c)
+ {
+-_Pragma("GCC diagnostic push")
+-_Pragma("GCC diagnostic ignored \"-Wstringop-overflow=\"")
+ 	return memchr(s, c, (size_t) -1);
+-_Pragma("GCC diagnostic pop")
+ }
+ #endif
+diff --git a/src/network.c b/src/network.c
+index 5bd5777..b339ea3 100644
+--- a/src/network.c
++++ b/src/network.c
+@@ -373,6 +373,10 @@ static bool network_set_8021x_secrets(struct network *network)
+ 	return true;
+ }
+ 
++void l_cleanup(void *ptr) {
++	l_free(*(void **) ptr);
++}
++
+ static int network_load_psk(struct network *network, bool need_passphrase)
+ {
+ 	const char *ssid = network_get_ssid(network);
+@@ -380,10 +384,10 @@ static int network_load_psk(struct network *network, bool need_passphrase)
+ 	size_t psk_len;
+ 	uint8_t *psk = l_settings_get_bytes(network->settings, "Security",
+ 						"PreSharedKey", &psk_len);
+-	_auto_(l_free) char *passphrase =
++	L_AUTO_CLEANUP_VAR(char *, passphrase, l_cleanup) =
+ 			l_settings_get_string(network->settings,
+ 						"Security", "Passphrase");
+-	_auto_(l_free) char *path =
++	L_AUTO_CLEANUP_VAR(char *, path, l_cleanup) =
+ 		storage_get_network_file_path(security, ssid);
+ 	int r;
+ 

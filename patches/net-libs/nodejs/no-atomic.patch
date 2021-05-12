@@ -1,0 +1,13 @@
+diff --git a/node.gyp b/node.gyp
+index acae34fa..8798b9a6 100644
+--- a/node.gyp
++++ b/node.gyp
+@@ -353,9 +353,6 @@
+           '-Wl,-bnoerrmsg',
+         ],
+       }],
+-      ['OS == "linux" and llvm_version != "0.0"', {
+-        'libraries': ['-latomic'],
+-      }],
+     ],
+   },

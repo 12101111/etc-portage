@@ -1,0 +1,13 @@
+diff --git a/xargs/xargs.c b/xargs/xargs.c
+index 824e9f0..7f2b760 100644
+--- a/xargs/xargs.c
++++ b/xargs/xargs.c
+@@ -498,7 +498,7 @@ main (int argc, char **argv)
+        * conforms to the POSIX requirement that the default command
+        * line length shall be at least LINE_MAX.
+        */
+-      assert (bc_ctl.arg_max >= LINE_MAX);
++      //assert (bc_ctl.arg_max >= LINE_MAX);
+ #endif
+ 
+       bc_ctl.exec_callback = xargs_do_exec;

@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index dafe1e2..b52592a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1238,7 +1238,7 @@ if test "x$backtrace_method" = "x" -a "x$enable_prof_libgcc" = "x1" \
+      -a "x$GCC" = "xyes" ; then
+   AC_CHECK_HEADERS([unwind.h], , [enable_prof_libgcc="0"])
+   if test "x${enable_prof_libgcc}" = "x1" ; then
+-    AC_CHECK_LIB([gcc], [_Unwind_Backtrace], [JE_APPEND_VS(LIBS, -lgcc)], [enable_prof_libgcc="0"])
++    AC_CHECK_LIB([unwind], [_Unwind_Backtrace], [JE_APPEND_VS(LIBS, -lunwind)], [enable_prof_libgcc="0"])
+   fi
+   if test "x${enable_prof_libgcc}" = "x1" ; then
+     backtrace_method="libgcc"

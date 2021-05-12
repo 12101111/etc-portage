@@ -1,0 +1,5 @@
+sys-devel/llvm
+dev-util/lldb
+sys-devel/lld
+sys-devel/clang
+dev-lang/rust

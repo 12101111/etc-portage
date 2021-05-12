@@ -1,0 +1,9 @@
+COMMON_FLAGS="-march=skylake -mtune=skylake -O1 -pipe -g"
+CFLAGS="${COMMON_FLAGS}"
+CXXFLAGS="${COMMON_FLAGS} -stdlib=libc++"
+RUSTFLAGS="-Ctarget-feature=-crt-static"
+LDFLAGS="-fuse-ld=lld -rtlib=compiler-rt -unwindlib=libunwind \
+-march=skylake -mtune=skylake"
+FEATURES="installsources nostrip"
+#FEATURES="installsources splitdebug compressdebug"
+PORTAGE_TMPDIR="/usr/obj"

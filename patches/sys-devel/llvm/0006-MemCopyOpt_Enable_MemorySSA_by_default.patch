@@ -1,0 +1,461 @@
+From 260f83aefa0d5dadb04d1348d09037f49fc8fbf5 Mon Sep 17 00:00:00 2001
+From: Nikita Popov <nikita.ppv@gmail.com>
+Date: Sun, 10 Jan 2021 10:52:01 +0100
+Subject: [PATCH] [MemCopyOpt] Enable MemorySSA by default
+
+This enables use of MemorySSA instead of MemDep in MemCpyOpt. To
+allow this without significant compile-time impact, the MemCpyOpt
+pass is moved directly before DSE (in the cases where this was not
+already the case), which allows us to reuse the existing MemorySSA
+analysis.
+
+Unlike the MemDep-based implementation, the MemorySSA-based MemCpyOpt
+can also perform simple optimizations across basic blocks.
+
+Differential Revision: https://reviews.llvm.org/D94376
+
+(cherry picked from commit 71a8e4e7d6b947c8b954ec0763ff7969b3879d7b)
+---
+ .../test/CodeGen/thinlto-distributed-newpm.ll |  4 +---
+ llvm/lib/Passes/PassBuilder.cpp               |  6 ++---
+ .../lib/Transforms/IPO/PassManagerBuilder.cpp |  2 +-
+ .../lib/Transforms/Scalar/MemCpyOptimizer.cpp |  2 +-
+ .../test/Analysis/BasicAA/phi-values-usage.ll |  4 ++--
+ llvm/test/CodeGen/AMDGPU/opt-pipeline.ll      | 22 +++++++------------
+ llvm/test/Other/new-pm-defaults.ll            |  5 ++---
+ llvm/test/Other/new-pm-lto-defaults.ll        |  2 +-
+ llvm/test/Other/new-pm-thinlto-defaults.ll    |  5 ++---
+ .../new-pm-thinlto-postlink-pgo-defaults.ll   |  5 ++---
+ ...-pm-thinlto-postlink-samplepgo-defaults.ll |  5 ++---
+ .../new-pm-thinlto-prelink-pgo-defaults.ll    |  5 ++---
+ ...w-pm-thinlto-prelink-samplepgo-defaults.ll |  5 ++---
+ llvm/test/Other/opt-LTO-pipeline.ll           |  2 --
+ llvm/test/Other/opt-O2-pipeline.ll            |  7 ++----
+ .../Other/opt-O3-pipeline-enable-matrix.ll    |  7 ++----
+ llvm/test/Other/opt-O3-pipeline.ll            |  7 ++----
+ llvm/test/Other/opt-Os-pipeline.ll            |  7 ++----
+ 18 files changed, 37 insertions(+), 65 deletions(-)
+
+diff --git a/llvm/lib/Passes/PassBuilder.cpp b/llvm/lib/Passes/PassBuilder.cpp
+index 6c1a7c75d30a..1ecb0eb004d9 100644
+--- a/llvm/lib/Passes/PassBuilder.cpp
++++ b/llvm/lib/Passes/PassBuilder.cpp
+@@ -776,9 +776,6 @@ PassBuilder::buildFunctionSimplificationPipeline(OptimizationLevel Level,
+   else
+     FPM.addPass(GVN());
+ 
+-  // Specially optimize memory movement as it doesn't look like dataflow in SSA.
+-  FPM.addPass(MemCpyOptPass());
+-
+   // Sparse conditional constant propagation.
+   // FIXME: It isn't clear why we do this *after* loop passes rather than
+   // before...
+@@ -804,6 +801,9 @@ PassBuilder::buildFunctionSimplificationPipeline(OptimizationLevel Level,
+   // TODO: Investigate if this is too expensive.
+   FPM.addPass(ADCEPass());
+ 
++  // Specially optimize memory movement as it doesn't look like dataflow in SSA.
++  FPM.addPass(MemCpyOptPass());
++
+   FPM.addPass(DSEPass());
+   FPM.addPass(createFunctionToLoopPassAdaptor(
+       LICMPass(PTO.LicmMssaOptCap, PTO.LicmMssaNoAccForPromotionCap),
+diff --git a/llvm/lib/Transforms/IPO/PassManagerBuilder.cpp b/llvm/lib/Transforms/IPO/PassManagerBuilder.cpp
+index 068328391dff..269b82eba7ad 100644
+--- a/llvm/lib/Transforms/IPO/PassManagerBuilder.cpp
++++ b/llvm/lib/Transforms/IPO/PassManagerBuilder.cpp
+@@ -472,7 +472,6 @@ void PassManagerBuilder::addFunctionSimplificationPasses(
+     MPM.add(NewGVN ? createNewGVNPass()
+                    : createGVNPass(DisableGVNLoadPRE)); // Remove redundancies
+   }
+-  MPM.add(createMemCpyOptPass());             // Remove memcpy / form memset
+   MPM.add(createSCCPPass());                  // Constant prop with SCCP
+ 
+   if (EnableConstraintElimination)
+@@ -493,6 +492,7 @@ void PassManagerBuilder::addFunctionSimplificationPasses(
+   }
+   MPM.add(createAggressiveDCEPass()); // Delete dead instructions
+ 
++  MPM.add(createMemCpyOptPass());               // Remove memcpy / form memset
+   // TODO: Investigate if this is too expensive at O1.
+   if (OptLevel > 1) {
+     MPM.add(createDeadStoreEliminationPass());  // Delete dead stores
+diff --git a/llvm/lib/Transforms/Scalar/MemCpyOptimizer.cpp b/llvm/lib/Transforms/Scalar/MemCpyOptimizer.cpp
+index d2d9140ef3eb..da4513535542 100644
+--- a/llvm/lib/Transforms/Scalar/MemCpyOptimizer.cpp
++++ b/llvm/lib/Transforms/Scalar/MemCpyOptimizer.cpp
+@@ -68,7 +68,7 @@ using namespace llvm;
+ #define DEBUG_TYPE "memcpyopt"
+ 
+ static cl::opt<bool>
+-    EnableMemorySSA("enable-memcpyopt-memoryssa", cl::init(false), cl::Hidden,
++    EnableMemorySSA("enable-memcpyopt-memoryssa", cl::init(true), cl::Hidden,
+                     cl::desc("Use MemorySSA-backed MemCpyOpt."));
+ 
+ STATISTIC(NumMemCpyInstr, "Number of memcpy instructions deleted");
+diff --git a/llvm/test/Analysis/BasicAA/phi-values-usage.ll b/llvm/test/Analysis/BasicAA/phi-values-usage.ll
+index 8d7f5e46c9ea..79f699a8f8a4 100644
+--- a/llvm/test/Analysis/BasicAA/phi-values-usage.ll
++++ b/llvm/test/Analysis/BasicAA/phi-values-usage.ll
+@@ -1,6 +1,6 @@
+-; RUN: opt -debug-pass=Executions -phi-values -memcpyopt -instcombine -disable-output < %s -enable-new-pm=0 2>&1 | FileCheck %s -check-prefixes=CHECK,CHECK-MEMCPY
++; RUN: opt -debug-pass=Executions -phi-values -memcpyopt -instcombine -disable-output < %s -enable-new-pm=0 -enable-memcpyopt-memoryssa=0 2>&1 | FileCheck %s -check-prefixes=CHECK,CHECK-MEMCPY
+ ; RUN: opt -debug-pass=Executions -memdep -instcombine -disable-output < %s -enable-new-pm=0 2>&1 | FileCheck %s -check-prefix=CHECK
+-; RUN: opt -debug-pass-manager -aa-pipeline=basic-aa -passes=memcpyopt,instcombine -disable-output < %s 2>&1 | FileCheck %s -check-prefixes=NPM
++; RUN: opt -debug-pass-manager -aa-pipeline=basic-aa -passes=memcpyopt,instcombine -disable-output -enable-memcpyopt-memoryssa=0 < %s 2>&1 | FileCheck %s -check-prefixes=NPM
+ 
+ ; Check that phi values is not run when it's not already available, and that
+ ; basicaa is not freed after a pass that preserves CFG, as it preserves CFG.
+diff --git a/llvm/test/CodeGen/AMDGPU/opt-pipeline.ll b/llvm/test/CodeGen/AMDGPU/opt-pipeline.ll
+index 54f6ac172936..f828484c8315 100644
+--- a/llvm/test/CodeGen/AMDGPU/opt-pipeline.ll
++++ b/llvm/test/CodeGen/AMDGPU/opt-pipeline.ll
+@@ -168,10 +168,6 @@
+ ; GCN-O1-NEXT:         Delete dead loops
+ ; GCN-O1-NEXT:         Unroll loops
+ ; GCN-O1-NEXT:       SROA
+-; GCN-O1-NEXT:       Phi Values Analysis
+-; GCN-O1-NEXT:       Function Alias Analysis Results
+-; GCN-O1-NEXT:       Memory Dependence Analysis
+-; GCN-O1-NEXT:       MemCpy Optimization
+ ; GCN-O1-NEXT:       Sparse Conditional Constant Propagation
+ ; GCN-O1-NEXT:       Demanded bits analysis
+ ; GCN-O1-NEXT:       Bit-Tracking Dead Code Elimination
+@@ -182,6 +178,10 @@
+ ; GCN-O1-NEXT:       Combine redundant instructions
+ ; GCN-O1-NEXT:       Post-Dominator Tree Construction
+ ; GCN-O1-NEXT:       Aggressive Dead Code Elimination
++; GCN-O1-NEXT:       Basic Alias Analysis (stateless AA impl)
++; GCN-O1-NEXT:       Function Alias Analysis Results
++; GCN-O1-NEXT:       Memory SSA
++; GCN-O1-NEXT:       MemCpy Optimization
+ ; GCN-O1-NEXT:       Simplify the CFG
+ ; GCN-O1-NEXT:       Dominator Tree Construction
+ ; GCN-O1-NEXT:       Basic Alias Analysis (stateless AA impl)
+@@ -501,14 +501,10 @@
+ ; GCN-O2-NEXT:       Lazy Block Frequency Analysis
+ ; GCN-O2-NEXT:       Optimization Remark Emitter
+ ; GCN-O2-NEXT:       Global Value Numbering
+-; GCN-O2-NEXT:       Phi Values Analysis
+-; GCN-O2-NEXT:       Basic Alias Analysis (stateless AA impl)
+-; GCN-O2-NEXT:       Function Alias Analysis Results
+-; GCN-O2-NEXT:       Memory Dependence Analysis
+-; GCN-O2-NEXT:       MemCpy Optimization
+ ; GCN-O2-NEXT:       Sparse Conditional Constant Propagation
+ ; GCN-O2-NEXT:       Demanded bits analysis
+ ; GCN-O2-NEXT:       Bit-Tracking Dead Code Elimination
++; GCN-O2-NEXT:       Basic Alias Analysis (stateless AA impl)
+ ; GCN-O2-NEXT:       Function Alias Analysis Results
+ ; GCN-O2-NEXT:       Lazy Branch Probability Analysis
+ ; GCN-O2-NEXT:       Lazy Block Frequency Analysis
+@@ -522,6 +518,7 @@
+ ; GCN-O2-NEXT:       Basic Alias Analysis (stateless AA impl)
+ ; GCN-O2-NEXT:       Function Alias Analysis Results
+ ; GCN-O2-NEXT:       Memory SSA
++; GCN-O2-NEXT:       MemCpy Optimization
+ ; GCN-O2-NEXT:       Dead Store Elimination
+ ; GCN-O2-NEXT:       Natural Loop Information
+ ; GCN-O2-NEXT:       Canonicalize natural loops
+@@ -865,14 +862,10 @@
+ ; GCN-O3-NEXT:       Lazy Block Frequency Analysis
+ ; GCN-O3-NEXT:       Optimization Remark Emitter
+ ; GCN-O3-NEXT:       Global Value Numbering
+-; GCN-O3-NEXT:       Phi Values Analysis
+-; GCN-O3-NEXT:       Basic Alias Analysis (stateless AA impl)
+-; GCN-O3-NEXT:       Function Alias Analysis Results
+-; GCN-O3-NEXT:       Memory Dependence Analysis
+-; GCN-O3-NEXT:       MemCpy Optimization
+ ; GCN-O3-NEXT:       Sparse Conditional Constant Propagation
+ ; GCN-O3-NEXT:       Demanded bits analysis
+ ; GCN-O3-NEXT:       Bit-Tracking Dead Code Elimination
++; GCN-O3-NEXT:       Basic Alias Analysis (stateless AA impl)
+ ; GCN-O3-NEXT:       Function Alias Analysis Results
+ ; GCN-O3-NEXT:       Lazy Branch Probability Analysis
+ ; GCN-O3-NEXT:       Lazy Block Frequency Analysis
+@@ -886,6 +879,7 @@
+ ; GCN-O3-NEXT:       Basic Alias Analysis (stateless AA impl)
+ ; GCN-O3-NEXT:       Function Alias Analysis Results
+ ; GCN-O3-NEXT:       Memory SSA
++; GCN-O3-NEXT:       MemCpy Optimization
+ ; GCN-O3-NEXT:       Dead Store Elimination
+ ; GCN-O3-NEXT:       Natural Loop Information
+ ; GCN-O3-NEXT:       Canonicalize natural loops
+diff --git a/llvm/test/Other/new-pm-defaults.ll b/llvm/test/Other/new-pm-defaults.ll
+index 28c14e1c39aa..01b02b8fd482 100644
+--- a/llvm/test/Other/new-pm-defaults.ll
++++ b/llvm/test/Other/new-pm-defaults.ll
+@@ -179,9 +179,7 @@
+ ; CHECK-O23SZ-NEXT: Running pass: GVN
+ ; CHECK-O23SZ-NEXT: Running analysis: MemoryDependenceAnalysis
+ ; CHECK-O23SZ-NEXT: Running analysis: PhiValuesAnalysis
+-; CHECK-O-NEXT: Running pass: MemCpyOptPass
+-; CHECK-O1-NEXT: Running analysis: MemoryDependenceAnalysis
+-; CHECK-O1-NEXT: Running analysis: PhiValuesAnalysis
++; CHECK-O1-NEXT: Running pass: MemCpyOptPass
+ ; CHECK-O-NEXT: Running pass: SCCPPass
+ ; CHECK-O-NEXT: Running pass: BDCEPass
+ ; CHECK-O-NEXT: Running analysis: DemandedBitsAnalysis
+@@ -193,6 +191,7 @@
+ ; CHECK-O23SZ-NEXT: Invalidating analysis: LazyValueAnalysis
+ ; CHECK-O-NEXT: Running pass: ADCEPass
+ ; CHECK-O-NEXT: Running analysis: PostDominatorTreeAnalysis
++; CHECK-O23SZ-NEXT: Running pass: MemCpyOptPass
+ ; CHECK-O23SZ-NEXT: Running pass: DSEPass
+ ; CHECK-O23SZ-NEXT: Starting llvm::Function pass manager run.
+ ; CHECK-O23SZ-NEXT: Running pass: LoopSimplifyPass
+diff --git a/llvm/test/Other/new-pm-lto-defaults.ll b/llvm/test/Other/new-pm-lto-defaults.ll
+index bf27ca9100b1..9dfd0ec55b72 100644
+--- a/llvm/test/Other/new-pm-lto-defaults.ll
++++ b/llvm/test/Other/new-pm-lto-defaults.ll
+@@ -92,8 +92,8 @@
+ ; CHECK-O2-NEXT: Running analysis: MemoryDependenceAnalysis
+ ; CHECK-O2-NEXT: Running analysis: PhiValuesAnalysis
+ ; CHECK-O2-NEXT: Running pass: MemCpyOptPass on foo
+-; CHECK-O2-NEXT: Running pass: DSEPass on foo
+ ; CHECK-O2-NEXT: Running analysis: MemorySSAAnalysis on foo
++; CHECK-O2-NEXT: Running pass: DSEPass on foo
+ ; CHECK-O2-NEXT: Running analysis: PostDominatorTreeAnalysis on foo
+ ; CHECK-O2-NEXT: Running pass: InstCombinePass on foo
+ ; CHECK-O2-NEXT: Running pass: SimplifyCFGPass on foo
+diff --git a/llvm/test/Other/new-pm-thinlto-defaults.ll b/llvm/test/Other/new-pm-thinlto-defaults.ll
+index 881bc6d1fbac..fbf47de87eeb 100644
+--- a/llvm/test/Other/new-pm-thinlto-defaults.ll
++++ b/llvm/test/Other/new-pm-thinlto-defaults.ll
+@@ -172,9 +172,7 @@
+ ; CHECK-O3-NEXT: Running pass: GVN
+ ; CHECK-O3-NEXT: Running analysis: MemoryDependenceAnalysis
+ ; CHECK-O3-NEXT: Running analysis: PhiValuesAnalysis
+-; CHECK-O-NEXT: Running pass: MemCpyOptPass
+-; CHECK-O1-NEXT: Running analysis: MemoryDependenceAnalysis
+-; CHECK-O1-NEXT: Running analysis: PhiValuesAnalysis
++; CHECK-O1-NEXT: Running pass: MemCpyOptPass
+ ; CHECK-O-NEXT: Running pass: SCCPPass
+ ; CHECK-O-NEXT: Running pass: BDCEPass
+ ; CHECK-O-NEXT: Running analysis: DemandedBitsAnalysis
+@@ -185,6 +183,7 @@
+ ; CHECK-O23SZ-NEXT: Invalidating analysis: LazyValueAnalysis
+ ; CHECK-O-NEXT: Running pass: ADCEPass
+ ; CHECK-O-NEXT: Running analysis: PostDominatorTreeAnalysis
++; CHECK-O23SZ-NEXT: Running pass: MemCpyOptPass
+ ; CHECK-O23SZ-NEXT: Running pass: DSEPass
+ ; CHECK-O23SZ-NEXT: Starting llvm::Function pass manager run
+ ; CHECK-O23SZ-NEXT: Running pass: LoopSimplifyPass
+diff --git a/llvm/test/Other/new-pm-thinlto-postlink-pgo-defaults.ll b/llvm/test/Other/new-pm-thinlto-postlink-pgo-defaults.ll
+index bcc9ea69eec2..4bcf70e15a5b 100644
+--- a/llvm/test/Other/new-pm-thinlto-postlink-pgo-defaults.ll
++++ b/llvm/test/Other/new-pm-thinlto-postlink-pgo-defaults.ll
+@@ -145,9 +145,7 @@
+ ; CHECK-O3-NEXT: Running pass: GVN
+ ; CHECK-O3-NEXT: Running analysis: MemoryDependenceAnalysis
+ ; CHECK-O3-NEXT: Running analysis: PhiValuesAnalysis
+-; CHECK-O-NEXT: Running pass: MemCpyOptPass
+-; CHECK-O1-NEXT: Running analysis: MemoryDependenceAnalysis
+-; CHECK-O1-NEXT: Running analysis: PhiValuesAnalysis
++; CHECK-O1-NEXT: Running pass: MemCpyOptPass
+ ; CHECK-O-NEXT: Running pass: SCCPPass
+ ; CHECK-O-NEXT: Running pass: BDCEPass
+ ; CHECK-O-NEXT: Running analysis: DemandedBitsAnalysis
+@@ -157,6 +155,7 @@
+ ; CHECK-O23SZ-NEXT: Running pass: CorrelatedValuePropagationPass
+ ; CHECK-O23SZ-NEXT: Invalidating analysis: LazyValueAnalysis
+ ; CHECK-O-NEXT: Running pass: ADCEPass
++; CHECK-O23SZ-NEXT: Running pass: MemCpyOptPass
+ ; CHECK-O23SZ-NEXT: Running pass: DSEPass
+ ; CHECK-O23SZ-NEXT: Starting {{.*}}Function pass manager run
+ ; CHECK-O23SZ-NEXT: Running pass: LoopSimplifyPass
+diff --git a/llvm/test/Other/new-pm-thinlto-postlink-samplepgo-defaults.ll b/llvm/test/Other/new-pm-thinlto-postlink-samplepgo-defaults.ll
+index dd5ed8b15239..1071d28432b9 100644
+--- a/llvm/test/Other/new-pm-thinlto-postlink-samplepgo-defaults.ll
++++ b/llvm/test/Other/new-pm-thinlto-postlink-samplepgo-defaults.ll
+@@ -154,9 +154,7 @@
+ ; CHECK-O3-NEXT: Running pass: GVN
+ ; CHECK-O3-NEXT: Running analysis: MemoryDependenceAnalysis
+ ; CHECK-O3-NEXT: Running analysis: PhiValuesAnalysis
+-; CHECK-O-NEXT: Running pass: MemCpyOptPass
+-; CHECK-O1-NEXT: Running analysis: MemoryDependenceAnalysis
+-; CHECK-O1-NEXT: Running analysis: PhiValuesAnalysis
++; CHECK-O1-NEXT: Running pass: MemCpyOptPass
+ ; CHECK-O-NEXT: Running pass: SCCPPass
+ ; CHECK-O-NEXT: Running pass: BDCEPass
+ ; CHECK-O-NEXT: Running analysis: DemandedBitsAnalysis
+@@ -166,6 +164,7 @@
+ ; CHECK-O23SZ-NEXT: Running pass: CorrelatedValuePropagationPass
+ ; CHECK-O23SZ-NEXT: Invalidating analysis: LazyValueAnalysis
+ ; CHECK-O-NEXT: Running pass: ADCEPass
++; CHECK-O23SZ-NEXT: Running pass: MemCpyOptPass
+ ; CHECK-O23SZ-NEXT: Running pass: DSEPass
+ ; CHECK-O23SZ-NEXT: Starting {{.*}}Function pass manager run
+ ; CHECK-O23SZ-NEXT: Running pass: LoopSimplifyPass
+diff --git a/llvm/test/Other/new-pm-thinlto-prelink-pgo-defaults.ll b/llvm/test/Other/new-pm-thinlto-prelink-pgo-defaults.ll
+index 0d6e78636d3e..e2f1385cf52b 100644
+--- a/llvm/test/Other/new-pm-thinlto-prelink-pgo-defaults.ll
++++ b/llvm/test/Other/new-pm-thinlto-prelink-pgo-defaults.ll
+@@ -191,9 +191,7 @@
+ ; CHECK-O3-NEXT: Running pass: GVN
+ ; CHECK-O3-NEXT: Running analysis: MemoryDependenceAnalysis
+ ; CHECK-O3-NEXT: Running analysis: PhiValuesAnalysis
+-; CHECK-O-NEXT: Running pass: MemCpyOptPass
+-; CHECK-O1-NEXT: Running analysis: MemoryDependenceAnalysis
+-; CHECK-O1-NEXT: Running analysis: PhiValuesAnalysis
++; CHECK-O1-NEXT: Running pass: MemCpyOptPass
+ ; CHECK-O-NEXT: Running pass: SCCPPass
+ ; CHECK-O-NEXT: Running pass: BDCEPass
+ ; CHECK-O-NEXT: Running analysis: DemandedBitsAnalysis
+@@ -203,6 +201,7 @@
+ ; CHECK-O23SZ-NEXT: Running pass: CorrelatedValuePropagationPass
+ ; CHECK-O23SZ-NEXT: Invalidating analysis: LazyValueAnalysis
+ ; CHECK-O-NEXT: Running pass: ADCEPass
++; CHECK-O23SZ-NEXT: Running pass: MemCpyOptPass
+ ; CHECK-O23SZ-NEXT: Running pass: DSEPass
+ ; CHECK-O23SZ-NEXT: Starting {{.*}}Function pass manager run
+ ; CHECK-O23SZ-NEXT: Running pass: LoopSimplifyPass
+diff --git a/llvm/test/Other/new-pm-thinlto-prelink-samplepgo-defaults.ll b/llvm/test/Other/new-pm-thinlto-prelink-samplepgo-defaults.ll
+index 88b6d7ad30a8..d4dc552aea01 100644
+--- a/llvm/test/Other/new-pm-thinlto-prelink-samplepgo-defaults.ll
++++ b/llvm/test/Other/new-pm-thinlto-prelink-samplepgo-defaults.ll
+@@ -148,9 +148,7 @@
+ ; CHECK-O3-NEXT: Running pass: GVN
+ ; CHECK-O3-NEXT: Running analysis: MemoryDependenceAnalysis
+ ; CHECK-O3-NEXT: Running analysis: PhiValuesAnalysis
+-; CHECK-O-NEXT: Running pass: MemCpyOptPass
+-; CHECK-O1-NEXT: Running analysis: MemoryDependenceAnalysis
+-; CHECK-O1-NEXT: Running analysis: PhiValuesAnalysis
++; CHECK-O1-NEXT: Running pass: MemCpyOptPass
+ ; CHECK-O-NEXT: Running pass: SCCPPass
+ ; CHECK-O-NEXT: Running pass: BDCEPass
+ ; CHECK-O-NEXT: Running analysis: DemandedBitsAnalysis
+@@ -160,6 +158,7 @@
+ ; CHECK-O23SZ-NEXT: Running pass: CorrelatedValuePropagationPass
+ ; CHECK-O23SZ-NEXT: Invalidating analysis: LazyValueAnalysis
+ ; CHECK-O-NEXT: Running pass: ADCEPass
++; CHECK-O23SZ-NEXT: Running pass: MemCpyOptPass
+ ; CHECK-O23SZ-NEXT: Running pass: DSEPass
+ ; CHECK-O23SZ-NEXT: Starting {{.*}}Function pass manager run
+ ; CHECK-O23SZ-NEXT: Running pass: LoopSimplifyPass
+diff --git a/llvm/test/Other/opt-LTO-pipeline.ll b/llvm/test/Other/opt-LTO-pipeline.ll
+index 14f6329b2540..32b983ee99d5 100644
+--- a/llvm/test/Other/opt-LTO-pipeline.ll
++++ b/llvm/test/Other/opt-LTO-pipeline.ll
+@@ -110,10 +110,8 @@
+ ; CHECK-NEXT:       Memory Dependence Analysis
+ ; CHECK-NEXT:       Optimization Remark Emitter
+ ; CHECK-NEXT:       Global Value Numbering
+-; CHECK-NEXT:       Phi Values Analysis
+ ; CHECK-NEXT:       Basic Alias Analysis (stateless AA impl)
+ ; CHECK-NEXT:       Function Alias Analysis Results
+-; CHECK-NEXT:       Memory Dependence Analysis
+ ; CHECK-NEXT:       MemCpy Optimization
+ ; CHECK-NEXT:       Post-Dominator Tree Construction
+ ; CHECK-NEXT:       Dead Store Elimination
+diff --git a/llvm/test/Other/opt-O2-pipeline.ll b/llvm/test/Other/opt-O2-pipeline.ll
+index 7d7934e6e4ab..9fea823d45d5 100644
+--- a/llvm/test/Other/opt-O2-pipeline.ll
++++ b/llvm/test/Other/opt-O2-pipeline.ll
+@@ -145,14 +145,10 @@
+ ; CHECK-NEXT:         Lazy Block Frequency Analysis
+ ; CHECK-NEXT:         Optimization Remark Emitter
+ ; CHECK-NEXT:         Global Value Numbering
+-; CHECK-NEXT:         Phi Values Analysis
+-; CHECK-NEXT:         Basic Alias Analysis (stateless AA impl)
+-; CHECK-NEXT:         Function Alias Analysis Results
+-; CHECK-NEXT:         Memory Dependence Analysis
+-; CHECK-NEXT:         MemCpy Optimization
+ ; CHECK-NEXT:         Sparse Conditional Constant Propagation
+ ; CHECK-NEXT:         Demanded bits analysis
+ ; CHECK-NEXT:         Bit-Tracking Dead Code Elimination
++; CHECK-NEXT:         Basic Alias Analysis (stateless AA impl)
+ ; CHECK-NEXT:         Function Alias Analysis Results
+ ; CHECK-NEXT:         Lazy Branch Probability Analysis
+ ; CHECK-NEXT:         Lazy Block Frequency Analysis
+@@ -166,6 +162,7 @@
+ ; CHECK-NEXT:         Basic Alias Analysis (stateless AA impl)
+ ; CHECK-NEXT:         Function Alias Analysis Results
+ ; CHECK-NEXT:         Memory SSA
++; CHECK-NEXT:         MemCpy Optimization
+ ; CHECK-NEXT:         Dead Store Elimination
+ ; CHECK-NEXT:         Natural Loop Information
+ ; CHECK-NEXT:         Canonicalize natural loops
+diff --git a/llvm/test/Other/opt-O3-pipeline-enable-matrix.ll b/llvm/test/Other/opt-O3-pipeline-enable-matrix.ll
+index bd77a8bac87c..50ff85703481 100644
+--- a/llvm/test/Other/opt-O3-pipeline-enable-matrix.ll
++++ b/llvm/test/Other/opt-O3-pipeline-enable-matrix.ll
+@@ -150,14 +150,10 @@
+ ; CHECK-NEXT:         Lazy Block Frequency Analysis
+ ; CHECK-NEXT:         Optimization Remark Emitter
+ ; CHECK-NEXT:         Global Value Numbering
+-; CHECK-NEXT:         Phi Values Analysis
+-; CHECK-NEXT:         Basic Alias Analysis (stateless AA impl)
+-; CHECK-NEXT:         Function Alias Analysis Results
+-; CHECK-NEXT:         Memory Dependence Analysis
+-; CHECK-NEXT:         MemCpy Optimization
+ ; CHECK-NEXT:         Sparse Conditional Constant Propagation
+ ; CHECK-NEXT:         Demanded bits analysis
+ ; CHECK-NEXT:         Bit-Tracking Dead Code Elimination
++; CHECK-NEXT:         Basic Alias Analysis (stateless AA impl)
+ ; CHECK-NEXT:         Function Alias Analysis Results
+ ; CHECK-NEXT:         Lazy Branch Probability Analysis
+ ; CHECK-NEXT:         Lazy Block Frequency Analysis
+@@ -171,6 +167,7 @@
+ ; CHECK-NEXT:         Basic Alias Analysis (stateless AA impl)
+ ; CHECK-NEXT:         Function Alias Analysis Results
+ ; CHECK-NEXT:         Memory SSA
++; CHECK-NEXT:         MemCpy Optimization
+ ; CHECK-NEXT:         Dead Store Elimination
+ ; CHECK-NEXT:         Natural Loop Information
+ ; CHECK-NEXT:         Canonicalize natural loops
+diff --git a/llvm/test/Other/opt-O3-pipeline.ll b/llvm/test/Other/opt-O3-pipeline.ll
+index 85f25363d232..040565aed4da 100644
+--- a/llvm/test/Other/opt-O3-pipeline.ll
++++ b/llvm/test/Other/opt-O3-pipeline.ll
+@@ -150,14 +150,10 @@
+ ; CHECK-NEXT:         Lazy Block Frequency Analysis
+ ; CHECK-NEXT:         Optimization Remark Emitter
+ ; CHECK-NEXT:         Global Value Numbering
+-; CHECK-NEXT:         Phi Values Analysis
+-; CHECK-NEXT:         Basic Alias Analysis (stateless AA impl)
+-; CHECK-NEXT:         Function Alias Analysis Results
+-; CHECK-NEXT:         Memory Dependence Analysis
+-; CHECK-NEXT:         MemCpy Optimization
+ ; CHECK-NEXT:         Sparse Conditional Constant Propagation
+ ; CHECK-NEXT:         Demanded bits analysis
+ ; CHECK-NEXT:         Bit-Tracking Dead Code Elimination
++; CHECK-NEXT:         Basic Alias Analysis (stateless AA impl)
+ ; CHECK-NEXT:         Function Alias Analysis Results
+ ; CHECK-NEXT:         Lazy Branch Probability Analysis
+ ; CHECK-NEXT:         Lazy Block Frequency Analysis
+@@ -171,6 +167,7 @@
+ ; CHECK-NEXT:         Basic Alias Analysis (stateless AA impl)
+ ; CHECK-NEXT:         Function Alias Analysis Results
+ ; CHECK-NEXT:         Memory SSA
++; CHECK-NEXT:         MemCpy Optimization
+ ; CHECK-NEXT:         Dead Store Elimination
+ ; CHECK-NEXT:         Natural Loop Information
+ ; CHECK-NEXT:         Canonicalize natural loops
+diff --git a/llvm/test/Other/opt-Os-pipeline.ll b/llvm/test/Other/opt-Os-pipeline.ll
+index 6d42b39fb8a5..bb134b277019 100644
+--- a/llvm/test/Other/opt-Os-pipeline.ll
++++ b/llvm/test/Other/opt-Os-pipeline.ll
+@@ -131,14 +131,10 @@
+ ; CHECK-NEXT:         Lazy Block Frequency Analysis
+ ; CHECK-NEXT:         Optimization Remark Emitter
+ ; CHECK-NEXT:         Global Value Numbering
+-; CHECK-NEXT:         Phi Values Analysis
+-; CHECK-NEXT:         Basic Alias Analysis (stateless AA impl)
+-; CHECK-NEXT:         Function Alias Analysis Results
+-; CHECK-NEXT:         Memory Dependence Analysis
+-; CHECK-NEXT:         MemCpy Optimization
+ ; CHECK-NEXT:         Sparse Conditional Constant Propagation
+ ; CHECK-NEXT:         Demanded bits analysis
+ ; CHECK-NEXT:         Bit-Tracking Dead Code Elimination
++; CHECK-NEXT:         Basic Alias Analysis (stateless AA impl)
+ ; CHECK-NEXT:         Function Alias Analysis Results
+ ; CHECK-NEXT:         Lazy Branch Probability Analysis
+ ; CHECK-NEXT:         Lazy Block Frequency Analysis
+@@ -152,6 +148,7 @@
+ ; CHECK-NEXT:         Basic Alias Analysis (stateless AA impl)
+ ; CHECK-NEXT:         Function Alias Analysis Results
+ ; CHECK-NEXT:         Memory SSA
++; CHECK-NEXT:         MemCpy Optimization
+ ; CHECK-NEXT:         Dead Store Elimination
+ ; CHECK-NEXT:         Natural Loop Information
+ ; CHECK-NEXT:         Canonicalize natural loops

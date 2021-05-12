@@ -1,0 +1,115 @@
+From ba1987df0feca5f91e00fce86cafac6b6a55967a Mon Sep 17 00:00:00 2001
+From: Nikita Popov <nikita.ppv@gmail.com>
+Date: Sun, 21 Feb 2021 17:49:49 +0100
+Subject: [PATCH] [Loads] Add optimized FindAvailableLoadedValue() overload
+ (NFCI)
+
+FindAvailableLoadedValue() accepts an iterator by reference. If no
+available value is found, then the iterator will either be left
+at a clobbering instruction or the beginning of the basic block.
+This allows using FindAvailableLoadedValue() across multiple blocks.
+
+If this functionality is not needed, as is the case in InstCombine,
+then we can use a much more efficient implementation: First try
+to find an available value, and only perform clobber checks if
+we actually found one. As this function only looks at a very small
+number of instructions (6 by default) and usually doesn't find an
+available value, this saves many expensive alias analysis queries.
+
+(cherry picked from commit e0615bcd39fd863361ce8eb68aafdfcdcd8b067d)
+---
+ llvm/include/llvm/Analysis/Loads.h            |  7 +++
+ llvm/lib/Analysis/Loads.cpp                   | 45 +++++++++++++++++++
+ .../InstCombineLoadStoreAlloca.cpp            |  4 +-
+ 3 files changed, 53 insertions(+), 3 deletions(-)
+
+diff --git a/llvm/include/llvm/Analysis/Loads.h b/llvm/include/llvm/Analysis/Loads.h
+index 24a05610e68d..1dd38926940e 100644
+--- a/llvm/include/llvm/Analysis/Loads.h
++++ b/llvm/include/llvm/Analysis/Loads.h
+@@ -127,6 +127,13 @@ Value *FindAvailableLoadedValue(LoadInst *Load,
+                                 bool *IsLoadCSE = nullptr,
+                                 unsigned *NumScanedInst = nullptr);
+ 
++/// This overload provides a more efficient implementation of
++/// FindAvailableLoadedValue() for the case where we are not interested in
++/// finding the closest clobbering instruction if no available load is found.
++/// This overload cannot be used to scan across multiple blocks.
++Value *FindAvailableLoadedValue(LoadInst *Load, AAResults &AA, bool *IsLoadCSE,
++                                unsigned MaxInstsToScan = DefMaxInstsToScan);
++
+ /// Scan backwards to see if we have the value of the given pointer available
+ /// locally within a small number of instructions.
+ ///
+diff --git a/llvm/lib/Analysis/Loads.cpp b/llvm/lib/Analysis/Loads.cpp
+index 6e0943929984..f9cb2445f49d 100644
+--- a/llvm/lib/Analysis/Loads.cpp
++++ b/llvm/lib/Analysis/Loads.cpp
+@@ -557,6 +557,51 @@ Value *llvm::FindAvailablePtrLoadStore(Value *Ptr, Type *AccessTy,
+   return nullptr;
+ }
+ 
++Value *llvm::FindAvailableLoadedValue(LoadInst *Load, AAResults &AA,
++                                      bool *IsLoadCSE,
++                                      unsigned MaxInstsToScan) {
++  const DataLayout &DL = Load->getModule()->getDataLayout();
++  Value *StrippedPtr = Load->getPointerOperand()->stripPointerCasts();
++  BasicBlock *ScanBB = Load->getParent();
++  Type *AccessTy = Load->getType();
++  bool AtLeastAtomic = Load->isAtomic();
++
++  if (!Load->isUnordered())
++    return nullptr;
++
++  // Try to find an available value first, and delay expensive alias analysis
++  // queries until later.
++  Value *Available = nullptr;;
++  SmallVector<Instruction *> MustNotAliasInsts;
++  for (Instruction &Inst : make_range(++Load->getReverseIterator(),
++                                      ScanBB->rend())) {
++    if (isa<DbgInfoIntrinsic>(&Inst))
++      continue;
++
++    if (MaxInstsToScan-- == 0)
++      return nullptr;
++
++    Available = getAvailableLoadStore(&Inst, StrippedPtr, AccessTy,
++                                      AtLeastAtomic, DL, IsLoadCSE);
++    if (Available)
++      break;
++
++    if (Inst.mayWriteToMemory())
++      MustNotAliasInsts.push_back(&Inst);
++  }
++
++  // If we found an available value, ensure that the instructions in between
++  // did not modify the memory location.
++  if (Available) {
++    auto AccessSize = LocationSize::precise(DL.getTypeStoreSize(AccessTy));
++    for (Instruction *Inst : MustNotAliasInsts)
++      if (isModSet(AA.getModRefInfo(Inst, StrippedPtr, AccessSize)))
++        return nullptr;
++  }
++
++  return Available;
++}
++
+ bool llvm::canReplacePointersIfEqual(Value *A, Value *B, const DataLayout &DL,
+                                      Instruction *CtxI) {
+   Type *Ty = A->getType();
+diff --git a/llvm/lib/Transforms/InstCombine/InstCombineLoadStoreAlloca.cpp b/llvm/lib/Transforms/InstCombine/InstCombineLoadStoreAlloca.cpp
+index c7b5f6f78069..d1848bd78f67 100644
+--- a/llvm/lib/Transforms/InstCombine/InstCombineLoadStoreAlloca.cpp
++++ b/llvm/lib/Transforms/InstCombine/InstCombineLoadStoreAlloca.cpp
+@@ -956,10 +956,8 @@ Instruction *InstCombinerImpl::visitLoadInst(LoadInst &LI) {
+   // Do really simple store-to-load forwarding and load CSE, to catch cases
+   // where there are several consecutive memory accesses to the same location,
+   // separated by a few arithmetic operations.
+-  BasicBlock::iterator BBI(LI);
+   bool IsLoadCSE = false;
+-  if (Value *AvailableVal = FindAvailableLoadedValue(
+-          &LI, LI.getParent(), BBI, DefMaxInstsToScan, AA, &IsLoadCSE)) {
++  if (Value *AvailableVal = FindAvailableLoadedValue(&LI, *AA, &IsLoadCSE)) {
+     if (IsLoadCSE)
+       combineMetadataForCSE(cast<LoadInst>(AvailableVal), &LI, false);
+ 

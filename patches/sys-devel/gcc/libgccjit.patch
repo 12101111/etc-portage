@@ -1,0 +1,59 @@
+diff --git a/gcc/jit/jit-playback.c b/gcc/jit/jit-playback.c
+index d2c8bb4c1..3d8bb3210 100644
+--- a/gcc/jit/jit-playback.c
++++ b/gcc/jit/jit-playback.c
+@@ -18,6 +18,7 @@ You should have received a copy of the GNU General Public License
+ along with GCC; see the file COPYING3.  If not see
+ <http://www.gnu.org/licenses/>.  */
+ 
++#include <pthread.h>
+ #include "config.h"
+ #include "system.h"
+ #include "coretypes.h"
+@@ -40,7 +41,6 @@ along with GCC; see the file COPYING3.  If not see
+ #include "gcc.h"
+ #include "diagnostic.h"
+ 
+-#include <pthread.h>
+ 
+ #include "jit-playback.h"
+ #include "jit-result.h"
+diff --git a/gcc/jit/jit-recording.c b/gcc/jit/jit-recording.c
+index b73cd76a0..8910bb767 100644
+--- a/gcc/jit/jit-recording.c
++++ b/gcc/jit/jit-recording.c
+@@ -18,6 +18,7 @@ You should have received a copy of the GNU General Public License
+ along with GCC; see the file COPYING3.  If not see
+ <http://www.gnu.org/licenses/>.  */
+ 
++#include <pthread.h>
+ #include "config.h"
+ #include "system.h"
+ #include "coretypes.h"
+@@ -25,7 +26,6 @@ along with GCC; see the file COPYING3.  If not see
+ #include "pretty-print.h"
+ #include "toplev.h"
+ 
+-#include <pthread.h>
+ 
+ #include "jit-builtins.h"
+ #include "jit-recording.h"
+diff --git a/gcc/jit/libgccjit.c b/gcc/jit/libgccjit.c
+index a29e9885e..02fc10f1f 100644
+--- a/gcc/jit/libgccjit.c
++++ b/gcc/jit/libgccjit.c
+@@ -18,13 +18,13 @@ You should have received a copy of the GNU General Public License
+ along with GCC; see the file COPYING3.  If not see
+ <http://www.gnu.org/licenses/>.  */
+ 
++#include <pthread.h>
+ #include "config.h"
+ #include "system.h"
+ #include "coretypes.h"
+ #include "timevar.h"
+ #include "typed-splay-tree.h"
+ #include "cppbuiltin.h"
+-#include <pthread.h>
+ 
+ #include "libgccjit.h"
+ #include "jit-recording.h"

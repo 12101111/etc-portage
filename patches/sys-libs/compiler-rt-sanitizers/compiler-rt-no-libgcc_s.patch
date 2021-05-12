@@ -1,0 +1,13 @@
+diff --git a/compiler-rt/CMakeLists.txt b/compiler-rt/CMakeLists.txt
+index b44ad2c2118e..7c3abc0e796c 100644
+--- a/compiler-rt/CMakeLists.txt
++++ b/compiler-rt/CMakeLists.txt
+@@ -234,7 +234,7 @@ endif()
+ option(SANITIZER_USE_STATIC_CXX_ABI
+   "Use static libc++abi." ${DEFAULT_SANITIZER_USE_STATIC_CXX_ABI})
+ 
+-set(DEFAULT_COMPILER_RT_USE_BUILTINS_LIBRARY OFF)
++set(DEFAULT_COMPILER_RT_USE_BUILTINS_LIBRARY ON)
+ if (FUCHSIA)
+   set(DEFAULT_COMPILER_RT_USE_BUILTINS_LIBRARY ON)
+ endif()

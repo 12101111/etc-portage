@@ -1,0 +1,1 @@
+export RUSTFLAGS="-Ctarget-cpu=skylake -Copt-level=3 -Ccodegen-units=4"

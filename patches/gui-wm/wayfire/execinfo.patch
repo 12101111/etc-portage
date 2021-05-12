@@ -1,0 +1,60 @@
+diff --git a/src/debug-func.hpp b/src/debug-func.hpp
+index a4ff962..e9a873b 100644
+--- a/src/debug-func.hpp
++++ b/src/debug-func.hpp
+@@ -2,7 +2,6 @@
+ #include <wayfire/debug.hpp>
+ #include <sstream>
+ #include <iomanip>
+-#include <execinfo.h>
+ #include <cxxabi.h>
+ #include <cstdio>
+ #include <dlfcn.h>
+@@ -212,46 +211,7 @@ addr2line_result locate_source_file(const demangling_result& dr)
+ 
+ void wf::print_trace(bool fast_mode)
+ {
+-    void *addrlist[MAX_FRAMES];
+-    int addrlen = backtrace(addrlist, MAX_FRAMES);
+-    if (addrlen == 0)
+-    {
+-        LOGE("Failed to determine backtrace, recompile with ASAN!");
+-
+-        return;
+-    }
+-
+-    char **symbollist = backtrace_symbols(addrlist, addrlen);
+-
+-    for (int i = 1; i < addrlen; i++)
+-    {
+-        auto result = demangle_function(symbollist[i]);
+-
+-        std::ostringstream line;
+-        line << '#' << std::left << std::setw(2) << i << " ";
+-        if (HAS_ADDR2LINE && !fast_mode && result.address.size() &&
+-            result.executable.size())
+-        {
+-            auto source = locate_source_file(result);
+-            line << source.function_name << " " << source.function_source;
+-        } else if (result.function_name.size())
+-        {
+-            line << result.function_name << " at " << result.address;
+-        } else
+-        {
+-            line << symbollist[i];
+-        }
+-
+-        auto contents = line.str();
+-        if (contents.size() && (contents.back() == '\n'))
+-        {
+-            contents.pop_back();
+-        }
+-
+-        wf::log::log_plain(wf::log::LOG_LEVEL_ERROR, contents);
+-    }
+-
+-    free(symbollist);
++    return;
+ }
+ 
+ /* ------------------- Impl of debugging functions ---------------------------*/

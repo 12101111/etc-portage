@@ -1,0 +1,40 @@
+# remove gcc
+-*sys-devel/gcc
+# system libraries
+sys-libs/compiler-rt
+sys-libs/compiler-rt-sanitizers
+sys-libs/libcxx
+sys-libs/libcxxabi
+sys-libs/libomp
+sys-libs/llvm-libunwind
+sys-libs/libucontext
+sys-libs/fts-standalone
+sys-libs/obstack-standalone
+sys-libs/libexecinfo
+sys-libs/musl-legacy-compat
+# compiler and binutils
+sys-devel/llvm
+sys-devel/clang
+sys-devel/lld
+dev-util/lldb
+# kernel
+net-wireless/wireless-regdb
+sys-devel/bc
+sys-kernel/linux-firmware
+# system tools
+sys-apps/musl-locales
+app-eselect/eselect-timezone
+sys-libs/timezone-data
+app-admin/sudo
+app-admin/metalog
+sys-apps/pciutils
+sys-devel/bc
+# portage
+app-eselect/eselect-repository
+app-portage/eix
+app-portage/gentoolkit
+app-portage/portage-bashrc-mv
+app-portage/repoman
+# archive
+app-arch/p7zip
+app-arch/zip

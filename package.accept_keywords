@@ -1,0 +1,35 @@
+x11-libs/xcb-imdkit **
+app-i18n/fcitx5 **
+app-i18n/libime **
+app-i18n/fcitx5-gtk **
+app-i18n/fcitx5-qt **
+app-i18n/fcitx5-chinese-addons **
+app-i18n/fcitx5-configtool **
+
+gui-libs/wlroots **
+app-text/scdoc **
+gui-wm/sway **
+gui-apps/swaylock **
+gui-apps/swayidle **
+gui-apps/swaybg **
+gui-apps/wf-shell **
+gui-libs/wf-config **
+gui-wm/wayfire **
+gui-apps/swaylock-effects **
+gui-wm/cage **
+gui-apps/waybar **
+gui-apps/wf-recorder **
+<=gui-libs/xdg-desktop-portal-wlr-99 **
+
+net-proxy/qv2ray **
+net-proxy/qvplugin-ssr **
+net-proxy/qvplugin-command **
+net-proxy/qvplugin-trojan-go **
+net-proxy/qvplugin-trojan **
+
+app-editors/emacs **
+app-text/goldendict **
+www-client/otter **
+dev-lang/zig **
+media-gfx/gimp **
+gui-apps/wob **

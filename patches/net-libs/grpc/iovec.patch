@@ -1,0 +1,18 @@
+diff --git a/src/core/tsi/alts/crypt/gsec.h b/src/core/tsi/alts/crypt/gsec.h
+index 4d65caa..5c92cb3 100644
+--- a/src/core/tsi/alts/crypt/gsec.h
++++ b/src/core/tsi/alts/crypt/gsec.h
+@@ -27,10 +27,13 @@
+ 
+ #include <grpc/grpc.h>
+ 
++#include <memory>
++#if false
+ struct iovec {
+   void* iov_base;
+   size_t iov_len;
+ };
++#endif
+ 
+ /**
+  * A gsec interface for AEAD encryption schemes. The API is thread-compatible.

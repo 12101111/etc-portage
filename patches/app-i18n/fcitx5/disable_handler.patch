@@ -1,0 +1,13 @@
+diff --git a/src/server/main.cpp b/src/server/main.cpp
+index b466716..5590c0d 100644
+--- a/src/server/main.cpp
++++ b/src/server/main.cpp
+@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
+         }
+     }
+ 
+-    SetMyExceptionHandler();
++    //SetMyExceptionHandler();
+ 
+     setlocale(LC_ALL, "");
+ 

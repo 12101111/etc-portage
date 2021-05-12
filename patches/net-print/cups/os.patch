@@ -1,0 +1,12 @@
+--- a/config-scripts/cups-compiler.m4	2020-03-24 20:29:56.913003903 +0800
++++ b/config-scripts/cups-compiler.m4	2020-03-24 20:37:00.936016843 +0800
+@@ -115,7 +115,7 @@
+ 	# Default optimization options...
+ 	if test -z "$OPTIM"; then
+ 		# Default to optimize-for-size and debug
+-		OPTIM="-Os -g"
++		OPTIM="-g"
+ 	fi
+
+ 	# Generate position-independent code as needed...
+

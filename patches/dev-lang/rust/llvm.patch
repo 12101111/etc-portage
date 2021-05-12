@@ -1,0 +1,30 @@
+diff --git a/compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp b/compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp
+index 2264908995b..113dc5b903c 100644
+--- a/compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp
++++ b/compiler/rustc_llvm/llvm-wrapper/PassWrapper.cpp
+@@ -371,7 +371,6 @@ static Reloc::Model fromRust(LLVMRustRelocModel RustReloc) {
+   report_fatal_error("Bad RelocModel.");
+ }
+ 
+-#ifdef LLVM_RUSTLLVM
+ /// getLongestEntryLength - Return the length of the longest entry in the table.
+ template<typename KV>
+ static size_t getLongestEntryLength(ArrayRef<KV> Table) {
+@@ -422,17 +421,6 @@ extern "C" void LLVMRustPrintTargetFeatures(LLVMTargetMachineRef TM) {
+          "target-feature=+feature1,-feature2\n\n");
+ }
+ 
+-#else
+-
+-extern "C" void LLVMRustPrintTargetCPUs(LLVMTargetMachineRef) {
+-  printf("Target CPU help is not supported by this LLVM version.\n\n");
+-}
+-
+-extern "C" void LLVMRustPrintTargetFeatures(LLVMTargetMachineRef) {
+-  printf("Target features help is not supported by this LLVM version.\n\n");
+-}
+-#endif
+-
+ extern "C" const char* LLVMRustGetHostCPUName(size_t *len) {
+   StringRef Name = sys::getHostCPUName();
+   *len = Name.size();

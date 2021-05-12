@@ -1,0 +1,12 @@
+--- a/meson.build	2019-09-26 23:42:14.000000000 +0800
++++ b/meson.build	2020-03-07 11:14:06.512329941 +0800
+@@ -170,8 +170,6 @@
+ endif
+ if cc.has_header('execinfo.h') == true
+   config_h.set('HAVE_EXECINFO_H'       , '1')
+-elif cc.has_function('backtrace_symbols_fd', dependencies: 'execinfo') == false
+-  execinfo_dep = dependency('execinfo', required: false)
+ endif
+
+ if cc.has_header('fnmatch.h') == false
+

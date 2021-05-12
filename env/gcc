@@ -1,0 +1,5 @@
+CC="gcc-11.1.0"
+CXX="g++-11.1.0"
+CFLAGS="-march=skylake -mtune=skylake -O2 -pipe"
+CXXFLAGS="${CFLAGS}"
+LDFLAGS="-fuse-ld=bfd"

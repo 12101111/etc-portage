@@ -1,0 +1,218 @@
+# Compiler
+sys-devel/gcc fortran openmp jit
+dev-lang/rust system-llvm clippy rustfmt miri rls wasm system-bootstrap parallel-compiler nightly wasi
+dev-lang/go system-bootstrap # to upgrade itself
+sys-devel/llvm libedit gold exegesis mlir z3
+dev-util/lldb libedit lzma
+sys-devel/clang xml default-lld # lldb
+sys-libs/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray -libfuzzer profile
+
+# Graphic
+media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind
+x11-base/xorg-server xvfb libglvnd elogind -suid
+x11-wm/awesome dbus doc gnome -luajit
+x11-misc/picom dbus
+media-libs/freetype harfbuzz infinality
+gui-wm/sway wallpapers tray -swaylock fish-completion seatd
+gui-apps/waybar network tray mpd wifi
+
+# Apps
+www-client/firefox hwaccel clang lto pgo screencast geckodriver
+mail-client/thunderbird hwaccel clang lto pgo
+app-editors/emacs nativecomp pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars xft
+app-editors/vim X python
+media-video/mpv archive cli drm libass opengl lua vaapi libmpv
+net-misc/remmina rdp vnc appindicator gnome-keyring spice ssh
+media-sound/mpd flac
+media-video/ffmpeg dav1d fontconfig truetype openh264 xcb jpeg2k libaom libass libdrm openssl opus v4l mp3 webp x264 x265 vaapi vpx
+net-misc/freerdp ffmpeg gstreamer openh264 usb server smartcard xinerama xv
+media-libs/libsdl2 gles2 udev vulkan haptic
+net-misc/aria2 bittorrent libuv sqlite xmlrpc
+x11-terms/st savedconfig
+net-analyzer/wireshark qt5
+www-client/otter webkit webengine
+app-text/goldendict multimedia opencc zim ffmpeg debug
+app-office/libreoffice gstreamer pdfimport java dbus kde
+net-fs/samba client syslog
+x11-apps/igt-gpu-tools overlay
+sys-cluster/kubernetes -kube-apiserver -kube-controller-manager -kube-proxy -kube-scheduler -kubeadm -kubelet kubectl
+media-gfx/sxiv savedconfig
+media-sound/mpd libsamplerate libmpdclient
+sys-process/procps modern-top
+kde-plasma/ksysguard lm-sensors
+www-client/uget aria2 libnotify openssl -gnutls
+mail-client/mutt gdbm mbox pop gpgme
+media-video/obs-studio -luajit v4l -python truetype
+dev-vcs/git subversion perl
+dev-vcs/subversion perl
+dev-util/perf -clang lzma libpfm perl -python unwind
+dev-qt/qt-creator beautifier cmake cppcheck git lsp perfprofiler python
+app-shells/fish doc
+app-crypt/gnupg scd-shared-access 
+media-gfx/nomacs opencv tiff
+media-libs/opencv qt5 -openmp
+sys-process/htop lm-sensors
+kde-apps/okular epub
+x11-terms/kitty debug -asan
+net-misc/openssh libedit
+sys-block/gparted fat udf
+net-misc/dropbear multicall -pam savedconfig static
+media-gfx/krita pdf qtmedia vc fftw
+media-gfx/gimp javascript webp python unwind
+dev-util/strace elfutils perl
+app-misc/skim tmux
+
+# VM / Emulator
+app-emulation/qemu udev zstd jemalloc gtk usb usbredir spice virgl -pin-upstream-blobs virtfs static-user -slirp io-uring virgl vte gnutls vhost-user-fs
+app-emulation/libvirt zfs virt-network -parted dbus
+app-emulation/virt-manager gtk
+app-emulation/spice gstreamer
+net-misc/spice-gtk gstaudio usbredir #gstvideo
+#sys-firmware/edk2-ovmf -binary
+app-emulation/pcem networking
+app-emulation/dosbox-x opengl ffmpeg
+app-emulation/bochs avx debugger
+
+# System
+sys-apps/openrc sysv-utils # to use openrc-init
+sys-kernel/linux-firmware savedconfig
+dev-lang/python sqlite tk # firefox
+sys-apps/busybox math syslog savedconfig
+app-portage/portage-bashrc-mv ccache
+dev-java/openjdk-bin gentoo-vm
+sys-libs/llvm-libunwind static-libs
+sys-libs/libcxx static-libs
+sys-libs/libcxxabi static-libs
+
+# libs
+x11-libs/libxcb xkb # xorg-server awesome
+media-libs/libpng apng # firefox: animation png
+media-libs/libass harfbuzz # ffmpeg
+app-text/xmlto text # xdg-utils
+dev-libs/libgcrypt o-flag-munging # bug with clang
+media-libs/libvpx postproc # Firefox
+www-client/w3m imlib # neofetch
+dev-libs/libxml2 python # virt-manager
+net-dns/dnsmasq script # libvirt
+sys-block/parted device-mapper # libvirt
+dev-libs/glib static-libs # qemu-user-static
+sys-libs/zlib static-libs minizip # qemu-user-static telegram
+sys-apps/attr static-libs # qemu-user-static
+dev-libs/libpcre static-libs # qemu-user-static
+dev-libs/libpcre2 pcre16 pcre32 # qtcore
+dev-qt/qtgui egl dbus # wayland qt5ct
+app-i18n/fcitx5-qt qt5
+gnome-base/librsvg tools # icon theme
+x11-libs/wxGTK tiff #pcem
+x11-libs/libva utils
+app-i18n/fcitx5-gtk gtk2
+dev-db/sqlite secure-delete # aria2[sqlite]
+dev-qt/qtwebchannel qml # zoom
+dev-qt/qtwebengine jumbo-build widgets
+dev-qt/qtmultimedia gstreamer
+#app-arch/unzip natspec # GBK zip files
+app-crypt/gcr gtk
+dev-libs/xmlsec nss
+app-i18n/fcitx5-chinese-addons gui
+media-gfx/imagemagick xml -openmp # svg? ( xml )
+app-text/poppler cairo qt5# materia-theme, qpdfview
+x11-misc/qt5ct dbus
+sys-apps/dbus user-session # mako
+media-plugins/gst-plugins-meta vorbis ogg mp3 aac flac ffmpeg
+dev-libs/libdbusmenu gtk3
+net-misc/curl http2 # rust
+media-libs/harfbuzz icu # tex electron
+app-text/poppler qt5 nss #okular
+media-libs/phonon -vlc
+dev-qt/qtcore icu
+dev-qt/qtwidgets gtk
+dev-util/ostree curl # flatpak
+app-emacs/emacs-common gui
+dev-lang/ruby jit -jemalloc
+media-sound/apulse sdk
+kde-apps/yakuake absolute-position
+dev-python/matplotlib gtk3 cairo
+net-vpn/tor caps lzma zstd tor-hardening
+dev-python/PyQt5 webchannel printsupport gui widgets svg dbus opengl declarative multimedia network sql websockets
+dev-qt/qtmultimedia widgets
+gui-libs/wlroots icccm x11-backend seatd
+media-video/pipewire pulseaudio sdl aptx aac extra pipewire-alsa v4l
+media-sound/pulseaudio -alsa-plugin -webrtc-aec -tcpd -asyncns
+media-libs/libtgvoip pulseaudio
+media-libs/tg_owt pulseaudio
+net-im/telegram-desktop pulseaudio lto
+app-crypt/pinentry gnome-keyring gtk qt5
+media-libs/phonon gstreamer
+#dev-qt/qtprintsupport cups # kde-plasma/xdg-desktop-portal-kde
+#kde-frameworks/prison qml
+kde-frameworks/kitemmodels qml
+games-emulation/dosbox-x ffmpeg
+sci-libs/fftw threads -fortran
+dev-scheme/racket doc
+net-wireless/blueman appindicator network
+dev-qt/qtquickcontrols2 widgets # yubikey-manager-qt
+app-crypt/gpgme qt5 # mail-client/kube
+net-libs/gnutls pkcs11
+dev-python/QtPy gui printsupport #jupyter
+net-libs/zeromq drafts #jupyter
+media-libs/gegl cairo
+media-libs/babl introspection lcms
+media-libs/gegl introspection lcms
+kde-apps/kio-extras mtp nfs #samba
+app-text/poppler lcms cjk
+kde-frameworks/prison qml
+sys-apps/util-linux caps
+dev-libs/libgit2 ssh
+dev-libs/jemalloc lazy-lock prof stats unwind
+
+# Tex
+app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra
+app-text/texlive-core cjk xetex
+media-libs/gd fontconfig truetype
+
+# minimal
+gnome-base/gnome-settings-daemon -colord
+sys-devel/binutils -binutils -gold gprof ld -nls plugins
+sys-libs/binutils-libs -nls
+net-print/cups-filters -postscript
+sys-apps/man-db -nls
+app-arch/tar -nls
+dev-perl/libintl-perl minimal
+app-admin/sudo -sendmail # drop dependence on virtual/mta and mail-mta/nullmailer
+net-wireless/iwd -crda standalone # kernal 4.15+ have built-in support, crda don't support py3
+net-libs/webkit-gtk media-source -geolocation -seccomp
+media-sound/alsa-utils -libsamplerate
+app-editors/vim -nls
+app-editors/vim-core -nls
+net-misc/socat -tcpd
+dev-java/openjdk -javafx
+x11-themes/gtk-engines-murrine -themes
+sys-apps/smartmontools -daemon
+kde-frameworks/* -handbook
+kde-apps/* -handbook
+sys-devel/gdb -nls # link failed
+sys-apps/findutils -nls
+net-misc/remmina -nls # segfault at ../Remmina-v1.4.12/src/remmina_file_editor.c:736
+net-vpn/tor -server
+media-libs/libcanberra -gtk
+app-i18n/fcitx5-gtk -gtk2
+dev-libs/elfutils -nls
+media-tv/v4l-utils -bpf
+app-text/opensp -nls #link error
+sys-apps/man-pages -l10n_zh-CN
+kde-frameworks/kio -kwallet
+kde-plasma/plasma-meta -desktop-portal -crypt -display-manager -firewall -handbook -legacy-systray -networkmanager -sddm -smart -browser-integration
+kde-plasma/powerdevil -wireless
+sys-block/parted -device-mapper
+sys-libs/libblockdev -cryptsetup
+
+# chromium and electron
+media-libs/libvpx svc
+net-libs/nodejs icu inspector system-icu
+dev-libs/libxml2 icu
+app-editors/vscode savedconfig system-electron system-ripgrep
+media-video/pipewire ffmpeg gstreamer
+dev-util/electron suid -tcmalloc lto pgo custom-cflags system-icu clang wayland pipewire screencast
+dev-util/electron:9 -wayland
+www-client/chromium -tcmalloc ozone wayland lto custom-cflags pgo vaapi -system-libvpx swiftshader vulkan screencast official
+dev-lang/python:2.7 -tk -bluetooth
