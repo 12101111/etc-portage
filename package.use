@@ -203,8 +203,7 @@ sys-apps/man-pages -l10n_zh-CN
 kde-frameworks/kio -kwallet
 kde-plasma/plasma-meta -desktop-portal -crypt -display-manager -firewall -handbook -legacy-systray -networkmanager -sddm -smart -browser-integration
 kde-plasma/powerdevil -wireless
-sys-block/parted -device-mapper
-sys-libs/libblockdev -cryptsetup
+sys-fs/lvm2 -thin
 
 # chromium and electron
 media-libs/libvpx svc
