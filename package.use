@@ -5,7 +5,7 @@ dev-lang/go system-bootstrap # to upgrade itself
 sys-devel/llvm libedit gold exegesis mlir z3
 dev-util/lldb libedit lzma
 sys-devel/clang xml default-lld # lldb
-sys-libs/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray -libfuzzer profile
+sys-libs/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray libfuzzer profile
 
 # Graphic
 media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind
@@ -19,7 +19,7 @@ gui-apps/waybar network tray mpd wifi
 # Apps
 www-client/firefox hwaccel clang lto pgo screencast geckodriver
 mail-client/thunderbird hwaccel clang lto pgo
-app-editors/emacs nativecomp pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars xft
+app-editors/emacs jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars xft
 app-editors/vim X python
 media-video/mpv archive cli drm libass opengl lua vaapi libmpv
 net-misc/remmina rdp vnc appindicator gnome-keyring spice ssh
@@ -42,7 +42,7 @@ sys-process/procps modern-top
 kde-plasma/ksysguard lm-sensors
 www-client/uget aria2 libnotify openssl -gnutls
 mail-client/mutt gdbm mbox pop gpgme
-media-video/obs-studio -luajit v4l -python truetype
+media-video/obs-studio -luajit v4l truetype pipewire fdk speex vlc python
 dev-vcs/git subversion perl
 dev-vcs/subversion perl
 dev-util/perf -clang lzma libpfm perl -python unwind
@@ -61,6 +61,8 @@ media-gfx/krita pdf qtmedia vc fftw
 media-gfx/gimp javascript webp python unwind
 dev-util/strace elfutils perl
 app-misc/skim tmux
+media-video/vlc dav1d archive fdk flac fontconfig gstreamer libass libnotify lua mp3 ogg opus speex truetype v4l vpx
+dev-util/pycharm-community -bundled-jdk
 
 # VM / Emulator
 app-emulation/qemu udev zstd jemalloc gtk usb usbredir spice virgl -pin-upstream-blobs virtfs static-user -slirp io-uring virgl vte gnutls vhost-user-fs
@@ -211,7 +213,9 @@ net-libs/nodejs icu inspector system-icu
 dev-libs/libxml2 icu
 app-editors/vscode savedconfig system-electron system-ripgrep
 media-video/pipewire ffmpeg gstreamer
-dev-util/electron suid -tcmalloc lto pgo custom-cflags system-icu clang wayland pipewire screencast
-dev-util/electron:9 -wayland
-www-client/chromium -tcmalloc ozone wayland lto custom-cflags pgo vaapi -system-libvpx swiftshader vulkan screencast official
+dev-util/electron suid tcmalloc lto pgo custom-cflags system-icu clang wayland pipewire screencast
+dev-util/electron:9 -wayland -tcmalloc
+dev-util/electron:11 -tcmalloc
+www-client/chromium tcmalloc ozone wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official
 dev-lang/python:2.7 -tk -bluetooth
+

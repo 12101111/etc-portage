@@ -7,7 +7,7 @@
 */*::tgbugs-overlay
 */*::FireBurn
 dev-dotnet/*::dotnet
-#*/*::pentoo
+*/*::pentoo
 
 dev-lang/python:3.10
 dev-lang/python::gentoo

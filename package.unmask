@@ -3,7 +3,6 @@ app-shells/runtitle
 x11-libs/gtk+::pg_overlay
 www-client/firefox::12101111-overlay
 sys-devel/binutils::12101111-overlay
-media-libs/gstreamer::lanodanOverlay
 dev-util/electron
 app-eselect/eselect-electron
 www-client/chromium::12101111-overlay
@@ -11,8 +10,8 @@ dev-libs/liborcus::pg_overlay
 dev-libs/qrcodegen::pg_overlay
 dev-libs/libixion::pg_overlay
 dev-lang/python::pg_overlay
-virtual/jre
-virtual/jdk
+virtual/jre:11
+virtual/jdk:11
 dev-lang/rust
 virtual/rust
 

@@ -6,15 +6,11 @@ media-libs/mesa /-flto*/-fno-lto #dont build
 media-libs/libglvnd /-flto*/-fno-lto #link error
 dev-cpp/glog /-flto*/-fno-lto
 sys-libs/libomp /-flto*/-fno-lto
-sys-devel/clang /-flto*/-flto=full
-sys-devel/llvm /-flto*/-flto=full
-app-emulation/qemu /-flto*/-flto=full
 dev-libs/libgcrypt /-flto*/-fno-lto/ /-O3/-O2/
 media-libs/libvpx /-flto*/-fno-lto/ #strip not recognized
 dev-util/perf /-flto*/-fno-lto/ #file not recognized: file format not recognized
 net-libs/nodejs /-flto*/-fno-lto/ # build time
 dev-dotnet/coreclr /-flto*/-fno-lto/
-net-libs/libtorrent-rasterbar CFLAGS+=-Wl,-lgcc # __udivti3
 media-gfx/imagemagick /-flto*/-fno-lto/ # llvm pacnic
 # sci-libs/* *FLAGS-=-flto* *FLAGS-=-rtlib=*
 media-libs/dav1d /-flto*/-fno-lto/ # GE
@@ -23,6 +19,11 @@ games-misc/typespeed /-flto*/-fno-lto/
 app-emulation/bochs /-flto*/-fno-lto/
 app-text/ghostscript-gpl /-flto*/-fno-lto/
 dev-java/openjdk /-flto*/-fno-lto/
+
+# full lto
+sys-devel/llvm /-flto*/-flto=full
+sys-devel/clang /-flto*/-flto=full
+app-emulation/qemu /-flto*/-flto=full
 
 # stack overflow
 sys-devel/clang LDFLAGS+=-Wl,-z,stack-size=0x800000
@@ -45,3 +46,4 @@ media-tv/v4l-utils LDFLAGS+=-largp
 dev-libs/libedit CFLAGS+=-D__STDC_ISO_10646__
 dev-qt/qtcore LDFLAGS+=-lexecinfo
 net-p2p/qbittorrent LDFLAGS+=-lexecinfo
+net-libs/libtorrent-rasterbar CFLAGS+=-Wl,-lgcc # __udivti3

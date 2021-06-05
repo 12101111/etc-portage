@@ -1,0 +1,20 @@
+diff --git a/src/main/tools/linux-sandbox-pid1.cc b/src/main/tools/linux-sandbox-pid1.cc
+index 5c9c53c..2816c02 100755
+--- a/src/main/tools/linux-sandbox-pid1.cc
++++ b/src/main/tools/linux-sandbox-pid1.cc
+@@ -394,6 +394,15 @@ static void SpawnChild() {
+   }
+ }
+ 
++#ifndef TEMP_FAILURE_RETRY
++#define TEMP_FAILURE_RETRY(expression) \
++  (__extension__                                                             \
++    ({ long int __result;                                                    \
++       do __result = (long int) (expression);                                \
++       while (__result == -1L && errno == EINTR);                            \
++       __result; }))
++#endif
++
+ static int WaitForChild() {
+   while (true) {
+     // Wait for some process to exit. This includes reparented processes in our

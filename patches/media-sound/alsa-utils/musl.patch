@@ -1,0 +1,12 @@
+diff --git a/alsactl/utils.c b/alsactl/utils.c
+index c79fd95..7c26f11 100644
+--- a/alsactl/utils.c
++++ b/alsactl/utils.c
+@@ -23,6 +23,7 @@
+ #include <stdio.h>
+ #include <stddef.h>
+ #include <unistd.h>
++#include <limits.h>
+ #include <fcntl.h>
+ #include <errno.h>
+ #include <ctype.h>
