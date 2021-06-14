@@ -10,7 +10,7 @@ sys-libs/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack 
 # Graphic
 media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind
 x11-base/xorg-server xvfb libglvnd elogind -suid
-x11-wm/awesome dbus doc gnome -luajit
+x11-wm/awesome dbus doc gnome
 x11-misc/picom dbus
 media-libs/freetype harfbuzz infinality
 gui-wm/sway wallpapers tray -swaylock fish-completion seatd
@@ -21,7 +21,7 @@ www-client/firefox hwaccel clang lto pgo screencast geckodriver
 mail-client/thunderbird hwaccel clang lto pgo
 app-editors/emacs jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars xft
 app-editors/vim X python
-media-video/mpv archive cli drm libass opengl lua vaapi libmpv
+media-video/mpv archive cli drm libass opengl lua vaapi libmpv lua_single_target_luajit
 net-misc/remmina rdp vnc appindicator gnome-keyring spice ssh
 media-sound/mpd flac
 media-video/ffmpeg dav1d fontconfig truetype openh264 xcb jpeg2k libaom libass libdrm openssl opus v4l mp3 webp x264 x265 vaapi vpx
@@ -42,7 +42,7 @@ sys-process/procps modern-top
 kde-plasma/ksysguard lm-sensors
 www-client/uget aria2 libnotify openssl -gnutls
 mail-client/mutt gdbm mbox pop gpgme
-media-video/obs-studio -luajit v4l truetype pipewire fdk speex vlc python
+media-video/obs-studio lua v4l truetype pipewire fdk speex vlc python lua_single_target_luajit
 dev-vcs/git subversion perl
 dev-vcs/subversion perl
 dev-util/perf -clang lzma libpfm perl -python unwind
@@ -61,8 +61,8 @@ media-gfx/krita pdf qtmedia vc fftw
 media-gfx/gimp javascript webp python unwind
 dev-util/strace elfutils perl
 app-misc/skim tmux
-media-video/vlc dav1d archive fdk flac fontconfig gstreamer libass libnotify lua mp3 ogg opus speex truetype v4l vpx
-dev-util/pycharm-community -bundled-jdk
+media-video/vlc dav1d archive fdk flac fontconfig gstreamer libass libnotify mp3 ogg opus speex truetype v4l vpx
+app-editors/neovim lua_single_target_luajit
 
 # VM / Emulator
 app-emulation/qemu udev zstd jemalloc gtk usb usbredir spice virgl -pin-upstream-blobs virtfs static-user -slirp io-uring virgl vte gnutls vhost-user-fs
@@ -95,7 +95,7 @@ dev-libs/libgcrypt o-flag-munging # bug with clang
 media-libs/libvpx postproc # Firefox
 www-client/w3m imlib # neofetch
 dev-libs/libxml2 python # virt-manager
-net-dns/dnsmasq script # libvirt
+net-dns/dnsmasq script lua tftp idn dnssec #libvirt
 sys-block/parted device-mapper # libvirt
 dev-libs/glib static-libs # qemu-user-static
 sys-libs/zlib static-libs minizip # qemu-user-static telegram
@@ -166,6 +166,9 @@ kde-frameworks/prison qml
 sys-apps/util-linux caps
 dev-libs/libgit2 ssh
 dev-libs/jemalloc lazy-lock prof stats unwind
+dev-lang/luajit lua52compat
+dev-lua/luv lua_single_target_luajit -lua_single_target_lua5-4
+sys-auth/polkit duktape
 
 # Tex
 app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra

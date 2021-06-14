@@ -1,13 +1,5 @@
 */*::mv
-*/*::jorgicio
-*/*::lua
-*/*::lanodanOverlay
-*/*::sorrow
 */*::pg_overlay
-*/*::tgbugs-overlay
-*/*::FireBurn
-dev-dotnet/*::dotnet
-*/*::pentoo
 
 dev-lang/python:3.10
 dev-lang/python::gentoo
@@ -20,7 +12,6 @@ sys-devel/binutils::gentoo
 app-i18n/man-pages-zh_CN::gentoo-zh
 net-libs/webkit-gtk::musl
 net-proxy/v2ray-bin
-sys-auth/polkit::musl
 www-client/firefox::gentoo
 dev-libs/elftoolchain
 virtual/libelf::12101111-overlay
@@ -35,4 +26,3 @@ net-proxy/qvplugin-ssr::gentoo-zh
 net-proxy/qvplugin-command::gentoo-zh
 net-proxy/qvplugin-trojan::gentoo-zh
 
-dev-lang/zig::gentoo # LLVM 12
