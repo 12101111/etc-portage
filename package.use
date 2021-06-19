@@ -1,6 +1,6 @@
 # Compiler
 sys-devel/gcc fortran openmp jit
-dev-lang/rust system-llvm clippy rustfmt miri rls wasm system-bootstrap parallel-compiler nightly wasi
+dev-lang/rust system-llvm rustfmt wasm system-bootstrap parallel-compiler nightly wasi
 dev-lang/go system-bootstrap # to upgrade itself
 sys-devel/llvm libedit gold exegesis mlir z3
 dev-util/lldb libedit lzma
