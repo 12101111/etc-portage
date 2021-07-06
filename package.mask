@@ -19,10 +19,10 @@ virtual/libelf::12101111-overlay
 dev-util/android-tools::musl
 sys-devel/gdb::musl
 app-editors/emacs::gentoo
+sys-auth/polkit::gentoo
 
 net-dns/avahi
 net-proxy/qv2ray::gentoo-zh
 net-proxy/qvplugin-ssr::gentoo-zh
 net-proxy/qvplugin-command::gentoo-zh
 net-proxy/qvplugin-trojan::gentoo-zh
-

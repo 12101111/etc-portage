@@ -1,0 +1,37 @@
+diff --git a/src/main.cpp b/src/main.cpp
+index 13a2567..abc9a13 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -4,6 +4,7 @@
+ #include <sys/types.h>
+ #include <sys/wait.h>
+ #include <spdlog/spdlog.h>
++#include <spdlog/cfg/env.h>
+ #include "client.hpp"
+ 
+ std::mutex reap_mtx;
+@@ -69,6 +70,7 @@ void startSignalThread(void) {
+ }
+ 
+ int main(int argc, char* argv[]) {
++  spdlog::cfg::load_env_levels();
+   try {
+     auto client = waybar::Client::inst();
+ 
+diff --git a/src/modules/sni/item.cpp b/src/modules/sni/item.cpp
+index abf9556..84b4b90 100644
+--- a/src/modules/sni/item.cpp
++++ b/src/modules/sni/item.cpp
+@@ -167,12 +167,8 @@ void Item::processUpdatedProperties(Glib::RefPtr<Gio::AsyncResult>& _result) {
+     auto properties = properties_variant.get();
+ 
+     for (const auto& [name, value] : properties) {
+-      Glib::VariantBase old_value;
+-      proxy_->get_cached_property(old_value, name);
+-      if (!old_value || !value.equal(old_value)) {
+         proxy_->set_cached_property(name, value);
+         setProperty(name, const_cast<Glib::VariantBase&>(value));
+-      }
+     }
+ 
+     this->updateImage();

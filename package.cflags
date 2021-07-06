@@ -33,6 +33,7 @@ dev-lang/python LDFLAGS+=-Wl,-z,stack-size=0x200000
 dev-util/lldb LDFLAGS+=-Wl,-z,stack-size=0x800000
 dev-dotnet/coreclr LDFLAGS+=-Wl,-z,stack-size=0x800000
 dev-dotnet/corehost LDFLAGS+=-Wl,-z,stack-size=0x800000
+app-text/goldendict LDFLAGS+=-Wl,-z,stack-size=0x800000
 
 # missing libs
 net-libs/gtk-vnc LDFLAGS+=-lucontext

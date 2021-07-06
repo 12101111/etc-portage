@@ -10,7 +10,7 @@ sys-libs/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack 
 # Graphic
 media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind
 x11-base/xorg-server xvfb libglvnd elogind -suid
-x11-wm/awesome dbus doc gnome
+x11-wm/awesome dbus doc gnome lua_single_target_luajit
 x11-misc/picom dbus
 media-libs/freetype harfbuzz infinality
 gui-wm/sway wallpapers tray -swaylock fish-completion seatd
@@ -142,7 +142,7 @@ media-video/pipewire pulseaudio sdl aptx aac extra pipewire-alsa v4l
 media-sound/pulseaudio -alsa-plugin -webrtc-aec -tcpd -asyncns
 media-libs/libtgvoip pulseaudio
 media-libs/tg_owt pulseaudio
-net-im/telegram-desktop pulseaudio lto
+net-im/telegram-desktop pulseaudio lto webkit
 app-crypt/pinentry gnome-keyring gtk qt5
 media-libs/phonon gstreamer
 #dev-qt/qtprintsupport cups # kde-plasma/xdg-desktop-portal-kde
@@ -169,6 +169,8 @@ dev-libs/jemalloc lazy-lock prof stats unwind
 dev-lang/luajit lua52compat
 dev-lua/luv lua_single_target_luajit -lua_single_target_lua5-4
 sys-auth/polkit duktape
+dev-util/vulkan-tools cube -wayland
+dev-lua/ldoc lua_single_target_luajit
 
 # Tex
 app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra
