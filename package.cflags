@@ -47,5 +47,4 @@ media-tv/v4l-utils LDFLAGS+=-largp
 dev-libs/libedit CFLAGS+=-D__STDC_ISO_10646__
 dev-qt/qtcore LDFLAGS+=-lexecinfo
 net-p2p/qbittorrent LDFLAGS+=-lexecinfo
-net-libs/libtorrent-rasterbar CFLAGS+=-Wl,-lgcc # __udivti3
 app-editors/neovim LDFLAGS+=-lexecinfo

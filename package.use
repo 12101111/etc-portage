@@ -211,6 +211,7 @@ kde-frameworks/kio -kwallet
 kde-plasma/plasma-meta -desktop-portal -crypt -display-manager -firewall -handbook -legacy-systray -networkmanager -sddm -smart -browser-integration
 kde-plasma/powerdevil -wireless
 sys-fs/lvm2 -thin
+media-libs/libmypaint -openmp
 
 # chromium and electron
 media-libs/libvpx svc
