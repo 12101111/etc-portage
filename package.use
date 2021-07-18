@@ -19,7 +19,7 @@ gui-apps/waybar network tray mpd wifi
 # Apps
 www-client/firefox hwaccel clang lto pgo screencast geckodriver
 mail-client/thunderbird hwaccel clang lto pgo
-app-editors/emacs jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars xft
+app-editors/emacs -jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars xft
 app-editors/vim X python
 media-video/mpv archive cli drm libass opengl lua vaapi libmpv lua_single_target_luajit
 net-misc/remmina rdp vnc appindicator gnome-keyring spice ssh
@@ -46,7 +46,7 @@ media-video/obs-studio lua v4l truetype pipewire fdk speex vlc python lua_single
 dev-vcs/git subversion perl
 dev-vcs/subversion perl
 dev-util/perf -clang lzma libpfm perl -python unwind
-dev-qt/qt-creator beautifier cmake cppcheck git lsp perfprofiler python
+dev-qt/qt-creator beautifier cmake cppcheck git lsp perfprofiler python webengine
 app-shells/fish doc
 app-crypt/gnupg scd-shared-access 
 media-gfx/nomacs opencv tiff
@@ -217,7 +217,7 @@ media-libs/libmypaint -openmp
 media-libs/libvpx svc
 net-libs/nodejs icu inspector system-icu
 dev-libs/libxml2 icu
-app-editors/vscode savedconfig system-electron system-ripgrep
+app-editors/vscode savedconfig system-electron system-ripgrep builtin-extensions
 media-video/pipewire ffmpeg gstreamer
 dev-util/electron suid tcmalloc lto pgo custom-cflags system-icu clang wayland pipewire screencast
 dev-util/electron:9 -wayland -tcmalloc

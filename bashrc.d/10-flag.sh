@@ -605,7 +605,7 @@ FlagMesonDedup() {
 	local newld=
 	FlagNodupAdd "$CFLAGS $CXXFLAGS $CPPFLAGS $FFLAGS $FCFLAGS $F77FLAGS" \
 		newld $LDFLAGS
-	LDFLAGS=$newld
+	#LDFLAGS=$newld
 }
 
 FlagSetFlags() {
@@ -653,11 +653,11 @@ FlagSetFlags() {
 	else	: ${KEEPPGO:=:}
 	fi
 	BashrcdTrue $NOLDOPT || FlagAdd LDFLAGS $OPTLDFLAGS
-	BashrcdTrue $NOCADD || BashrcdTrue $MESONDEDUP || \
-		case " $LDFLAGS $CFLAGS $CXXFLAGS" in
-		*[[:space:]]'-flto'*)
-			ld="$CFLAGS $CXXFLAGS";;
-		esac
+	#BashrcdTrue $NOCADD || BashrcdTrue $MESONDEDUP || \
+	#	case " $LDFLAGS $CFLAGS $CXXFLAGS" in
+	#	*[[:space:]]'-flto'*)
+	#		ld="$CFLAGS $CXXFLAGS";;
+	#	esac
 	BashrcdTrue $NOLDADD || BashrcdTrue $MESONDEDUP || FlagAddCFlags $LDFLAGS
 	FlagAdd LDFLAGS $ld
 	BashrcdTrue $NOCOPT || FlagAdd CFLAGS $OPTCFLAGS

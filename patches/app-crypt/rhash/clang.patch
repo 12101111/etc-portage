@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index 59d432b..c161a1b 100755
+--- a/configure
++++ b/configure
+@@ -544,7 +544,7 @@ else
+         finish_check "$cc_name $cc_version"
+         break
+       fi
+-      if echo "$cc_name_tmp" | grep -q "clang"; then
++      if $CC --version 2>&1 | head -n 1 | cut -d ' ' -f 1 | grep -q "clang"; then
+         start_check "$CC version"
+         cc_vendor=clang
+         cc_version=$($CC -dumpversion 2>&1)

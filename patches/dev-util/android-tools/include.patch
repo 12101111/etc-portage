@@ -1,0 +1,15 @@
+diff --git a/vendor/e2fsprogs/lib/ext2fs/ext2fs.h b/vendor/e2fsprogs/lib/ext2fs/ext2fs.h
+index 5012b50..eb59dd0 100644
+--- a/vendor/e2fsprogs/lib/ext2fs/ext2fs.h
++++ b/vendor/e2fsprogs/lib/ext2fs/ext2fs.h
+@@ -53,10 +53,7 @@ extern "C" {
+  */
+ #define EXT2_LIB_CURRENT_REV	EXT2_DYNAMIC_REV
+ 
+-#ifdef HAVE_SYS_TYPES_H
+ #include <sys/types.h>
+-#endif
+-
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>

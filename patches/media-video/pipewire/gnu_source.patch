@@ -1,0 +1,12 @@
+diff --git a/src/examples/video-src-reneg.c b/src/examples/video-src-reneg.c
+index 133fc90..a451885 100644
+--- a/src/examples/video-src-reneg.c
++++ b/src/examples/video-src-reneg.c
+@@ -24,6 +24,7 @@
+ 
+ #include "config.h"
+ 
++#define _GNU_SOURCE
+ #include <stdio.h>
+ #include <errno.h>
+ #include <signal.h>
