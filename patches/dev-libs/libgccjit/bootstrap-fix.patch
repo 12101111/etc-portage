@@ -1,0 +1,25 @@
+diff --git a/gcc/Makefile.in b/gcc/Makefile.in
+index 0191211..87350ac 100644
+--- a/gcc/Makefile.in
++++ b/gcc/Makefile.in
+@@ -2127,7 +2127,7 @@ cpp$(exeext): $(GCC_OBJS) c-family/cppspec.o libcommon-target.a $(LIBDEPS) \
+ 
+ # Dump a specs file to make -B./ read these specs over installed ones.
+ $(SPECS): xgcc$(exeext)
+-	$(GCC_FOR_TARGET) -dumpspecs > tmp-specs
++	./xgcc -dumpspecs > tmp-specs
+ 	mv tmp-specs $(SPECS)
+ 
+ # We do want to create an executable named `xgcc', so we can use it to
+diff --git a/gcc/c/Make-lang.in b/gcc/c/Make-lang.in
+index a1cdee8..b51157c 100644
+--- a/gcc/c/Make-lang.in
++++ b/gcc/c/Make-lang.in
+@@ -124,7 +124,6 @@ C_SELFTEST_DEPS = cc1$(exeext) $(SELFTEST_DEPS)
+ 
+ # Run the C selftests:
+ s-selftest-c: $(C_SELFTEST_DEPS)
+-	$(GCC_FOR_TARGET) $(C_SELFTEST_FLAGS)
+ 	$(STAMP) $@
+ 
+ # Convenience methods for running C selftests under gdb:

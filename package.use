@@ -19,7 +19,7 @@ gui-apps/waybar network tray mpd wifi
 # Apps
 www-client/firefox hwaccel clang lto pgo screencast geckodriver
 mail-client/thunderbird hwaccel clang lto pgo
-app-editors/emacs -jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars xft
+app-editors/emacs jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars xft
 app-editors/vim X python
 media-video/mpv archive cli drm libass opengl lua vaapi libmpv lua_single_target_luajit
 net-misc/remmina rdp vnc appindicator gnome-keyring spice ssh

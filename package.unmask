@@ -21,5 +21,5 @@ net-misc/neatvnc
 
 x11-libs/pango
 dev-libs/elfutils
-app-office/libreoffice
+app-office/libreoffice::gentoo
 app-office/libreoffice-l10n::gentoo

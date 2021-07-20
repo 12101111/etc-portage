@@ -6,4 +6,4 @@ LDFLAGS="-fuse-ld=lld -rtlib=compiler-rt -unwindlib=libunwind \
 -march=skylake -mtune=skylake"
 FEATURES="installsources nostrip"
 #FEATURES="installsources splitdebug compressdebug"
-PORTAGE_TMPDIR="/usr/obj"
+#PORTAGE_TMPDIR="/usr/obj"
