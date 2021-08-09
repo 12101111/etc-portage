@@ -1,0 +1,12 @@
+diff --git a/include/ldb.h b/include/ldb.h
+index 08e2096..622f021 100644
+--- a/include/ldb.h
++++ b/include/ldb.h
+@@ -48,6 +48,7 @@
+ 
+ #include <stdbool.h>
+ #include <talloc.h>
++#include <unistd.h>
+ #include <tevent.h>
+ #include <ldb_version.h>
+ #include <ldb_errors.h>

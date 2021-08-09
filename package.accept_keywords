@@ -1,3 +1,6 @@
+gui-wm/sway **
+gui-libs/wlroots **
+app-text/scdoc **
 gui-apps/swaylock-effects **
 gui-apps/waybar **
 gui-apps/wf-recorder **
@@ -15,4 +18,3 @@ gui-apps/wayvnc **
 gui-libs/neatvnc **
 dev-libs/aml **
 dev-lang/luajit **
-app-editors/neovim **

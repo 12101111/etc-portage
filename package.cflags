@@ -19,6 +19,7 @@ games-misc/typespeed /-flto*/-fno-lto/
 app-emulation/bochs /-flto*/-fno-lto/
 app-text/ghostscript-gpl /-flto*/-fno-lto/
 dev-java/openjdk /-flto*/-fno-lto/
+sys-apps/attr /-flto*/-fno-lto/
 
 # full lto
 sys-devel/llvm /-flto*/-flto=full

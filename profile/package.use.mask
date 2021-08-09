@@ -1,1 +1,2 @@
 dev-java/openjdk-bin -gentoo-vm
+dev-java/openjdk -gentoo-vm

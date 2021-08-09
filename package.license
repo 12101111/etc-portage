@@ -4,3 +4,4 @@ sys-kernel/linux-firmware linux-fw-redistributable no-source-code
 app-misc/xmind EULA
 app-editors/typora EULA
 media-libs/faac MPEG-4
+dev-util/idea-community codehaus-classworlds

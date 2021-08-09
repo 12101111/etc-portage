@@ -1,1 +1,1 @@
-PORTAGE_TMPDIR="/data/tmp"
+PORTAGE_TMPDIR="/usr/obj"

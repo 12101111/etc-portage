@@ -1,11 +1,12 @@
 # Compiler
 sys-devel/gcc fortran openmp jit
-dev-lang/rust system-llvm rustfmt wasm system-bootstrap parallel-compiler nightly wasi
+dev-lang/rust system-llvm rustfmt wasm system-bootstrap parallel-compiler nightly wasi clippy
 dev-lang/go system-bootstrap # to upgrade itself
 sys-devel/llvm libedit gold exegesis mlir z3
 dev-util/lldb libedit lzma
 sys-devel/clang xml default-lld # lldb
 sys-libs/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray libfuzzer profile
+dev-java/openjdk gentoo-vm
 
 # Graphic
 media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind
@@ -27,7 +28,7 @@ media-sound/mpd flac
 media-video/ffmpeg dav1d fontconfig truetype openh264 xcb jpeg2k libaom libass libdrm openssl opus v4l mp3 webp x264 x265 vaapi vpx
 net-misc/freerdp ffmpeg gstreamer openh264 usb server smartcard xinerama xv
 media-libs/libsdl2 gles2 udev vulkan haptic
-net-misc/aria2 bittorrent libuv sqlite xmlrpc
+net-misc/aria2 bittorrent libuv sqlite xmlrpc -jemalloc
 x11-terms/st savedconfig
 net-analyzer/wireshark qt5
 www-client/otter webkit webengine
@@ -42,10 +43,10 @@ sys-process/procps modern-top
 kde-plasma/ksysguard lm-sensors
 www-client/uget aria2 libnotify openssl -gnutls
 mail-client/mutt gdbm mbox pop gpgme
-media-video/obs-studio lua v4l truetype pipewire fdk speex vlc python lua_single_target_luajit
+media-video/obs-studio lua v4l truetype pipewire fdk speex vlc python lua_single_target_luajit -ssl
 dev-vcs/git subversion perl
 dev-vcs/subversion perl
-dev-util/perf -clang lzma libpfm perl -python unwind
+dev-util/perf -clang lzma libpfm perl -python
 dev-qt/qt-creator beautifier cmake cppcheck git lsp perfprofiler python webengine
 app-shells/fish doc
 app-crypt/gnupg scd-shared-access 
@@ -85,6 +86,7 @@ dev-java/openjdk-bin gentoo-vm
 sys-libs/llvm-libunwind static-libs
 sys-libs/libcxx static-libs
 sys-libs/libcxxabi static-libs
+sys-apps/kmod zstd
 
 # libs
 x11-libs/libxcb xkb # xorg-server awesome
@@ -165,12 +167,14 @@ app-text/poppler lcms cjk
 kde-frameworks/prison qml
 sys-apps/util-linux caps
 dev-libs/libgit2 ssh
-dev-libs/jemalloc lazy-lock prof stats unwind
+dev-libs/jemalloc -lazy-lock prof stats unwind
 dev-lang/luajit lua52compat
 dev-lua/luv lua_single_target_luajit -lua_single_target_lua5-4
 sys-auth/polkit duktape
 dev-util/vulkan-tools cube -wayland
 dev-lua/ldoc lua_single_target_luajit
+net-p2p/qbittorrent webui
+dev-util/pycharm-community -bundled-jdk
 
 # Tex
 app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra

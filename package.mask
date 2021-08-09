@@ -6,6 +6,7 @@ dev-lang/python::gentoo
 x11-libs/gtk+::gentoo
 media-libs/mesa::musl
 dev-java/openjdk-bin::gentoo
+dev-java/openjdk::gentoo
 sys-devel/binutils::musl
 sys-devel/binutils::gentoo
 #sys-apps/attr::gentoo #https://bugs.gentoo.org/644048
