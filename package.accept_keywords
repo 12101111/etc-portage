@@ -5,9 +5,6 @@ gui-apps/swaylock-effects **
 gui-apps/waybar **
 gui-apps/wf-recorder **
 
-net-proxy/qv2ray **
-net-proxy/qvplugin-ssr **
-
 app-editors/emacs **
 app-text/goldendict **
 www-client/otter **
