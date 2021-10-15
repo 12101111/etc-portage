@@ -1,6 +1,6 @@
 # Compiler
 sys-devel/gcc fortran openmp jit
-dev-lang/rust system-llvm rustfmt wasm system-bootstrap parallel-compiler nightly wasi clippy
+dev-lang/rust system-llvm system-bootstrap rustfmt wasm nightly wasi clippy miri rls
 dev-lang/go system-bootstrap # to upgrade itself
 sys-devel/llvm libedit gold exegesis mlir z3
 dev-util/lldb libedit lzma
@@ -19,7 +19,7 @@ gui-apps/waybar network tray mpd wifi
 
 # Apps
 www-client/firefox hwaccel clang lto pgo screencast geckodriver
-mail-client/thunderbird hwaccel clang lto pgo
+mail-client/thunderbird hwaccel clang lto
 app-editors/emacs jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars xft
 app-editors/vim X python
 media-video/mpv archive cli drm libass opengl lua vaapi libmpv lua_single_target_luajit
@@ -32,7 +32,7 @@ net-misc/aria2 bittorrent libuv sqlite xmlrpc -jemalloc
 x11-terms/st savedconfig
 net-analyzer/wireshark qt5
 www-client/otter webkit webengine
-app-text/goldendict multimedia opencc zim ffmpeg debug
+app-text/goldendict multimedia opencc zim ffmpeg debug -qtwebengine
 app-office/libreoffice gstreamer pdfimport java dbus kde
 net-fs/samba client syslog
 x11-apps/igt-gpu-tools overlay
@@ -64,6 +64,7 @@ dev-util/strace elfutils perl
 app-misc/skim tmux
 media-video/vlc dav1d archive fdk flac fontconfig gstreamer libass libnotify mp3 ogg opus speex truetype v4l vpx
 app-editors/neovim lua_single_target_luajit
+gui-apps/wayvnc gbm
 
 # VM / Emulator
 app-emulation/qemu udev zstd jemalloc gtk usb usbredir spice virgl -pin-upstream-blobs virtfs static-user -slirp io-uring virgl vte gnutls vhost-user-fs
@@ -80,13 +81,16 @@ app-emulation/bochs avx debugger
 sys-apps/openrc sysv-utils # to use openrc-init
 sys-kernel/linux-firmware savedconfig
 dev-lang/python sqlite tk # firefox
-sys-apps/busybox math syslog savedconfig
+sys-apps/busybox math syslog savedconfig static -pam
 app-portage/portage-bashrc-mv ccache
 dev-java/openjdk-bin gentoo-vm
 sys-libs/llvm-libunwind static-libs
 sys-libs/libcxx static-libs
 sys-libs/libcxxabi static-libs
 sys-apps/kmod zstd
+net-firewall/nftables xtables python
+sys-apps/coreutils gmp caps multicall
+x11-drivers/nvidia-drivers -tools -X -wayland
 
 # libs
 x11-libs/libxcb xkb # xorg-server awesome
@@ -144,7 +148,8 @@ media-video/pipewire pulseaudio sdl aptx aac extra pipewire-alsa v4l
 media-sound/pulseaudio -alsa-plugin -webrtc-aec -tcpd -asyncns
 media-libs/libtgvoip pulseaudio
 media-libs/tg_owt pulseaudio
-net-im/telegram-desktop pulseaudio lto webkit
+net-im/telegram-desktop pulseaudio lto webkit screencast
+media-libs/tg_owt screencast
 app-crypt/pinentry gnome-keyring gtk qt5
 media-libs/phonon gstreamer
 #dev-qt/qtprintsupport cups # kde-plasma/xdg-desktop-portal-kde
@@ -162,7 +167,7 @@ net-libs/zeromq drafts #jupyter
 media-libs/gegl cairo
 media-libs/babl introspection lcms
 media-libs/gegl introspection lcms
-kde-apps/kio-extras mtp nfs #samba
+kde-apps/kio-extras mtp nfs samba
 app-text/poppler lcms cjk
 kde-frameworks/prison qml
 sys-apps/util-linux caps
@@ -173,8 +178,15 @@ dev-lua/luv lua_single_target_luajit -lua_single_target_lua5-4
 sys-auth/polkit duktape
 dev-util/vulkan-tools cube -wayland
 dev-lua/ldoc lua_single_target_luajit
-net-p2p/qbittorrent webui
+net-p2p/qbittorrent-enhanced webui
 dev-util/pycharm-community -bundled-jdk
+net-libs/gnutls tools
+dev-util/bcc lua_single_target_luajit
+dev-libs/libbpf static-libs
+virtual/libcrypt static-libs
+x11-libs/cairo -opengl
+app-misc/pax-utils -seccomp
+dev-lang/spidermonkey lto
 
 # Tex
 app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra
@@ -211,7 +223,6 @@ dev-libs/elfutils -nls
 media-tv/v4l-utils -bpf
 app-text/opensp -nls #link error
 sys-apps/man-pages -l10n_zh-CN
-kde-frameworks/kio -kwallet
 kde-plasma/plasma-meta -desktop-portal -crypt -display-manager -firewall -handbook -legacy-systray -networkmanager -sddm -smart -browser-integration
 kde-plasma/powerdevil -wireless
 sys-fs/lvm2 -thin
@@ -224,8 +235,95 @@ dev-libs/libxml2 icu
 app-editors/vscode savedconfig system-electron system-ripgrep builtin-extensions
 media-video/pipewire ffmpeg gstreamer
 dev-util/electron suid tcmalloc lto pgo custom-cflags system-icu clang wayland pipewire screencast
-dev-util/electron:9 -wayland -tcmalloc
-dev-util/electron:11 -tcmalloc
-www-client/chromium tcmalloc ozone wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official
+www-client/chromium tcmalloc hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official
 dev-lang/python:2.7 -tk -bluetooth
 
+# Python 3.9
+app-crypt/swtpm PYTHON_SINGLE_TARGET: python3_9
+app-crypt/yubikey-manager-qt PYTHON_SINGLE_TARGET: python3_9
+app-emulation/virt-manager PYTHON_SINGLE_TARGET: python3_9
+media-gfx/inkscape PYTHON_SINGLE_TARGET: python3_9
+net-fs/samba PYTHON_SINGLE_TARGET: python3_9
+x11-terms/kitty PYTHON_SINGLE_TARGET: python3_9
+dev-util/itstool PYTHON_SINGLE_TARGET: python3_9
+sys-libs/libblockdev PYTHON_SINGLE_TARGET: python3_9
+sys-apps/pcsc-lite PYTHON_SINGLE_TARGET: python3_9
+sys-libs/ldb PYTHON_SINGLE_TARGET: python3_9
+sys-libs/talloc PYTHON_SINGLE_TARGET: python3_9
+sys-libs/tevent PYTHON_SINGLE_TARGET: python3_9
+net-fs/cifs-utils PYTHON_SINGLE_TARGET: python3_9
+dev-util/gtk-doc PYTHON_SINGLE_TARGET: python3_9
+media-gfx/fontforge PYTHON_SINGLE_TARGET: python3_9
+app-misc/solaar PYTHON_SINGLE_TARGET: python3_9 -python3_10
+
+app-portage/pacvis PYTHON_TARGETS: python3_9
+app-portage/pfl PYTHON_TARGETS: python3_9
+dev-python/libvirt-python PYTHON_TARGETS: python3_9
+dev-python/paho-mqtt PYTHON_TARGETS: python3_9
+dev-util/perf PYTHON_TARGETS: python3_9
+media-sound/pulsemixer PYTHON_TARGETS: python3_9
+media-video/mpv PYTHON_TARGETS: python3_9
+www-client/qutebrowser PYTHON_TARGETS: python3_9
+x11-base/xcb-proto PYTHON_TARGETS: python3_9
+dev-libs/libxml2 PYTHON_TARGETS: python3_9
+dev-util/scons PYTHON_TARGETS: python3_9
+dev-python/jinja PYTHON_TARGETS: python3_9
+dev-python/markupsafe PYTHON_TARGETS: python3_9
+dev-python/setuptools PYTHON_TARGETS: python3_9
+dev-python/certifi PYTHON_TARGETS: python3_9
+dev-python/setuptools_scm PYTHON_TARGETS: python3_9
+dev-python/packaging PYTHON_TARGETS: python3_9
+dev-python/tomli PYTHON_TARGETS: python3_9
+dev-python/pyparsing PYTHON_TARGETS: python3_9
+dev-java/java-config PYTHON_TARGETS: python3_9
+dev-java/javatoolkit PYTHON_TARGETS: python3_9
+sys-apps/portage PYTHON_TARGETS: python3_9
+app-portage/gemato PYTHON_TARGETS: python3_9
+dev-python/requests PYTHON_TARGETS: python3_9
+dev-python/charset_normalizer PYTHON_TARGETS: python3_9
+dev-python/idna PYTHON_TARGETS: python3_9
+dev-python/urllib3 PYTHON_TARGETS: python3_9
+dev-python/PySocks PYTHON_TARGETS: python3_9
+media-libs/opencv PYTHON_TARGETS: python3_9
+app-text/gnome-doc-utils PYTHON_TARGETS: python3_9
+dev-util/cppcheck PYTHON_TARGETS: python3_9
+dev-python/pygments PYTHON_TARGETS: python3_9
+dev-python/pyyaml PYTHON_TARGETS: python3_9
+dev-python/cython PYTHON_TARGETS: python3_9
+dev-python/PyQt5 PYTHON_TARGETS: python3_9
+dev-python/dbus-python PYTHON_TARGETS: python3_9
+dev-python/PyQt5-sip PYTHON_TARGETS: python3_9
+dev-python/PyQt-builder PYTHON_TARGETS: python3_9
+dev-python/sip PYTHON_TARGETS: python3_9
+dev-python/toml PYTHON_TARGETS: python3_9
+dev-python/lxml PYTHON_TARGETS: python3_9
+dev-python/pygobject PYTHON_TARGETS: python3_9
+dev-python/pycairo PYTHON_TARGETS: python3_9
+dev-python/six PYTHON_TARGETS: python3_9
+dev-python/numpy PYTHON_TARGETS: python3_9
+dev-python/typing-extensions PYTHON_TARGETS: python3_9
+www-servers/tornado PYTHON_TARGETS: python3_9
+dev-python/mistune PYTHON_TARGETS: python3_9
+dev-python/docutils PYTHON_TARGETS: python3_9
+dev-python/m2r PYTHON_TARGETS: python3_9
+dev-python/click PYTHON_TARGETS: python3_9
+dev-python/cffi PYTHON_TARGETS: python3_9
+dev-python/cryptography PYTHON_TARGETS: python3_9
+dev-python/pyasn1-modules PYTHON_TARGETS: python3_9
+dev-python/pyasn1 PYTHON_TARGETS: python3_9
+dev-python/service_identity PYTHON_TARGETS: python3_9
+dev-python/pyopenssl PYTHON_TARGETS: python3_9
+dev-python/zope-interface PYTHON_TARGETS: python3_9
+dev-python/pyhamcrest PYTHON_TARGETS: python3_9
+dev-python/incremental PYTHON_TARGETS: python3_9
+dev-python/hyperlink PYTHON_TARGETS: python3_9
+dev-python/constantly PYTHON_TARGETS: python3_9
+dev-python/automat PYTHON_TARGETS: python3_9
+dev-python/attrs PYTHON_TARGETS: python3_9
+dev-python/twisted PYTHON_TARGETS: python3_9
+dev-python/pycurl PYTHON_TARGETS: python3_9
+dev-python/pycparser PYTHON_TARGETS: python3_9
+dev-python/ply PYTHON_TARGETS: python3_9
+dev-python/namespace-zope PYTHON_TARGETS: python3_9
+dev-python/pytz PYTHON_TARGETS: python3_9
+app-misc/yq PYTHON_TARGETS: python3_9

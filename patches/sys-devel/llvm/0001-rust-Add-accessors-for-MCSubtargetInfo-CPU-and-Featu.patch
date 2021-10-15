@@ -1,7 +1,7 @@
-From f52511528e9f879c91a1956098aff079e3773727 Mon Sep 17 00:00:00 2001
+From 2782c3042fe108c52844aa0c117d611254ed7a0d Mon Sep 17 00:00:00 2001
 From: Cameron Hart <cameron.hart@gmail.com>
 Date: Sun, 10 Jul 2016 23:55:53 +1000
-Subject: [PATCH] [rust] Add accessors for MCSubtargetInfo CPU and Feature
+Subject: [PATCH 1/5] [rust] Add accessors for MCSubtargetInfo CPU and Feature
  tables
 
 This is needed for `-C target-cpu=help` and `-C target-feature=help` in rustc
@@ -10,10 +10,10 @@ This is needed for `-C target-cpu=help` and `-C target-feature=help` in rustc
  1 file changed, 8 insertions(+)
 
 diff --git a/llvm/include/llvm/MC/MCSubtargetInfo.h b/llvm/include/llvm/MC/MCSubtargetInfo.h
-index 2c1072d833fb..6340f60eead3 100644
+index 839a3bd85829..8e98d6f7a08b 100644
 --- a/llvm/include/llvm/MC/MCSubtargetInfo.h
 +++ b/llvm/include/llvm/MC/MCSubtargetInfo.h
-@@ -226,6 +226,14 @@ class MCSubtargetInfo {
+@@ -229,6 +229,14 @@ public:
      return Found != ProcDesc.end() && StringRef(Found->Key) == CPU;
    }
  
@@ -28,4 +28,6 @@ index 2c1072d833fb..6340f60eead3 100644
    virtual unsigned getHwMode() const { return 0; }
  
    /// Return the cache size in bytes for the given level of cache.
+-- 
+2.33.0
 

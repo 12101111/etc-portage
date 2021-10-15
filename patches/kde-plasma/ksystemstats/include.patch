@@ -1,0 +1,24 @@
+diff --git a/plugins/cpu/loadaverages.cpp b/plugins/cpu/loadaverages.cpp
+index c756e35..6635906 100644
+--- a/plugins/cpu/loadaverages.cpp
++++ b/plugins/cpu/loadaverages.cpp
+@@ -6,6 +6,7 @@
+ 
+ #include "loadaverages.h"
+ 
++#include <array>
+ #include <KLocalizedString>
+ 
+ LoadAverages::LoadAverages(KSysGuard::SensorContainer *parent)
+diff --git a/plugins/lmsensors/lmsensors.cpp b/plugins/lmsensors/lmsensors.cpp
+index c7326ee..af3ab57 100644
+--- a/plugins/lmsensors/lmsensors.cpp
++++ b/plugins/lmsensors/lmsensors.cpp
+@@ -10,6 +10,7 @@
+ #include <systemstats/SensorObject.h>
+ #include <systemstats/SensorsFeatureSensor.h>
+ 
++#include <array>
+ #include <KLocalizedString>
+ #include <KPluginFactory>
+ 

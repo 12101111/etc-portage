@@ -1,19 +1,19 @@
-From c3fb40134af61d5b8a95b7c3ee586421f345d3ba Mon Sep 17 00:00:00 2001
+From 33901250f97910415ddae131ec344b4b0febc612 Mon Sep 17 00:00:00 2001
 From: Simonas Kazlauskas <git@kazlauskas.me>
 Date: Sat, 3 Jun 2017 18:55:08 +0300
-Subject: [PATCH] [rust] Add knowledge of __rust_{alloc,realloc,dealloc}
+Subject: [PATCH 2/5] [rust] Add knowledge of __rust_{alloc,realloc,dealloc}
 
 ---
- .../llvm/Analysis/TargetLibraryInfo.def       | 10 +++++++++
- llvm/lib/Analysis/MemoryBuiltins.cpp          |  8 +++++--
- llvm/lib/Analysis/TargetLibraryInfo.cpp       | 22 +++++++++++++++++++
- 3 files changed, 38 insertions(+), 2 deletions(-)
+ .../llvm/Analysis/TargetLibraryInfo.def       | 10 ++++++++++
+ llvm/lib/Analysis/MemoryBuiltins.cpp          |  8 ++++++--
+ llvm/lib/Analysis/TargetLibraryInfo.cpp       | 19 +++++++++++++++++++
+ 3 files changed, 35 insertions(+), 2 deletions(-)
 
 diff --git a/llvm/include/llvm/Analysis/TargetLibraryInfo.def b/llvm/include/llvm/Analysis/TargetLibraryInfo.def
-index defc95d0062a..8b7023a1dfba 100644
+index ded53617b304..88b434c25cc1 100644
 --- a/llvm/include/llvm/Analysis/TargetLibraryInfo.def
 +++ b/llvm/include/llvm/Analysis/TargetLibraryInfo.def
-@@ -385,6 +385,16 @@ TLI_DEFINE_STRING_INTERNAL("__powf_finite")
+@@ -391,6 +391,16 @@ TLI_DEFINE_STRING_INTERNAL("__powf_finite")
  /// long double __powl_finite(long double x, long double y);
  TLI_DEFINE_ENUM_INTERNAL(powl_finite)
  TLI_DEFINE_STRING_INTERNAL("__powl_finite")
@@ -31,22 +31,22 @@ index defc95d0062a..8b7023a1dfba 100644
  TLI_DEFINE_ENUM_INTERNAL(sincospi_stret)
  TLI_DEFINE_STRING_INTERNAL("__sincospi_stret")
 diff --git a/llvm/lib/Analysis/MemoryBuiltins.cpp b/llvm/lib/Analysis/MemoryBuiltins.cpp
-index 5dda96a2ca94..a42f54de9f2b 100644
+index 68e997656d84..a2e1364998a8 100644
 --- a/llvm/lib/Analysis/MemoryBuiltins.cpp
 +++ b/llvm/lib/Analysis/MemoryBuiltins.cpp
-@@ -109,7 +109,10 @@ static const std::pair<LibFunc, AllocFnsTy> AllocationFnData[] = {
-   {LibFunc_vec_realloc,         {ReallocLike, 2, 1,  -1}},
+@@ -111,7 +111,10 @@ static const std::pair<LibFunc, AllocFnsTy> AllocationFnData[] = {
    {LibFunc_reallocf,            {ReallocLike, 2, 1,  -1}},
    {LibFunc_strdup,              {StrDupLike,  1, -1, -1}},
--  {LibFunc_strndup,             {StrDupLike,  2, 1,  -1}}
-+  {LibFunc_strndup,             {StrDupLike,  2, 1,  -1}},
+   {LibFunc_strndup,             {StrDupLike,  2, 1,  -1}},
+-  {LibFunc___kmpc_alloc_shared, {MallocLike,  1, 0,  -1}}
++  {LibFunc___kmpc_alloc_shared, {MallocLike,  1, 0,  -1}},
 +
 +  {LibFunc_rust_alloc,         {MallocLike,  2, 0,  -1}},
 +  {LibFunc_rust_realloc,       {ReallocLike,  4, 3,  -1}},
    // TODO: Handle "int posix_memalign(void **, size_t, size_t)"
  };
  
-@@ -462,7 +465,8 @@ bool llvm::isLibFreeFunction(const Function *F, const LibFunc TLIFn) {
+@@ -464,7 +467,8 @@ bool llvm::isLibFreeFunction(const Function *F, const LibFunc TLIFn) {
             TLIFn == LibFunc_ZdlPvjSt11align_val_t || // delete(void*, unsigned long, align_val_t)
             TLIFn == LibFunc_ZdlPvmSt11align_val_t || // delete(void*, unsigned long, align_val_t)
             TLIFn == LibFunc_ZdaPvjSt11align_val_t || // delete[](void*, unsigned int, align_val_t)
@@ -57,19 +57,18 @@ index 5dda96a2ca94..a42f54de9f2b 100644
    else
      return false;
 diff --git a/llvm/lib/Analysis/TargetLibraryInfo.cpp b/llvm/lib/Analysis/TargetLibraryInfo.cpp
-index a4de21a2541e..7e90e8ca2948 100644
+index c3a609ee4fe1..fa5a5c5ae2d0 100644
 --- a/llvm/lib/Analysis/TargetLibraryInfo.cpp
 +++ b/llvm/lib/Analysis/TargetLibraryInfo.cpp
-@@ -1513,6 +1513,28 @@ bool TargetLibraryInfoImpl::isValidProtoForLibFunc(const FunctionType &FTy,
+@@ -1591,6 +1591,25 @@ bool TargetLibraryInfoImpl::isValidProtoForLibFunc(const FunctionType &FTy,
      else
        return false;
    }
 +
 +  case LibFunc_rust_alloc:
-+    return (NumParams == 3 && FTy.getReturnType()->isPointerTy() &&
++    return (NumParams == 2 && FTy.getReturnType()->isPointerTy() &&
 +            FTy.getParamType(0)->isIntegerTy() &&
-+            FTy.getParamType(1)->isIntegerTy() &&
-+            FTy.getParamType(2)->isPointerTy());
++            FTy.getParamType(1)->isIntegerTy());
 +
 +  case LibFunc_rust_dealloc:
 +    return (NumParams == 3 && FTy.getReturnType()->isVoidTy() &&
@@ -78,15 +77,15 @@ index a4de21a2541e..7e90e8ca2948 100644
 +            FTy.getParamType(2)->isIntegerTy());
 +
 +  case LibFunc_rust_realloc:
-+    return (NumParams == 6 && FTy.getReturnType()->isPointerTy() &&
++    return (NumParams == 4 && FTy.getReturnType()->isPointerTy() &&
 +            FTy.getParamType(0)->isPointerTy() &&
 +            FTy.getParamType(1)->isIntegerTy() &&
 +            FTy.getParamType(2)->isIntegerTy() &&
-+            FTy.getParamType(3)->isIntegerTy() &&
-+            FTy.getParamType(4)->isIntegerTy() &&
-+            FTy.getParamType(5)->isPointerTy());
++            FTy.getParamType(3)->isIntegerTy());
 +
    case LibFunc::NumLibFuncs:
    case LibFunc::NotLibFunc:
      break;
+-- 
+2.33.0
 

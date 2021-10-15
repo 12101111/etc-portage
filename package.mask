@@ -27,3 +27,5 @@ net-proxy/qv2ray::gentoo-zh
 net-proxy/qvplugin-ssr::gentoo-zh
 net-proxy/qvplugin-command::gentoo-zh
 net-proxy/qvplugin-trojan::gentoo-zh
+
+~dev-libs/boost-1.77.0

@@ -26,6 +26,7 @@ dev-scheme/racket /-Wl,--gc-sections//
 sys-devel/llvm /-flto*/-flto=full
 sys-devel/clang /-flto*/-flto=full
 app-emulation/qemu /-flto*/-flto=full
+x11-libs/pixman /-flto*/-flto=full
 
 # stack overflow
 sys-devel/clang LDFLAGS+=-Wl,-z,stack-size=0x800000
@@ -36,6 +37,10 @@ dev-util/lldb LDFLAGS+=-Wl,-z,stack-size=0x800000
 dev-dotnet/coreclr LDFLAGS+=-Wl,-z,stack-size=0x800000
 dev-dotnet/corehost LDFLAGS+=-Wl,-z,stack-size=0x800000
 app-text/goldendict LDFLAGS+=-Wl,-z,stack-size=0x800000
+# See https://gitlab.gnome.org/GNOME/librsvg/-/issues/595
+x11-libs/pixman LDFLAGS+=-Wl,-z,stack-size=0x200000
+net-libs/libtorrent-rasterbar LDFLAGS+=-Wl,-z,stack-size=0x200000
+dev-java/openjdk LDFLAGS+=-Wl,-z,stack-size=0x800000
 
 # missing libs
 net-libs/gtk-vnc LDFLAGS+=-lucontext
@@ -48,5 +53,5 @@ app-arch/rpm LDFLAGS+=-lelf
 media-tv/v4l-utils LDFLAGS+=-largp
 dev-libs/libedit CFLAGS+=-D__STDC_ISO_10646__
 dev-qt/qtcore LDFLAGS+=-lexecinfo
-net-p2p/qbittorrent LDFLAGS+=-lexecinfo
 app-editors/neovim LDFLAGS+=-lexecinfo
+www-client/falkon LDFLAGS+=-lexecinfo

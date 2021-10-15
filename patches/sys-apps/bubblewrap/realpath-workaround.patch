@@ -1,4 +1,6 @@
---- a/bind-mount.c.orig
+diff --git a/bind-mount.c b/bind-mount.c
+index 4246c15..2d08a17 100644
+--- a/bind-mount.c
 +++ b/bind-mount.c
 @@ -23,6 +23,28 @@
  #include "utils.h"
@@ -29,15 +31,16 @@
  static char *
  skip_token (char *line, bool eat_whitespace)
  {
-@@ -397,7 +419,11 @@ bind_mount (int           proc_fd,
+@@ -401,7 +423,12 @@ bind_mount (int           proc_fd,
       path, so to find it in the mount table we need to do that too. */
    resolved_dest = realpath (dest, NULL);
    if (resolved_dest == NULL)
 +#ifdef __GLIBC__
-     return 2;
+     return BIND_MOUNT_ERROR_REALPATH_DEST;
 +#else
 +    resolved_dest = normpath(strdup(dest));
 +#endif
++
  
-   mount_tab = parse_mountinfo (proc_fd, resolved_dest);
-   if (mount_tab[0].mountpoint == NULL)
+   dest_fd = open (resolved_dest, O_PATH | O_CLOEXEC);
+   if (dest_fd < 0)

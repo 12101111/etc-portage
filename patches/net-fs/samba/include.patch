@@ -1,0 +1,12 @@
+diff --git a/lib/util/signal.h b/lib/util/signal.h
+index 0663af6..0537983 100644
+--- a/lib/util/signal.h
++++ b/lib/util/signal.h
+@@ -22,6 +22,7 @@
+ #define _SAMBA_UTIL_SIGNAL_H_
+ 
+ #include <stdbool.h>
++#include <signal.h>
+ 
+ /**
+  Block sigs.

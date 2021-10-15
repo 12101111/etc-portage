@@ -1,0 +1,12 @@
+diff --git a/src/layers.cpp b/src/layers.cpp
+index 1f7933c..17a1f88 100644
+--- a/src/layers.cpp
++++ b/src/layers.cpp
+@@ -87,6 +87,7 @@
+ 
+ #include <QDebug>
+ #include <QQueue>
++#include <array>
+ 
+ namespace KWin
+ {

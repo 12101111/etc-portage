@@ -6,10 +6,8 @@ sys-devel/binutils::12101111-overlay
 dev-util/electron
 app-eselect/eselect-electron
 www-client/chromium::12101111-overlay
-dev-libs/liborcus::pg_overlay
-dev-libs/qrcodegen::pg_overlay
-dev-libs/libixion::pg_overlay
 dev-lang/python::pg_overlay
+net-im/telegram-desktop::pg_overlay
 virtual/jre:11
 virtual/jdk:11
 dev-lang/rust
@@ -24,3 +22,4 @@ dev-libs/elfutils
 app-office/libreoffice::gentoo
 app-office/libreoffice-l10n::gentoo
 dev-qt/qtwebkit
+x11-drivers/nvidia-drivers

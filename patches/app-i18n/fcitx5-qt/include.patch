@@ -1,0 +1,13 @@
+diff --git a/qt5/platforminputcontext/qfcitxplatforminputcontext.cpp b/qt5/platforminputcontext/qfcitxplatforminputcontext.cpp
+index 94a3877..5673a78 100644
+--- a/qt5/platforminputcontext/qfcitxplatforminputcontext.cpp
++++ b/qt5/platforminputcontext/qfcitxplatforminputcontext.cpp
+@@ -29,6 +29,7 @@
+ #include "qtkey.h"
+
+ #include <memory>
++#include <array>
+ #include <xcb/xcb.h>
+
+ namespace fcitx {
+
