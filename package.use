@@ -47,7 +47,7 @@ media-video/obs-studio lua v4l truetype pipewire fdk speex vlc python lua_single
 dev-vcs/git subversion perl
 dev-vcs/subversion perl
 dev-util/perf -clang lzma libpfm perl -python
-dev-qt/qt-creator beautifier cmake cppcheck git lsp perfprofiler python webengine
+dev-qt/qt-creator beautifier -clang cmake cppcheck git lsp perfprofiler python webengine
 app-shells/fish doc
 app-crypt/gnupg scd-shared-access 
 media-gfx/nomacs opencv tiff
@@ -113,7 +113,7 @@ app-i18n/fcitx5-qt qt5
 gnome-base/librsvg tools # icon theme
 x11-libs/wxGTK tiff #pcem
 x11-libs/libva utils
-app-i18n/fcitx5-gtk gtk2
+app-i18n/fcitx5-gtk -gtk2 gtk4
 dev-db/sqlite secure-delete # aria2[sqlite]
 dev-qt/qtwebchannel qml # zoom
 dev-qt/qtwebengine jumbo-build widgets
@@ -122,7 +122,8 @@ dev-qt/qtmultimedia gstreamer
 app-crypt/gcr gtk
 dev-libs/xmlsec nss
 app-i18n/fcitx5-chinese-addons gui
-media-gfx/imagemagick xml -openmp # svg? ( xml )
+media-gfx/imagemagick xml tiff -openmp # svg? ( xml )
+virtual/imagemagick-tools tiff
 app-text/poppler cairo qt5# materia-theme, qpdfview
 x11-misc/qt5ct dbus
 sys-apps/dbus user-session # mako
@@ -187,6 +188,7 @@ virtual/libcrypt static-libs
 x11-libs/cairo -opengl
 app-misc/pax-utils -seccomp
 dev-lang/spidermonkey lto
+dev-lang/deno static-libs
 
 # Tex
 app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra
@@ -195,7 +197,7 @@ media-libs/gd fontconfig truetype
 
 # minimal
 gnome-base/gnome-settings-daemon -colord
-sys-devel/binutils -binutils -gold gprof ld -nls plugins
+sys-devel/binutils -binutils -gold gprof -ld -nls plugins
 sys-libs/binutils-libs -nls
 net-print/cups-filters -postscript
 sys-apps/man-db -nls
@@ -218,7 +220,6 @@ sys-apps/findutils -nls
 net-misc/remmina -nls # segfault at ../Remmina-v1.4.12/src/remmina_file_editor.c:736
 net-vpn/tor -server
 media-libs/libcanberra -gtk
-app-i18n/fcitx5-gtk -gtk2
 dev-libs/elfutils -nls
 media-tv/v4l-utils -bpf
 app-text/opensp -nls #link error

@@ -176,7 +176,6 @@ FLAG_FILTER_NONGNU=(
 	'-frerun-cse-after-loop'
 	'-fsched*'
 	'-fsection-anchors'
-	'-fstack-clash-protection'
 	'-ftree*'
 	'-funsafe-loop*'
 	'-fuse-linker-plugin'
@@ -197,12 +196,17 @@ FLAG_FILTER_GNU=(
 	'-flto-jobs=*'
 	'-fopenmp=*'
 	'-frewrite-includes'
-	'-fsanitize=cfi'
+	'-fsanitize=cfi*'
 	'-fsanitize=safe-stack'
 	'-mllvm'
 	'-mretpoline*'
 	'-polly*'
 	'-Wl,-z,retpolineplt'
+)
+
+FLAG_FILTER_CLANG_LTO_DEP=(
+	'-fsanitize=cfi*'
+	'-fwhole-program-vtables'
 )
 
 FlagEval() {
@@ -583,6 +587,7 @@ FlagScanDir() {
 }
 
 FlagSetUseNonGNU() {
+	has clang ${IUSE//+} && use clang && return 0
 	case $CC$CXX in
 	*clang*)
 		return 0;;
@@ -595,6 +600,12 @@ FlagSetNonGNU() {
 	FlagSubAllFlags "${FLAG_FILTER_NONGNU[@]}"
 	FlagReplaceAllFlags '-fstack-check*' '-fstack-check'
 	# FlagAddCFlags '-flto' '-emit-llvm'
+	case " $LDFLAGS $CFLAGS $CXXFLAGS" in
+	*[[:space:]]'-flto'*)
+		;;
+	*)
+		FlagSubAllFlags "${FLAG_FILTER_CLANG_LTO_DEP[@]}";;
+	esac
 }
 
 FlagSetGNU() {

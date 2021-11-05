@@ -1,27 +1,27 @@
 diff --git a/ell/useful.h b/ell/useful.h
-index d696bc3..2cb5424 100644
+index 4c8b23e..3b05595 100644
 --- a/ell/useful.h
 +++ b/ell/useful.h
-@@ -67,8 +67,12 @@ static inline unsigned char bit_field(const unsigned char oct,
- #define _AUTODESTRUCT(var, func)			\
- 	__AUTODESTRUCT(var, func)
+@@ -62,8 +62,12 @@ static inline unsigned char bit_field(const unsigned char oct,
+ #define __AUTODESTRUCT(func)				\
+ 	__attribute((cleanup(func ## _cleanup)))
  
 -#define _auto_(func)					\
--	_AUTODESTRUCT(__COUNTER__, func)
+-	__AUTODESTRUCT(func)
 +#define L_AUTO_CLEANUP_VAR(vartype,varname,destroy) \
-+        vartype varname __attribute__((cleanup(destroy)))
++	vartype varname __attribute__((cleanup(destroy)))
 +
 +static inline void l_settings_cleanup(struct l_settings **ptr) {
-+       l_settings_free(*ptr);
++	l_settings_free(*ptr);
 +}
  
  /*
   * Trick the compiler into thinking that var might be changed somehow by
 diff --git a/src/ap.c b/src/ap.c
-index f78863a..e33a802 100644
+index 46a7a6a..7dbcbdb 100644
 --- a/src/ap.c
 +++ b/src/ap.c
-@@ -3320,7 +3320,7 @@ static struct l_dbus_message *ap_dbus_start_profile(struct l_dbus *dbus,
+@@ -3587,7 +3587,7 @@ static struct l_dbus_message *ap_dbus_start_profile(struct l_dbus *dbus,
  {
  	struct ap_if_data *ap_if = user_data;
  	const char *ssid;
@@ -95,10 +95,10 @@ index 0645be4..dd115b7 100644
  		/* Invalid packets to be ignored */
  		return;
 diff --git a/src/missing.h b/src/missing.h
-index 2cc80ae..cdbc727 100644
+index a5b9295..a65800f 100644
 --- a/src/missing.h
 +++ b/src/missing.h
-@@ -31,9 +31,6 @@ static inline void explicit_bzero(void *s, size_t n)
+@@ -31,10 +31,7 @@ static inline void explicit_bzero(void *s, size_t n)
  #ifndef HAVE_RAWMEMCHR
  static inline void *rawmemchr(const void *s, int c)
  {
@@ -108,11 +108,12 @@ index 2cc80ae..cdbc727 100644
 -_Pragma("GCC diagnostic pop")
  }
  #endif
+ 
 diff --git a/src/network.c b/src/network.c
-index b78a7cb..452fd85 100644
+index 9a2d12c..f1ece00 100644
 --- a/src/network.c
 +++ b/src/network.c
-@@ -532,9 +532,9 @@ static int network_settings_load_pt_ecc(struct network *network,
+@@ -538,9 +538,9 @@ static int network_settings_load_pt_ecc(struct network *network,
  					unsigned int group,
  					struct l_ecc_point **out_pt)
  {
@@ -124,7 +125,7 @@ index b78a7cb..452fd85 100644
  						"Security", key, &pt_len);
  	const struct l_ecc_curve *curve = l_ecc_curve_from_ike_group((group));
  
-@@ -571,13 +571,13 @@ static int network_load_psk(struct network *network, bool need_passphrase)
+@@ -577,13 +577,13 @@ static int network_load_psk(struct network *network, bool need_passphrase)
  	const char *ssid = network_get_ssid(network);
  	enum security security = network_get_security(network);
  	size_t psk_len;
@@ -141,7 +142,7 @@ index b78a7cb..452fd85 100644
  		storage_get_network_file_path(security, ssid);
  
  	if (psk && psk_len != 32) {
-@@ -620,7 +620,7 @@ static void network_settings_save_sae_pt_ecc(struct l_settings *settings,
+@@ -626,7 +626,7 @@ static void network_settings_save_sae_pt_ecc(struct l_settings *settings,
  {
  	const struct l_ecc_curve *curve = l_ecc_point_get_curve(pt);
  	unsigned int group = l_ecc_curve_get_ike_group(curve);
@@ -151,10 +152,10 @@ index b78a7cb..452fd85 100644
  	ssize_t len;
  
 diff --git a/src/wsc.c b/src/wsc.c
-index 4ab497d..c46e7d5 100644
+index 2618497..78fb999 100644
 --- a/src/wsc.c
 +++ b/src/wsc.c
-@@ -529,9 +529,9 @@ static void wsc_store_credentials(struct wsc_credentials_info *creds,
+@@ -530,9 +530,9 @@ static void wsc_store_credentials(struct wsc_credentials_info *creds,
  	for (i = 0; i < n_creds; i++) {
  		enum security security = creds[i].security;
  		const char *ssid = creds[i].ssid;

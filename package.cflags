@@ -21,6 +21,8 @@ app-text/ghostscript-gpl /-flto*/-fno-lto/
 dev-java/openjdk /-flto*/-fno-lto/
 sys-apps/attr /-flto*/-fno-lto/
 dev-scheme/racket /-Wl,--gc-sections//
+net-wireless/iwd /-Wl,--gc-sections//
+dev-libs/ell /-Wl,--gc-sections//
 
 # full lto
 sys-devel/llvm /-flto*/-flto=full
