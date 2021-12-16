@@ -1,0 +1,15 @@
+diff --git a/boost/interprocess/permissions.hpp b/boost/interprocess/permissions.hpp
+index ab55411..0b21a68 100644
+--- a/boost/interprocess/permissions.hpp
++++ b/boost/interprocess/permissions.hpp
+@@ -29,6 +29,10 @@
+ 
+ #include <boost/interprocess/detail/win32_api.hpp>
+ 
++#else
++
++#include <sys/stat.h>
++
+ #endif
+ 
+ #endif   //#ifndef BOOST_INTERPROCESS_DOXYGEN_INVOKED

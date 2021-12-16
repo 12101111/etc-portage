@@ -5,4 +5,4 @@ app-misc/xmind EULA
 app-editors/typora EULA
 media-libs/faac MPEG-4
 dev-util/idea-community codehaus-classworlds
-x11-drivers/nvidia-drivers NVIDIA-r2
+x11-libs/libva-intel-media-driver no-source-code

@@ -1,0 +1,13 @@
+diff --git a/tests/zfs-tests/cmd/mmap_seek/mmap_seek.c b/tests/zfs-tests/cmd/mmap_seek/mmap_seek.c
+index f476e1d..69f77b0 100644
+--- a/tests/zfs-tests/cmd/mmap_seek/mmap_seek.c
++++ b/tests/zfs-tests/cmd/mmap_seek/mmap_seek.c
+@@ -30,6 +30,8 @@
+ #include <string.h>
+ #include <sys/mman.h>
+ #include <errno.h>
++#include <linux/fs.h>
++#define P2ROUNDUP(x, align)     ((((x) - 1) | ((align) - 1)) + 1)
+ 
+ static void
+ seek_data(int fd, off_t offset, off_t expected)

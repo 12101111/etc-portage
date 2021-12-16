@@ -1,6 +1,6 @@
 # Compiler
 sys-devel/gcc fortran openmp jit
-dev-lang/rust system-llvm system-bootstrap rustfmt wasm nightly wasi clippy miri rls
+dev-lang/rust system-llvm system-bootstrap rustfmt wasm nightly wasi clippy miri rls rust-src
 dev-lang/go system-bootstrap # to upgrade itself
 sys-devel/llvm libedit gold exegesis mlir z3
 dev-util/lldb libedit lzma
@@ -65,6 +65,7 @@ app-misc/skim tmux
 media-video/vlc dav1d archive fdk flac fontconfig gstreamer libass libnotify mp3 ogg opus speex truetype v4l vpx
 app-editors/neovim lua_single_target_luajit
 gui-apps/wayvnc gbm
+www-client/luakit LUA_SINGLE_TARGET: luajit
 
 # VM / Emulator
 app-emulation/qemu udev zstd jemalloc gtk usb usbredir spice virgl -pin-upstream-blobs virtfs static-user -slirp io-uring virgl vte gnutls vhost-user-fs
@@ -89,7 +90,7 @@ sys-libs/libcxx static-libs
 sys-libs/libcxxabi static-libs
 sys-apps/kmod zstd
 net-firewall/nftables xtables python
-sys-apps/coreutils gmp caps multicall
+sys-apps/coreutils gmp caps
 x11-drivers/nvidia-drivers -tools -X -wayland
 
 # libs
@@ -179,7 +180,7 @@ dev-lua/luv lua_single_target_luajit -lua_single_target_lua5-4
 sys-auth/polkit duktape
 dev-util/vulkan-tools cube -wayland
 dev-lua/ldoc lua_single_target_luajit
-net-p2p/qbittorrent-enhanced webui
+net-p2p/qbittorrent webui
 dev-util/pycharm-community -bundled-jdk
 net-libs/gnutls tools
 dev-util/bcc lua_single_target_luajit
@@ -188,7 +189,7 @@ virtual/libcrypt static-libs
 x11-libs/cairo -opengl
 app-misc/pax-utils -seccomp
 dev-lang/spidermonkey lto
-dev-lang/deno static-libs
+kde-frameworks/sonnet qml
 
 # Tex
 app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra
@@ -236,7 +237,7 @@ dev-libs/libxml2 icu
 app-editors/vscode savedconfig system-electron system-ripgrep builtin-extensions
 media-video/pipewire ffmpeg gstreamer
 dev-util/electron suid tcmalloc lto pgo custom-cflags system-icu clang wayland pipewire screencast
-www-client/chromium tcmalloc hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official
+www-client/chromium tcmalloc hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official -system-png
 dev-lang/python:2.7 -tk -bluetooth
 
 # Python 3.9

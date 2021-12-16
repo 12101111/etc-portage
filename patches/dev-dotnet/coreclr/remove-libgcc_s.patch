@@ -1,5 +1,5 @@
---- a/src/pal/src/CMakeLists.txt
-+++ b/src/pal/src/CMakeLists.txt
+--- a/pal/src/CMakeLists.txt
++++ b/pal/src/CMakeLists.txt
 @@ -300,7 +300,6 @@ if(CLR_CMAKE_TARGET_LINUX)
    # On Android, we don't need to link with gcc_s, pthread and rt
    if(NOT CLR_CMAKE_TARGET_ANDROID)

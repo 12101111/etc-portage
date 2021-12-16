@@ -20,15 +20,23 @@ app-emulation/bochs /-flto*/-fno-lto/
 app-text/ghostscript-gpl /-flto*/-fno-lto/
 dev-java/openjdk /-flto*/-fno-lto/
 sys-apps/attr /-flto*/-fno-lto/
+dev-lang/mono /-flto*//
+sys-apps/pciutils /-flto*// # symver break
+media-libs/alsa-lib /-flto*//
+
 dev-scheme/racket /-Wl,--gc-sections//
 net-wireless/iwd /-Wl,--gc-sections//
 dev-libs/ell /-Wl,--gc-sections//
+net-wireless/iw /-Wl,--gc-sections//
 
 # full lto
 sys-devel/llvm /-flto*/-flto=full
 sys-devel/clang /-flto*/-flto=full
 app-emulation/qemu /-flto*/-flto=full
 x11-libs/pixman /-flto*/-flto=full
+
+# net-libs/libtorrent-rasterbar C*FLAGS+=-fsanitize=address LDFLAGS+=-fsanitize=address
+# net-p2p/qbittorrent-enhanced C*FLAGS+=-fsanitize=address LDFLAGS+=-fsanitize=address
 
 # stack overflow
 sys-devel/clang LDFLAGS+=-Wl,-z,stack-size=0x800000
@@ -57,3 +65,4 @@ dev-libs/libedit CFLAGS+=-D__STDC_ISO_10646__
 dev-qt/qtcore LDFLAGS+=-lexecinfo
 app-editors/neovim LDFLAGS+=-lexecinfo
 www-client/falkon LDFLAGS+=-lexecinfo
+sys-process/htop LDFLAGS+=-lexecinfo
