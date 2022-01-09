@@ -1,0 +1,20 @@
+diff --git a/configure b/configure
+index 09a57e3..52796ba 100755
+--- a/configure
++++ b/configure
+@@ -4346,6 +4346,7 @@ $as_echo_n "checking for getprotobynumber_r() variant... " >&6; }
+ if ${sc_cv_getprotobynumber_r+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
++CFLAGS1="$CFLAGS"; CFLAGS="$ERRONWARN $(echo "$CFLAGS1" | sed -e 's@-Wall@@g')";
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ #include <stddef.h>
+@@ -4399,6 +4400,7 @@ fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+ fi
+ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++CFLAGS="$CFLAGS1"
+ fi
+ 
+ if test "$sc_cv_getprotobynumber_r"; then

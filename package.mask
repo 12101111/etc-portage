@@ -1,8 +1,6 @@
 */*::mv
 */*::pg_overlay
 
-dev-lang/python:3.10
-dev-lang/python::gentoo
 x11-libs/gtk+::gentoo
 media-libs/mesa::musl
 dev-java/openjdk-bin::gentoo
@@ -16,15 +14,9 @@ net-proxy/v2ray-bin
 www-client/firefox::gentoo
 dev-libs/elftoolchain
 virtual/libelf::12101111-overlay
-=sys-firmware/edk2-ovmf-202008
-dev-util/android-tools::musl
-sys-devel/gdb::musl
 net-wireless/bluez::musl
 app-editors/emacs::gentoo
 sys-auth/polkit::gentoo
+net-im/telegram-desktop::gentoo-zh
 
 net-dns/avahi
-net-proxy/qv2ray::gentoo-zh
-net-proxy/qvplugin-ssr::gentoo-zh
-net-proxy/qvplugin-command::gentoo-zh
-net-proxy/qvplugin-trojan::gentoo-zh

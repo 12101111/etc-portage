@@ -6,8 +6,8 @@ sys-devel/binutils::12101111-overlay
 www-client/chromium::12101111-overlay
 dev-lang/python::pg_overlay
 net-im/telegram-desktop::pg_overlay
-virtual/jre:11
-virtual/jdk:11
+virtual/jre
+virtual/jdk
 dev-lang/rust
 virtual/rust
 

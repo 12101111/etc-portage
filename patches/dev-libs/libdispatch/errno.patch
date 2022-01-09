@@ -1,0 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 75c419c..c17babc 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -102,10 +102,7 @@ option(ENABLE_THREAD_LOCAL_STORAGE "enable usage of thread local storage via _Th
+ set(DISPATCH_USE_THREAD_LOCAL_STORAGE ${ENABLE_THREAD_LOCAL_STORAGE})
+ 
+ 
+-check_symbol_exists(__GNU_LIBRARY__ "features.h" _GNU_SOURCE)
+-if(_GNU_SOURCE)
+-  set(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS} -D_GNU_SOURCE)
+-endif()
++set(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS} -D_GNU_SOURCE)
+ 
+ check_c_source_compiles("void __attribute__((__noreturn__)) main() { __builtin_trap(); }"
+                         __BUILTIN_TRAP)

@@ -1,7 +1,7 @@
-diff --git a/gl/lib/error.h b/gl/lib/error.h
+diff --git a/gnu/error.h b/gnu/error.h
 deleted file mode 100644
-index 814715e..0000000
---- a/gl/lib/error.h
+index f65d072..0000000
+--- a/gnu/error.h
 +++ /dev/null
 @@ -1,66 +0,0 @@
 -/* Declaration for error-reporting function
@@ -9,17 +9,17 @@ index 814715e..0000000
 -   Inc.
 -   This file is part of the GNU C Library.
 -
--   This file is free software: you can redistribute it and/or modify
--   it under the terms of the GNU Lesser General Public License as
--   published by the Free Software Foundation; either version 2.1 of the
--   License, or (at your option) any later version.
+-   This program is free software: you can redistribute it and/or modify
+-   it under the terms of the GNU General Public License as published by
+-   the Free Software Foundation; either version 3 of the License, or
+-   (at your option) any later version.
 -
--   This file is distributed in the hope that it will be useful,
+-   This program is distributed in the hope that it will be useful,
 -   but WITHOUT ANY WARRANTY; without even the implied warranty of
 -   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
--   GNU Lesser General Public License for more details.
+-   GNU General Public License for more details.
 -
--   You should have received a copy of the GNU Lesser General Public License
+-   You should have received a copy of the GNU General Public License
 -   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 -
 -#ifndef _ERROR_H

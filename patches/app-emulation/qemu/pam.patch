@@ -1,0 +1,14 @@
+diff --git a/meson.build b/meson.build
+index fbe8567..065c4ac 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1088,8 +1088,7 @@ endif
+ pam = not_found
+ if not get_option('auth_pam').auto() or have_system
+   pam = cc.find_library('pam', has_headers: ['security/pam_appl.h'],
+-                        required: get_option('auth_pam'),
+-                        kwargs: static_kwargs)
++                        required: get_option('auth_pam'))
+ endif
+ if pam.found() and not cc.links('''
+    #include <stddef.h>

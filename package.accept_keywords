@@ -1,13 +1,9 @@
-gui-wm/sway **
-gui-libs/wlroots **
-app-text/scdoc **
 gui-apps/swaylock-effects **
 gui-apps/waybar **
 gui-apps/wf-recorder **
 
 app-editors/emacs **
 app-text/goldendict **
-www-client/otter **
 <media-gfx/gimp-9999 **
 gui-apps/wob **
 media-video/wlrobs **
@@ -16,4 +12,3 @@ gui-libs/neatvnc **
 dev-libs/aml **
 dev-lang/luajit **
 dev-lang/zig **
-<dev-lang/rust-1.57.0 **
