@@ -18,7 +18,7 @@ gui-wm/sway wallpapers tray -swaylock fish-completion seatd
 gui-apps/waybar network tray mpd wifi
 
 # Apps
-www-client/firefox hwaccel clang lto pgo screencast geckodriver
+www-client/firefox hwaccel clang lto pgo screencast geckodriver system-png
 mail-client/thunderbird hwaccel clang lto
 app-editors/emacs jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars xft
 app-editors/vim X python
@@ -191,6 +191,10 @@ app-misc/pax-utils -seccomp
 dev-lang/spidermonkey lto
 kde-frameworks/sonnet qml
 sys-fs/e2fsprogs -lto # don't work with clang
+kde-plasma/kwin screencast
+kde-plasma/plasma-workspace screencast
+media-libs/libsdl2 pipewire
+sys-apps/xdg-desktop-portal geolocation screencast
 
 # Tex
 app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra
@@ -238,13 +242,15 @@ dev-libs/libxml2 icu
 app-editors/vscode savedconfig system-electron system-ripgrep builtin-extensions
 media-video/pipewire ffmpeg gstreamer
 dev-util/electron suid tcmalloc lto pgo custom-cflags system-icu clang wayland pipewire screencast
-www-client/chromium tcmalloc hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official -system-png
+www-client/chromium gtk4 -libcxx hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png
 dev-lang/python:2.7 -tk -bluetooth
 
-dev-python/setuptools PYTHON_TARGETS: python3_9
-dev-python/certifi PYTHON_TARGETS: python3_9
-dev-python/setuptools_scm PYTHON_TARGETS: python3_9
-dev-python/packaging PYTHON_TARGETS: python3_9
-dev-python/tomli PYTHON_TARGETS: python3_9
-dev-python/pyparsing PYTHON_TARGETS: python3_9
-dev-util/scons PYTHON_TARGETS: python3_9 # svn
+#dev-python/setuptools PYTHON_TARGETS: python3_9 # old electron
+#dev-python/certifi PYTHON_TARGETS: python3_9
+#dev-python/setuptools_scm PYTHON_TARGETS: python3_9
+#dev-python/packaging PYTHON_TARGETS: python3_9
+#dev-python/tomli PYTHON_TARGETS: python3_9
+#dev-python/pyparsing PYTHON_TARGETS: python3_9
+#dev-util/scons PYTHON_TARGETS: python3_9 # svn
+#dev-python/installer PYTHON_TARGETS: python3_9
+#dev-python/wheel PYTHON_TARGETS: python3_9

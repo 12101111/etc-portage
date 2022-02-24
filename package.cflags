@@ -12,17 +12,18 @@ dev-util/perf /-flto*/-fno-lto/ #file not recognized: file format not recognized
 net-libs/nodejs /-flto*/-fno-lto/ # build time
 dev-dotnet/coreclr /-flto*/-fno-lto/
 media-gfx/imagemagick /-flto*/-fno-lto/ # llvm pacnic
+media-libs/libwebp /-flto*/-fno-lto/ # miscompile
 # sci-libs/* *FLAGS-=-flto* *FLAGS-=-rtlib=*
 media-libs/dav1d /-flto*/-fno-lto/ # GE
 x11-misc/qt5ct /-flto*/-fno-lto
 games-misc/typespeed /-flto*/-fno-lto/
 app-emulation/bochs /-flto*/-fno-lto/
 app-text/ghostscript-gpl /-flto*/-fno-lto/
-dev-java/openjdk /-flto*/-fno-lto/
 sys-apps/attr /-flto*/-fno-lto/
 dev-lang/mono /-flto*//
 sys-apps/pciutils /-flto*// # symver break
 media-libs/alsa-lib /-flto*//
+dev-java/openjdk:17 /-fomit-frame-pointer//
 
 dev-scheme/racket /-Wl,--gc-sections//
 net-wireless/iwd /-Wl,--gc-sections//

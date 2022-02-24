@@ -6,3 +6,4 @@ app-editors/typora EULA
 media-libs/faac MPEG-4
 dev-util/idea-community codehaus-classworlds
 x11-libs/libva-intel-media-driver no-source-code
+app-emulation/86Box-roms 86Box-roms
