@@ -1,1 +1,1 @@
-../../usr/portage/local/profiles/clang/musl/amd64
+../../usr/portage/local/profiles/clang/musl/amd64/systemd

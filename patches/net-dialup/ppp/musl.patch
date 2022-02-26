@@ -1,0 +1,13 @@
+diff --git a/pppd/Makefile.linux b/pppd/Makefile.linux
+index 6a84531..cb8bf0d 100644
+--- a/pppd/Makefile.linux
++++ b/pppd/Makefile.linux
+@@ -91,7 +91,7 @@ MAXOCTETS=y
+ 
+ INCLUDE_DIRS= -I../include
+ 
+-COMPILE_FLAGS= -DHAVE_PATHS_H -DIPX_CHANGE -DHAVE_MMAP -pipe
++COMPILE_FLAGS= -DHAVE_PATHS_H -DHAVE_MMAP -pipe
+ 
+ CFLAGS= $(COPTS) $(COMPILE_FLAGS) $(INCLUDE_DIRS) '-DDESTDIR="@DESTDIR@"'
+ 

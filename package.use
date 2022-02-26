@@ -1,5 +1,5 @@
 # Compiler
-sys-devel/gcc fortran openmp jit
+sys-devel/gcc fortran openmp jit -pgo -lto
 dev-lang/rust system-llvm system-bootstrap rustfmt wasm nightly wasi clippy miri rls rust-src
 dev-lang/go system-bootstrap # to upgrade itself
 sys-devel/llvm libedit gold exegesis mlir z3
@@ -66,6 +66,7 @@ media-video/vlc dav1d archive fdk flac fontconfig gstreamer libass libnotify mp3
 app-editors/neovim lua_single_target_luajit
 gui-apps/wayvnc gbm
 www-client/luakit LUA_SINGLE_TARGET: luajit
+gnome-extra/nm-applet appindicator
 
 # VM / Emulator
 app-emulation/qemu udev zstd jemalloc gtk usb usbredir spice virgl -pin-upstream-blobs virtfs static-user -slirp io-uring virgl vte gnutls vhost-user-fs
@@ -79,7 +80,6 @@ app-emulation/dosbox-x opengl ffmpeg
 app-emulation/bochs avx debugger
 
 # System
-sys-apps/openrc sysv-utils # to use openrc-init
 sys-kernel/linux-firmware savedconfig
 dev-lang/python sqlite tk # firefox
 sys-apps/busybox math syslog savedconfig static -pam
@@ -92,6 +92,7 @@ sys-apps/kmod zstd
 net-firewall/nftables xtables python
 sys-apps/coreutils gmp caps
 x11-drivers/nvidia-drivers -tools -X -wayland
+sys-apps/systemd elfutils fido2 xkb
 
 # libs
 x11-libs/libxcb xkb # xorg-server awesome
@@ -147,15 +148,12 @@ dev-python/PyQt5 webchannel printsupport gui widgets svg dbus opengl declarative
 dev-qt/qtmultimedia widgets
 gui-libs/wlroots icccm x11-backend seatd
 media-video/pipewire pulseaudio sdl aptx aac extra pipewire-alsa v4l
-media-sound/pulseaudio -alsa-plugin -webrtc-aec -tcpd -asyncns
 media-libs/libtgvoip pulseaudio
 media-libs/tg_owt pulseaudio
 net-im/telegram-desktop pulseaudio lto webkit screencast
 media-libs/tg_owt screencast
 app-crypt/pinentry gnome-keyring gtk qt5
 media-libs/phonon gstreamer
-#dev-qt/qtprintsupport cups # kde-plasma/xdg-desktop-portal-kde
-#kde-frameworks/prison qml
 kde-frameworks/kitemmodels qml
 games-emulation/dosbox-x ffmpeg
 sci-libs/fftw threads -fortran
@@ -195,6 +193,7 @@ kde-plasma/kwin screencast
 kde-plasma/plasma-workspace screencast
 media-libs/libsdl2 pipewire
 sys-apps/xdg-desktop-portal geolocation screencast
+net-misc/networkmanager connection-sharing dhcpcd nftables iwd -lto
 
 # Tex
 app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra
@@ -230,10 +229,11 @@ dev-libs/elfutils -nls
 media-tv/v4l-utils -bpf
 app-text/opensp -nls #link error
 sys-apps/man-pages -l10n_zh-CN
-kde-plasma/plasma-meta -desktop-portal -crypt -display-manager -firewall -handbook -legacy-systray -networkmanager -sddm -smart -browser-integration
-kde-plasma/powerdevil -wireless
+kde-plasma/plasma-meta -crypt -firewall -handbook -browser-integration
 sys-fs/lvm2 -thin
 media-libs/libmypaint -openmp
+sys-apps/openrc -sysv-utils -netifrc
+media-sound/pulseaudio -udev -alsa-plugin -webrtc-aec -tcpd -asyncns -daemon -alsa -bluetooth -jack -zeroconf -orc -ssl
 
 # chromium and electron
 media-libs/libvpx svc
@@ -254,3 +254,4 @@ dev-lang/python:2.7 -tk -bluetooth
 #dev-util/scons PYTHON_TARGETS: python3_9 # svn
 #dev-python/installer PYTHON_TARGETS: python3_9
 #dev-python/wheel PYTHON_TARGETS: python3_9
+

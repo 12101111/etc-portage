@@ -1,9 +1,7 @@
 app-portage/portage-bashrc-mv
 app-shells/runtitle
 x11-libs/gtk+::pg_overlay
-www-client/firefox::12101111-overlay
 sys-devel/binutils::12101111-overlay
-www-client/chromium::12101111-overlay
 virtual/jre
 virtual/jdk
 dev-lang/rust

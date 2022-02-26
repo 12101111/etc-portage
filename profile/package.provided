@@ -6,3 +6,4 @@ app-i18n/man-pages-zh_CN-1.6.3.2
 sys-libs/libunwind-1.5.0-r1
 app-accessibility/at-spi2-core-2.42.0
 app-accessibility/at-spi2-atk-2.38.0
+sys-apps/sysvinit-3.0.1
