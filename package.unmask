@@ -4,8 +4,8 @@ x11-libs/gtk+::pg_overlay
 sys-devel/binutils::12101111-overlay
 virtual/jre
 virtual/jdk
-dev-lang/rust
-virtual/rust
+dev-lang/rust::12101111-overlay
+virtual/rust::gentoo
 
 gui-apps/wayvnc
 dev-libs/aml

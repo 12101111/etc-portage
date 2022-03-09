@@ -1,0 +1,23 @@
+diff --git a/meson.build b/meson.build
+index 5b63aa6..e6f3bc0 100644
+--- a/meson.build
++++ b/meson.build
+@@ -50,18 +50,6 @@ add_project_arguments(
+   language : 'c',
+ )
+ 
+-if (
+-  cc.has_argument('-Werror=format=2')
+-  and cc.has_argument('-Werror=format-security')
+-  and cc.has_argument('-Werror=format-nonliteral')
+-)
+-  add_project_arguments([
+-    '-Werror=format=2',
+-    '-Werror=format-security',
+-    '-Werror=format-nonliteral',
+-  ], language : 'c')
+-endif
+-
+ bash = find_program('bash', required : false)
+ 
+ if get_option('python') == ''

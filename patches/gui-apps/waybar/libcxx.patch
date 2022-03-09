@@ -1,0 +1,37 @@
+diff --git a/include/modules/clock.hpp b/include/modules/clock.hpp
+index 5a9c01e..7c3eb8f 100644
+--- a/include/modules/clock.hpp
++++ b/include/modules/clock.hpp
+@@ -36,7 +36,7 @@ class Clock : public ALabel {
+   auto first_day_of_week() -> date::weekday;
+   const date::time_zone* current_timezone();
+   bool is_timezone_fixed();
+-  auto timezones_text(std::chrono::_V2::system_clock::time_point *now) -> std::string;
++  auto timezones_text(std::chrono::system_clock::time_point *now) -> std::string;
+ };
+ 
+ }  // namespace modules
+diff --git a/include/modules/memory.hpp b/include/modules/memory.hpp
+index abfe287..b15353c 100644
+--- a/include/modules/memory.hpp
++++ b/include/modules/memory.hpp
+@@ -1,5 +1,6 @@
+ #pragma once
+ 
++#include <unordered_map>
+ #include <fmt/format.h>
+ #include <fstream>
+ #include <unordered_map>
+diff --git a/src/modules/clock.cpp b/src/modules/clock.cpp
+index 87cd58a..c80057c 100644
+--- a/src/modules/clock.cpp
++++ b/src/modules/clock.cpp
+@@ -219,7 +219,7 @@ auto waybar::modules::Clock::weekdays_header(const date::weekday& first_dow, std
+   os << "\n";
+ }
+ 
+-auto waybar::modules::Clock::timezones_text(std::chrono::_V2::system_clock::time_point *now) -> std::string {
++auto waybar::modules::Clock::timezones_text(std::chrono::system_clock::time_point *now) -> std::string {
+   if (time_zones_.size() == 1) {
+     return "";
+   }

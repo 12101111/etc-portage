@@ -1,0 +1,12 @@
+diff --git a/src/coredump/coredump.h b/src/coredump/coredump.h
+index fceeebe..a953393 100644
+--- a/src/coredump/coredump.h
++++ b/src/coredump/coredump.h
+@@ -9,6 +9,7 @@
+ #include <QHash>
+ #include <QJsonDocument>
+ #include <QString>
++#include <unistd.h>
+ 
+ class Coredump
+ {

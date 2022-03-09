@@ -26,7 +26,6 @@ sys-apps/musl-locales
 app-eselect/eselect-timezone
 sys-libs/timezone-data
 app-admin/sudo
-app-admin/metalog
 sys-apps/pciutils
 sys-devel/bc
 # portage

@@ -24,6 +24,7 @@ dev-lang/mono /-flto*//
 sys-apps/pciutils /-flto*// # symver break
 media-libs/alsa-lib /-flto*//
 dev-java/openjdk:17 /-fomit-frame-pointer//
+sys-fs/lvm2 /-flto*//
 
 dev-scheme/racket /-Wl,--gc-sections//
 net-wireless/iwd /-Wl,--gc-sections//
