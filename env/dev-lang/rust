@@ -1,1 +1,0 @@
-export RUSTFLAGS="-Ctarget-cpu=skylake -Copt-level=3 -Ccodegen-units=1 -Ctarget-feature=-crt-static -Clinker-plugin-lto -Clinker=clang -Clink-arg=-fuse-ld=lld -Clink-arg=-flto=thin"

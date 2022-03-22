@@ -2,14 +2,14 @@
 sys-devel/gcc fortran openmp jit -pgo -lto
 dev-lang/rust system-llvm system-bootstrap rustfmt wasm nightly wasi clippy miri rls rust-src
 dev-lang/go system-bootstrap # to upgrade itself
-sys-devel/llvm libedit gold exegesis mlir z3
+sys-devel/llvm libedit gold exegesis polly mlir
 dev-util/lldb libedit lzma
 sys-devel/clang xml default-lld # lldb
 sys-libs/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray libfuzzer profile
 dev-java/openjdk gentoo-vm
 
 # Graphic
-media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind
+media-libs/mesa vulkan lm-sensors libglvnd -llvm vaapi unwind
 x11-base/xorg-server xvfb libglvnd elogind -suid
 x11-wm/awesome dbus doc gnome lua_single_target_luajit
 x11-misc/picom dbus
@@ -47,7 +47,7 @@ media-video/obs-studio lua v4l truetype pipewire fdk speex vlc python lua_single
 dev-vcs/git subversion perl
 dev-vcs/subversion perl
 dev-util/perf -clang lzma libpfm perl -python
-dev-qt/qt-creator beautifier -clang cmake cppcheck git lsp perfprofiler python webengine
+dev-qt/qt-creator beautifier ctfvisualizer glsl meson qmlprofiler serialterminal cmake git lsp perfprofiler python webengine
 app-shells/fish doc
 app-crypt/gnupg scd-shared-access 
 media-gfx/nomacs opencv tiff
@@ -244,5 +244,5 @@ dev-libs/libxml2 icu
 app-editors/vscode savedconfig system-electron system-ripgrep builtin-extensions
 media-video/pipewire ffmpeg gstreamer
 dev-util/electron suid tcmalloc lto pgo custom-cflags system-icu clang wayland pipewire screencast
-www-client/chromium gtk4 -libcxx hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png
+www-client/chromium gtk4 -libcxx hevc wayland lto custom-cflags -pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png
 dev-lang/python:2.7 -tk -bluetooth

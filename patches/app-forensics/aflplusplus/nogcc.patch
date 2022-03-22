@@ -1,0 +1,72 @@
+diff --git a/GNUmakefile b/GNUmakefile
+index a2059f0..d6d063d 100644
+--- a/GNUmakefile
++++ b/GNUmakefile
+@@ -305,7 +305,7 @@ ifdef TEST_MMAP
+ endif
+ 
+ .PHONY: all
+-all:	test_x86 test_shm test_python ready $(PROGS) afl-as llvm gcc_plugin test_build all_done
++all:	test_x86 test_shm test_python ready $(PROGS) afl-as llvm test_build all_done
+ 	-$(MAKE) -C utils/aflpp_driver
+ 
+ .PHONY: llvm
+@@ -313,12 +313,6 @@ llvm:
+ 	$(MAKE) -j4 -f GNUmakefile.llvm
+ 	@test -e afl-cc || { echo "[-] Compiling afl-cc failed. You seem not to have a working compiler." ; exit 1; }
+ 
+-.PHONY: gcc_plugin
+-gcc_plugin:
+-ifneq "$(SYS)" "Darwin"
+-	$(MAKE) -f GNUmakefile.gcc_plugin
+-endif
+-
+ .PHONY: man
+ man:    $(MANPAGES)
+ 
+@@ -555,7 +549,6 @@ all_done: test_build
+ 	@test -e afl-cc && echo "[+] Main compiler 'afl-cc' successfully built!" || { echo "[-] Main compiler 'afl-cc' failed to build, set up a working build environment first!" ; exit 1 ; }
+ 	@test -e cmplog-instructions-pass.so && echo "[+] LLVM mode for 'afl-cc' successfully built!" || echo "[-] LLVM mode for 'afl-cc'  failed to build, likely you either don't have llvm installed, or you need to set LLVM_CONFIG, to point to e.g. llvm-config-11. See instrumentation/README.llvm.md how to do this. Highly recommended!"
+ 	@test -e SanitizerCoverageLTO.so && echo "[+] LLVM LTO mode for 'afl-cc' successfully built!" || echo "[-] LLVM LTO mode for 'afl-cc'  failed to build, this would need LLVM 11+, see instrumentation/README.lto.md how to build it"
+-	@test -e afl-gcc-pass.so && echo "[+] gcc_plugin for 'afl-cc' successfully built!" || echo "[-] gcc_plugin for 'afl-cc'  failed to build, unless you really need it that is fine - or read instrumentation/README.gcc_plugin.md how to build it"
+ 	@echo "[+] All done! Be sure to review the README.md - it's pretty short and useful."
+ 	@if [ "$(SYS)" = "Darwin" ]; then printf "\nWARNING: Fuzzing on MacOS X is slow because of the unusually high overhead of\nfork() on this OS. Consider using Linux or *BSD for fuzzing software not\nspecifically for MacOS.\n\n"; fi
+ 	@! tty <&1 >/dev/null || printf "\033[0;30mNOTE: If you can read this, your terminal probably uses white background.\nThis will make the UI hard to read. See docs/status_screen.md for advice.\033[0m\n" 2>/dev/null
+@@ -566,7 +559,6 @@ all_done: test_build
+ clean:
+ 	rm -rf $(PROGS) afl-fuzz-document afl-as as afl-g++ afl-clang afl-clang++ *.o src/*.o *~ a.out core core.[1-9][0-9]* *.stackdump .test .test1 .test2 test-instr .test-instr0 .test-instr1 afl-cs-proxy afl-qemu-trace afl-gcc-fast afl-g++-fast ld *.so *.8 test/unittests/*.o test/unittests/unit_maybe_alloc test/unittests/preallocable .afl-* afl-gcc afl-g++ afl-clang afl-clang++ test/unittests/unit_hash test/unittests/unit_rand *.dSYM
+ 	$(MAKE) -f GNUmakefile.llvm clean
+-	$(MAKE) -f GNUmakefile.gcc_plugin clean
+ 	$(MAKE) -C utils/libdislocator clean
+ 	$(MAKE) -C utils/libtokencap clean
+ 	$(MAKE) -C utils/aflpp_driver clean
+@@ -608,9 +600,6 @@ endif
+ .PHONY: distrib
+ distrib: all
+ 	$(MAKE) -j4 -f GNUmakefile.llvm
+-ifneq "$(SYS)" "Darwin"
+-	$(MAKE) -f GNUmakefile.gcc_plugin
+-endif
+ 	$(MAKE) -C utils/libdislocator
+ 	$(MAKE) -C utils/libtokencap
+ 	$(MAKE) -C utils/afl_network_proxy
+@@ -652,9 +641,6 @@ endif
+ .PHONY: source-only
+ source-only: all
+ 	$(MAKE) -j4 -f GNUmakefile.llvm
+-ifneq "$(SYS)" "Darwin"
+-	$(MAKE) -f GNUmakefile.gcc_plugin
+-endif
+ 	$(MAKE) -C utils/libdislocator
+ 	$(MAKE) -C utils/libtokencap
+ 	# -$(MAKE) -C utils/plot_ui
+@@ -703,9 +689,6 @@ install: all $(MANPAGES)
+ 	@if [ -f utils/aflpp_driver/libAFLDriver.a ]; then set -e; install -m 644 utils/aflpp_driver/libAFLDriver.a $${DESTDIR}$(HELPER_PATH); fi
+ 	@if [ -f utils/aflpp_driver/libAFLQemuDriver.a ]; then set -e; install -m 644 utils/aflpp_driver/libAFLQemuDriver.a $${DESTDIR}$(HELPER_PATH); fi
+ 	$(MAKE) -f GNUmakefile.llvm install
+-ifneq "$(SYS)" "Darwin"
+-	$(MAKE) -f GNUmakefile.gcc_plugin install
+-endif
+ 	ln -sf afl-cc $${DESTDIR}$(BIN_PATH)/afl-gcc
+ 	ln -sf afl-cc $${DESTDIR}$(BIN_PATH)/afl-g++
+ 	ln -sf afl-cc $${DESTDIR}$(BIN_PATH)/afl-clang

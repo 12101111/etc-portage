@@ -23,9 +23,9 @@ sys-apps/attr /-flto*/-fno-lto/
 dev-lang/mono /-flto*//
 sys-apps/pciutils /-flto*// # symver break
 media-libs/alsa-lib /-flto*//
-dev-java/openjdk:17 /-fomit-frame-pointer//
 sys-fs/lvm2 /-flto*//
 
+# gc-sections
 dev-scheme/racket /-Wl,--gc-sections//
 net-wireless/iwd /-Wl,--gc-sections//
 dev-libs/ell /-Wl,--gc-sections//
@@ -34,11 +34,9 @@ net-wireless/iw /-Wl,--gc-sections//
 # full lto
 sys-devel/llvm /-flto*/-flto=full
 sys-devel/clang /-flto*/-flto=full
+sys-devel/lld /-flto*/-flto=full
 app-emulation/qemu /-flto*/-flto=full
 x11-libs/pixman /-flto*/-flto=full
-
-# net-libs/libtorrent-rasterbar C*FLAGS+=-fsanitize=address LDFLAGS+=-fsanitize=address
-# net-p2p/qbittorrent-enhanced C*FLAGS+=-fsanitize=address LDFLAGS+=-fsanitize=address
 
 # stack overflow
 sys-devel/clang LDFLAGS+=-Wl,-z,stack-size=0x800000
@@ -54,6 +52,14 @@ x11-libs/pixman LDFLAGS+=-Wl,-z,stack-size=0x200000
 net-libs/libtorrent-rasterbar LDFLAGS+=-Wl,-z,stack-size=0x200000
 dev-java/openjdk LDFLAGS+=-Wl,-z,stack-size=0x800000
 
+# no-plt
+dev-libs/nss /-fno-plt//
+media-video/ffmpeg /-fno-plt//
+sys-libs/glibc /-fno-plt//
+sys-libs/musl /-fno-plt//
+sys-libs/compiler-rt-sanitizers /-fno-plt//
+x11-base/xorg-server /-fno-plt//
+
 # missing libs
 net-libs/gtk-vnc LDFLAGS+=-lucontext
 net-misc/spice-gtk LDFLAGS+=-lucontext
@@ -63,8 +69,14 @@ sys-devel/dwz LDFLAGS+=-lobstack
 dev-libs/sink LDFLAGS+=-lexecinfo
 app-arch/rpm LDFLAGS+=-lelf
 media-tv/v4l-utils LDFLAGS+=-largp
-dev-libs/libedit CFLAGS+=-D__STDC_ISO_10646__
 dev-qt/qtcore LDFLAGS+=-lexecinfo
 app-editors/neovim LDFLAGS+=-lexecinfo
 www-client/falkon LDFLAGS+=-lexecinfo
 sys-process/htop LDFLAGS+=-lexecinfo
+dev-qt/qt-creator LDFLAGS+=-lexecinfo
+
+# misc
+dev-util/colm NOLAFILEREMOVE=true
+dev-java/openjdk:17 /-fomit-frame-pointer//
+dev-libs/libedit CFLAGS+=-D__STDC_ISO_10646__
+
