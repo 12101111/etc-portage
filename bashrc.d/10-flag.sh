@@ -186,7 +186,10 @@ FLAG_FILTER_NONGNU=(
 	'-mfunction-return*'
 	'-mindirect-branch*'
 	'-mvectorize*'
+	'-Waggressive-loop-optimizations'
+	'-Wclobbered'
 	'-Wl,-z,retpolineplt' # does not work, currently
+	'-Wreturn-local-addr'
 )
 
 FLAG_FILTER_GNU=(
@@ -701,7 +704,7 @@ FlagSetFlags() {
 
 FlagInfoExport() {
 	local out
-	for out in FEATURES CFLAGS CXXFLAGS CPPFLAGS FFLAGS FCFLAGS F77FLAGS \
+	for out in FEATURES CFLAGS CXXFLAGS CPPFLAGS RUSTFLAGS FFLAGS FCFLAGS F77FLAGS \
 		LDFLAGS MAKEOPTS EXTRA_ECONF EXTRA_EMAKE USE_NONGNU
 	do	eval "if [ -n \"\${$out:++}\" ]
 		then	export $out

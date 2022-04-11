@@ -1,0 +1,30 @@
+diff --git a/util/base64.c b/util/base64.c
+index e386c11..4e89999 100644
+--- a/util/base64.c
++++ b/util/base64.c
+@@ -21,6 +21,7 @@
+ 
+ #include <stdlib.h>
+ #include <string.h>
++#include <stdint.h>
+ #include <errno.h>
+ 
+ static const char base64_table[65] =
+@@ -40,7 +41,7 @@ static const char base64_table[65] =
+ int base64_encode(const unsigned char *src, int srclen, char *dst)
+ {
+ 	int i, bits = 0;
+-	u_int32_t ac = 0;
++	uint32_t ac = 0;
+ 	char *cp = dst;
+ 
+ 	for (i = 0; i < srclen; i++) {
+@@ -75,7 +76,7 @@ int base64_encode(const unsigned char *src, int srclen, char *dst)
+  */
+ int base64_decode(const char *src, int srclen, unsigned char *dst)
+ {
+-	u_int32_t ac = 0;
++	uint32_t ac = 0;
+ 	int i, bits = 0;
+ 	unsigned char *bp = dst;
+ 

@@ -12,3 +12,4 @@ gui-libs/neatvnc **
 dev-libs/aml **
 dev-lang/luajit **
 dev-lang/zig **
+dev-lang/rust **

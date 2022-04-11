@@ -43,7 +43,7 @@ sys-process/procps modern-top
 kde-plasma/ksysguard lm-sensors
 www-client/uget aria2 libnotify openssl -gnutls
 mail-client/mutt gdbm mbox pop gpgme
-media-video/obs-studio lua v4l truetype pipewire fdk speex vlc python lua_single_target_luajit -ssl
+media-video/obs-studio lua v4l truetype pipewire fdk speex python lua_single_target_luajit -ssl
 dev-vcs/git subversion perl
 dev-vcs/subversion perl
 dev-util/perf -clang lzma libpfm perl -python
@@ -192,7 +192,7 @@ sys-fs/e2fsprogs -lto # don't work with clang
 kde-plasma/kwin screencast
 kde-plasma/plasma-workspace screencast
 media-libs/libsdl2 pipewire
-sys-apps/xdg-desktop-portal geolocation screencast
+sys-apps/xdg-desktop-portal screencast
 net-misc/networkmanager connection-sharing -dhcpcd nftables -iwd -lto
 net-wireless/wpa_supplicant ap -crda
 
@@ -211,7 +211,7 @@ app-arch/tar -nls
 dev-perl/libintl-perl minimal
 app-admin/sudo -sendmail # drop dependence on virtual/mta and mail-mta/nullmailer
 net-wireless/iwd -crda standalone # kernal 4.15+ have built-in support, crda don't support py3
-net-libs/webkit-gtk media-source -geolocation -seccomp
+net-libs/webkit-gtk gnome-keyring libnotify spell
 media-sound/alsa-utils -libsamplerate
 app-editors/vim -nls
 app-editors/vim-core -nls
@@ -243,6 +243,6 @@ net-libs/nodejs icu inspector system-icu
 dev-libs/libxml2 icu
 app-editors/vscode savedconfig system-electron system-ripgrep builtin-extensions
 media-video/pipewire ffmpeg gstreamer
-dev-util/electron suid tcmalloc lto pgo custom-cflags system-icu clang wayland pipewire screencast
-www-client/chromium gtk4 -libcxx hevc wayland lto custom-cflags -pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png
+dev-util/electron -libcxx gtk4 -system-png suid tcmalloc lto pgo custom-cflags system-icu clang wayland pipewire screencast
+www-client/chromium gtk4 -libcxx hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png
 dev-lang/python:2.7 -tk -bluetooth

@@ -1,25 +1,8 @@
-diff --git a/build/config/linux/BUILD.gn b/build/config/linux/BUILD.gn
-index 4770424..b7c940d 100644
---- a/build/config/linux/BUILD.gn
-+++ b/build/config/linux/BUILD.gn
-@@ -27,12 +27,6 @@ config("runtime_library") {
-   if (is_chromeos) {
-     defines = [ "OS_CHROMEOS" ]
-   }
--
--  if ((!(is_chromeos_ash || is_chromeos_lacros) ||
--       default_toolchain != "//build/toolchain/cros:target") &&
--      (!use_custom_libcxx || current_cpu == "mipsel")) {
--    libs = [ "atomic" ]
--  }
- }
- 
- config("libcap") {
 diff --git a/base/BUILD.gn b/base/BUILD.gn
-index 0b3dd3f..34b63df 100644
+index ee8845c..18fd229 100644
 --- a/base/BUILD.gn
 +++ b/base/BUILD.gn
-@@ -1354,15 +1354,6 @@ component("base") {
+@@ -1483,15 +1483,6 @@ mixed_component("base") {
      "//third_party/abseil-cpp:absl",
    ]
  
@@ -35,3 +18,19 @@ index 0b3dd3f..34b63df 100644
    if (use_allocator_shim) {
      sources += [
        "allocator/allocator_shim.cc",
+diff --git a/build/config/linux/BUILD.gn b/build/config/linux/BUILD.gn
+index d304d08..af1e2d6 100644
+--- a/build/config/linux/BUILD.gn
++++ b/build/config/linux/BUILD.gn
+@@ -39,11 +39,6 @@ config("runtime_library") {
+   if (is_chromeos) {
+     defines = [ "OS_CHROMEOS" ]
+   }
+-
+-  if ((!is_chromeos || default_toolchain != "//build/toolchain/cros:target") &&
+-      (!use_custom_libcxx || current_cpu == "mipsel")) {
+-    libs = [ "atomic" ]
+-  }
+ }
+ 
+ config("libcap") {

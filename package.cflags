@@ -22,21 +22,27 @@ app-text/ghostscript-gpl /-flto*/-fno-lto/
 sys-apps/attr /-flto*/-fno-lto/
 dev-lang/mono /-flto*//
 sys-apps/pciutils /-flto*// # symver break
+sys-fs/fuse /-flto*// # symver
 media-libs/alsa-lib /-flto*//
 sys-fs/lvm2 /-flto*//
 
 # gc-sections
-dev-scheme/racket /-Wl,--gc-sections//
-net-wireless/iwd /-Wl,--gc-sections//
-dev-libs/ell /-Wl,--gc-sections//
-net-wireless/iw /-Wl,--gc-sections//
+dev-scheme/racket LDFLAGS-=-Wl,--gc-sections
+net-wireless/iwd LDFLAGS-=-Wl,--gc-sections
+dev-libs/ell LDFLAGS-=-Wl,--gc-sections
+net-wireless/iw LDFLAGS-=-Wl,--gc-sections
 
 # full lto
 sys-devel/llvm /-flto*/-flto=full
 sys-devel/clang /-flto*/-flto=full
 sys-devel/lld /-flto*/-flto=full
 app-emulation/qemu /-flto*/-flto=full
-x11-libs/pixman /-flto*/-flto=full
+
+# mozbuild bug. rustc isn't used for final link anyway
+# mozbuild.configure.options.InvalidOptionError: RUSTFLAGS takes 1 value
+dev-lang/spidermonkey RUSTFLAGS-=-Clink-arg=-Wl,*
+www-client/firefox RUSTFLAGS-=-Clink-arg=-Wl,*
+mail-client/thunderbird RUSTFLAGS-=-Clink-arg=-Wl,*
 
 # stack overflow
 sys-devel/clang LDFLAGS+=-Wl,-z,stack-size=0x800000
@@ -60,6 +66,13 @@ sys-libs/musl /-fno-plt//
 sys-libs/compiler-rt-sanitizers /-fno-plt//
 x11-base/xorg-server /-fno-plt//
 
+#unused-command-line-argument
+dev-util/cmake C*FLAGS+=-Qunused-arguments
+net-libs/libssh C*FLAGS+=-Qunused-arguments
+dev-dotnet/coreclr C*FLAGS+=-Qunused-arguments
+dev-dotnet/corefx C*FLAGS+=-Qunused-arguments
+dev-dotnet/corehost C*FLAGS+=-Qunused-arguments
+
 # missing libs
 net-libs/gtk-vnc LDFLAGS+=-lucontext
 net-misc/spice-gtk LDFLAGS+=-lucontext
@@ -79,4 +92,3 @@ dev-qt/qt-creator LDFLAGS+=-lexecinfo
 dev-util/colm NOLAFILEREMOVE=true
 dev-java/openjdk:17 /-fomit-frame-pointer//
 dev-libs/libedit CFLAGS+=-D__STDC_ISO_10646__
-

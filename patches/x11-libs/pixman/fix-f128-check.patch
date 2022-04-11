@@ -1,0 +1,13 @@
+diff --git a/meson.build b/meson.build
+index 1cec227..4eb88a8 100644
+--- a/meson.build
++++ b/meson.build
+@@ -493,7 +493,7 @@ if cc.links('''
+ endif
+ 
+ if cc.links(
+-    ' __float128 a = 1.0Q, b = 2.0Q; int main (void) { return a + b; }',
++    'volatile  __float128 a = 1.0Q, b = 2.0Q; int main (void) { return a + b; }',
+     name : 'Has float128 support')
+   config.set('HAVE_FLOAT128', 1)
+ endif

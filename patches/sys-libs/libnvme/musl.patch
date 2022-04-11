@@ -1,0 +1,15 @@
+diff --git a/src/nvme/fabrics.c b/src/nvme/fabrics.c
+index 2a26843..b2630b9 100644
+--- a/src/nvme/fabrics.c
++++ b/src/nvme/fabrics.c
+@@ -311,6 +311,10 @@ static int inet4_pton(const char *src, uint16_t port,
+ 	return 0;
+ }
+ 
++#ifndef SCOPE_DELIMITER
++#define SCOPE_DELIMITER	'%'
++#endif
++
+ static int inet6_pton(nvme_root_t r, const char *src, uint16_t port,
+ 		      struct sockaddr_storage *addr)
+ {

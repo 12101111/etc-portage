@@ -1,25 +1,28 @@
-From 33901250f97910415ddae131ec344b4b0febc612 Mon Sep 17 00:00:00 2001
+From 59b1d748157ddce5f701dfcaa4fae9a553fc9775 Mon Sep 17 00:00:00 2001
 From: Simonas Kazlauskas <git@kazlauskas.me>
 Date: Sat, 3 Jun 2017 18:55:08 +0300
-Subject: [PATCH 2/5] [rust] Add knowledge of __rust_{alloc,realloc,dealloc}
+Subject: [PATCH] [rust] Add knowledge of __rust_{alloc,realloc,dealloc}
 
 ---
- .../llvm/Analysis/TargetLibraryInfo.def       | 10 ++++++++++
- llvm/lib/Analysis/MemoryBuiltins.cpp          |  8 ++++++--
- llvm/lib/Analysis/TargetLibraryInfo.cpp       | 19 +++++++++++++++++++
- 3 files changed, 35 insertions(+), 2 deletions(-)
+ .../llvm/Analysis/TargetLibraryInfo.def       | 13 ++++++++++++
+ llvm/lib/Analysis/MemoryBuiltins.cpp          |  6 +++++-
+ llvm/lib/Analysis/TargetLibraryInfo.cpp       | 20 +++++++++++++++++++
+ 3 files changed, 38 insertions(+), 1 deletion(-)
 
 diff --git a/llvm/include/llvm/Analysis/TargetLibraryInfo.def b/llvm/include/llvm/Analysis/TargetLibraryInfo.def
-index ded53617b304..88b434c25cc1 100644
+index 9c1abef33b288..70a79112ded85 100644
 --- a/llvm/include/llvm/Analysis/TargetLibraryInfo.def
 +++ b/llvm/include/llvm/Analysis/TargetLibraryInfo.def
-@@ -391,6 +391,16 @@ TLI_DEFINE_STRING_INTERNAL("__powf_finite")
+@@ -391,6 +391,19 @@ TLI_DEFINE_STRING_INTERNAL("__powf_finite")
  /// long double __powl_finite(long double x, long double y);
  TLI_DEFINE_ENUM_INTERNAL(powl_finite)
  TLI_DEFINE_STRING_INTERNAL("__powl_finite")
 +
 +TLI_DEFINE_ENUM_INTERNAL(rust_alloc)
 +TLI_DEFINE_STRING_INTERNAL("__rust_alloc")
++
++TLI_DEFINE_ENUM_INTERNAL(rust_alloc_zeroed)
++TLI_DEFINE_STRING_INTERNAL("__rust_alloc_zeroed")
 +
 +TLI_DEFINE_ENUM_INTERNAL(rust_dealloc)
 +TLI_DEFINE_STRING_INTERNAL("__rust_dealloc")
@@ -31,22 +34,20 @@ index ded53617b304..88b434c25cc1 100644
  TLI_DEFINE_ENUM_INTERNAL(sincospi_stret)
  TLI_DEFINE_STRING_INTERNAL("__sincospi_stret")
 diff --git a/llvm/lib/Analysis/MemoryBuiltins.cpp b/llvm/lib/Analysis/MemoryBuiltins.cpp
-index 68e997656d84..a2e1364998a8 100644
+index 9e26f292b789a..4b08e6417ebf6 100644
 --- a/llvm/lib/Analysis/MemoryBuiltins.cpp
 +++ b/llvm/lib/Analysis/MemoryBuiltins.cpp
-@@ -111,7 +111,10 @@ static const std::pair<LibFunc, AllocFnsTy> AllocationFnData[] = {
-   {LibFunc_reallocf,            {ReallocLike, 2, 1,  -1}},
-   {LibFunc_strdup,              {StrDupLike,  1, -1, -1}},
-   {LibFunc_strndup,             {StrDupLike,  2, 1,  -1}},
--  {LibFunc___kmpc_alloc_shared, {MallocLike,  1, 0,  -1}}
-+  {LibFunc___kmpc_alloc_shared, {MallocLike,  1, 0,  -1}},
-+
-+  {LibFunc_rust_alloc,         {MallocLike,  2, 0,  -1}},
-+  {LibFunc_rust_realloc,       {ReallocLike,  4, 3,  -1}},
-   // TODO: Handle "int posix_memalign(void **, size_t, size_t)"
+@@ -111,6 +111,9 @@ static const std::pair<LibFunc, AllocFnsTy> AllocationFnData[] = {
+     {LibFunc_strdup,                            {StrDupLike,       1, -1, -1, -1}},
+     {LibFunc_strndup,                           {StrDupLike,       2,  1, -1, -1}},
+     {LibFunc___kmpc_alloc_shared,               {MallocLike,       1,  0, -1, -1}},
++    {LibFunc_rust_alloc,                        {MallocLike,       2,  0, -1,  1}},
++    {LibFunc_rust_alloc_zeroed,                 {CallocLike,       2,  0, -1,  1}},
++    {LibFunc_rust_realloc,                      {ReallocLike,      4,  3, -1,  2}},
+     // TODO: Handle "int posix_memalign(void **, size_t, size_t)"
  };
  
-@@ -464,7 +467,8 @@ bool llvm::isLibFreeFunction(const Function *F, const LibFunc TLIFn) {
+@@ -429,7 +432,8 @@ bool llvm::isLibFreeFunction(const Function *F, const LibFunc TLIFn) {
             TLIFn == LibFunc_ZdlPvjSt11align_val_t || // delete(void*, unsigned long, align_val_t)
             TLIFn == LibFunc_ZdlPvmSt11align_val_t || // delete(void*, unsigned long, align_val_t)
             TLIFn == LibFunc_ZdaPvjSt11align_val_t || // delete[](void*, unsigned int, align_val_t)
@@ -57,15 +58,16 @@ index 68e997656d84..a2e1364998a8 100644
    else
      return false;
 diff --git a/llvm/lib/Analysis/TargetLibraryInfo.cpp b/llvm/lib/Analysis/TargetLibraryInfo.cpp
-index c3a609ee4fe1..fa5a5c5ae2d0 100644
+index 02923c2c7eb14..22d6a5f04152a 100644
 --- a/llvm/lib/Analysis/TargetLibraryInfo.cpp
 +++ b/llvm/lib/Analysis/TargetLibraryInfo.cpp
-@@ -1591,6 +1591,25 @@ bool TargetLibraryInfoImpl::isValidProtoForLibFunc(const FunctionType &FTy,
+@@ -1793,6 +1793,26 @@ bool TargetLibraryInfoImpl::isValidProtoForLibFunc(const FunctionType &FTy,
      else
        return false;
    }
 +
 +  case LibFunc_rust_alloc:
++  case LibFunc_rust_alloc_zeroed:
 +    return (NumParams == 2 && FTy.getReturnType()->isPointerTy() &&
 +            FTy.getParamType(0)->isIntegerTy() &&
 +            FTy.getParamType(1)->isIntegerTy());
@@ -86,6 +88,3 @@ index c3a609ee4fe1..fa5a5c5ae2d0 100644
    case LibFunc::NumLibFuncs:
    case LibFunc::NotLibFunc:
      break;
--- 
-2.33.0
-

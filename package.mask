@@ -20,3 +20,5 @@ sys-auth/polkit::gentoo
 net-im/telegram-desktop::gentoo-zh
 net-dns/avahi
 >=sys-cluster/kubectl-1.22
+net-misc/spice-gtk::musl
+mail-client/thunderbird::gentoo-zh

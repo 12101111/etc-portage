@@ -1,0 +1,22 @@
+diff --git a/src/BCache_Info.cc b/src/BCache_Info.cc
+index 129a517..1080c13 100644
+--- a/src/BCache_Info.cc
++++ b/src/BCache_Info.cc
+@@ -16,7 +16,7 @@
+ 
+ 
+ #include "BCache_Info.h"
+-
++#include <libgen.h>
+ #include <string.h>  // GNU version of basename()
+ #include <unistd.h>
+ #include <glibmm/ustring.h>
+@@ -49,7 +49,7 @@ Glib::ustring BCache_Info::get_bcache_device(const Glib::ustring& device_path, c
+ 		return Glib::ustring("");
+ 	buf[len] = '\0';
+ 
+-	return "/dev/" + Glib::ustring(basename(buf));
++	return "/dev/" + Glib::ustring(basename(strdup(buf)));
+ }
+ 
+ 
