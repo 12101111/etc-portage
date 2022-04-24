@@ -10,7 +10,7 @@ sys-devel/binutils::gentoo
 #sys-apps/attr::gentoo #https://bugs.gentoo.org/644048
 app-i18n/man-pages-zh_CN::gentoo-zh
 net-libs/webkit-gtk::musl
-net-proxy/v2ray-bin
+#net-proxy/v2ray-bin
 www-client/firefox::gentoo
 dev-libs/elftoolchain
 virtual/libelf::12101111-overlay

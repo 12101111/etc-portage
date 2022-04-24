@@ -9,7 +9,7 @@ sys-libs/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack 
 dev-java/openjdk gentoo-vm
 
 # Graphic
-media-libs/mesa vulkan lm-sensors libglvnd -llvm vaapi unwind
+media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind
 x11-base/xorg-server xvfb libglvnd elogind -suid
 x11-wm/awesome dbus doc gnome lua_single_target_luajit
 x11-misc/picom dbus
@@ -243,6 +243,6 @@ net-libs/nodejs icu inspector system-icu
 dev-libs/libxml2 icu
 app-editors/vscode savedconfig system-electron system-ripgrep builtin-extensions
 media-video/pipewire ffmpeg gstreamer
-dev-util/electron -libcxx gtk4 -system-png suid tcmalloc lto pgo custom-cflags system-icu clang wayland pipewire screencast
+dev-util/electron -libcxx gtk4 -system-png suid lto pgo custom-cflags system-icu clang wayland pipewire screencast
 www-client/chromium gtk4 -libcxx hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png
 dev-lang/python:2.7 -tk -bluetooth

@@ -92,3 +92,4 @@ dev-qt/qt-creator LDFLAGS+=-lexecinfo
 dev-util/colm NOLAFILEREMOVE=true
 dev-java/openjdk:17 /-fomit-frame-pointer//
 dev-libs/libedit CFLAGS+=-D__STDC_ISO_10646__
+kde-apps/kio-extras CFLAGS+=-D_GNU_SOURCE
