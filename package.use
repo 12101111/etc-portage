@@ -1,6 +1,6 @@
 # Compiler
 sys-devel/gcc fortran openmp jit -pgo -lto
-dev-lang/rust system-llvm system-bootstrap rustfmt wasm nightly wasi clippy miri rls rust-src
+dev-lang/rust system-llvm system-bootstrap rustfmt wasm nightly wasi clippy miri rls rust-src profiler
 dev-lang/go system-bootstrap # to upgrade itself
 sys-devel/llvm libedit gold exegesis polly mlir
 dev-util/lldb libedit lzma
