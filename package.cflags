@@ -25,8 +25,12 @@ sys-apps/pciutils /-flto*// # symver break
 sys-fs/fuse /-flto*// # symver
 media-libs/alsa-lib /-flto*//
 sys-fs/lvm2 /-flto*//
+dev-java/openjdk /-flto*// # segfault
 
-# gc-sections
+# no polly
+media-gfx/krita /-mllvm// /-polly*//
+
+# no gc-sections
 dev-scheme/racket LDFLAGS-=-Wl,--gc-sections
 net-wireless/iwd LDFLAGS-=-Wl,--gc-sections
 dev-libs/ell LDFLAGS-=-Wl,--gc-sections
@@ -72,6 +76,7 @@ net-libs/libssh C*FLAGS+=-Qunused-arguments
 dev-dotnet/coreclr C*FLAGS+=-Qunused-arguments
 dev-dotnet/corefx C*FLAGS+=-Qunused-arguments
 dev-dotnet/corehost C*FLAGS+=-Qunused-arguments
+dev-libs/vc C*FLAGS+=-Qunused-arguments
 
 # missing libs
 net-libs/gtk-vnc LDFLAGS+=-lucontext
@@ -87,9 +92,10 @@ app-editors/neovim LDFLAGS+=-lexecinfo
 www-client/falkon LDFLAGS+=-lexecinfo
 sys-process/htop LDFLAGS+=-lexecinfo
 dev-qt/qt-creator LDFLAGS+=-lexecinfo
+x11-libs/libva-intel-media-driver LDFLAGS+=-lexecinfo
 
 # misc
 dev-util/colm NOLAFILEREMOVE=true
-dev-java/openjdk:17 /-fomit-frame-pointer//
+dev-java/openjdk /-fomit-frame-pointer//
 dev-libs/libedit CFLAGS+=-D__STDC_ISO_10646__
 kde-apps/kio-extras CFLAGS+=-D_GNU_SOURCE

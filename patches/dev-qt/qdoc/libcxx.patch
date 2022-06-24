@@ -1,0 +1,16 @@
+diff --git a/src/qdoc/configure.pri b/src/qdoc/configure.pri
+index 4f3d776..98eb65b 100644
+--- a/src/qdoc/configure.pri
++++ b/src/qdoc/configure.pri
+@@ -1,7 +1,7 @@
+-defineReplace(extractVersion)      { return($$replace(1, ^(\\d+\\.\\d+\\.\\d+)(svn|git)?$, \\1)) }
+-defineReplace(extractMajorVersion) { return($$replace(1, ^(\\d+)\\.\\d+\\.\\d+(svn|git)?$, \\1)) }
+-defineReplace(extractMinorVersion) { return($$replace(1, ^\\d+\\.(\\d+)\\.\\d+(svn|git)?$, \\1)) }
+-defineReplace(extractPatchVersion) { return($$replace(1, ^\\d+\\.\\d+\\.(\\d+)(svn|git)?$, \\1)) }
++defineReplace(extractVersion)      { return($$replace(1, ^(\\d+\\.\\d+\\.\\d+)(svn|git|libcxx)?$, \\1)) }
++defineReplace(extractMajorVersion) { return($$replace(1, ^(\\d+)\\.\\d+\\.\\d+(svn|git|libcxx)?$, \\1)) }
++defineReplace(extractMinorVersion) { return($$replace(1, ^\\d+\\.(\\d+)\\.\\d+(svn|git|libcxx)?$, \\1)) }
++defineReplace(extractPatchVersion) { return($$replace(1, ^\\d+\\.\\d+\\.(\\d+)(svn|git|libcxx)?$, \\1)) }
+ 
+ defineTest(versionIsAtLeast) {
+     actual_major_version = $$extractMajorVersion($$1)

@@ -5,4 +5,4 @@ RUSTFLAGS="-Copt-level=0  -Ctarget-feature=-crt-static"
 LDFLAGS="-fuse-ld=lld -rtlib=compiler-rt -unwindlib=libunwind \
 -march=skylake -mtune=skylake"
 FEATURES="installsources nostrip"
-PORTAGE_TMPDIR="/var/tmp"
+#PORTAGE_TMPDIR="/var/tmp"
