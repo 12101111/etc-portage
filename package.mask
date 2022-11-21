@@ -1,8 +1,9 @@
 */*::mv
 */*::pg_overlay
 
-x11-libs/gtk+::gentoo
 dev-libs/elftoolchain
 virtual/libelf::12101111-overlay
->=sys-cluster/kubectl-1.22
-dev-lang/python:3.11
+dev-java/openjdk:11::gentoo
+>=net-proxy/v2ray-5.0.0
+>=sys-apps/systemd-252
+games-emulation/dosbox-x::guru

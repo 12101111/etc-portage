@@ -1,19 +1,16 @@
-From da7c7123d9acfa9b699e85dae733318e6ec13114 Mon Sep 17 00:00:00 2001
-From: Cameron Hart <cameron.hart@gmail.com>
-Date: Sun, 10 Jul 2016 23:55:53 +1000
-Subject: [PATCH] [rust] Add accessors for MCSubtargetInfo CPU and Feature
- tables
+commit a8f170c5611585510033764926b0c40a6901d001
+Author: Cameron Hart <cameron.hart@gmail.com>
+Date:   Sun Jul 10 23:55:53 2016 +1000
 
-This is needed for `-C target-cpu=help` and `-C target-feature=help` in rustc
----
- llvm/include/llvm/MC/MCSubtargetInfo.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+    [rust] Add accessors for MCSubtargetInfo CPU and Feature tables
+    
+    This is needed for `-C target-cpu=help` and `-C target-feature=help` in rustc
 
 diff --git a/llvm/include/llvm/MC/MCSubtargetInfo.h b/llvm/include/llvm/MC/MCSubtargetInfo.h
-index 839a3bd85829b..8e98d6f7a08b6 100644
+index e1f0a86141e3..1e529bf4fb31 100644
 --- a/llvm/include/llvm/MC/MCSubtargetInfo.h
 +++ b/llvm/include/llvm/MC/MCSubtargetInfo.h
-@@ -229,6 +229,14 @@ class MCSubtargetInfo {
+@@ -230,6 +230,14 @@ public:
      return Found != ProcDesc.end() && StringRef(Found->Key) == CPU;
    }
  

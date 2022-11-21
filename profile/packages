@@ -33,7 +33,6 @@ app-eselect/eselect-repository
 app-portage/eix
 app-portage/gentoolkit
 app-portage/portage-bashrc-mv
-app-portage/repoman
 # archive
 app-arch/p7zip
 app-arch/zip

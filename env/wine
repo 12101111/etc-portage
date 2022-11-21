@@ -1,0 +1,2 @@
+CFLAGS="-march=skylake -mtune=skylake -pipe -O2"
+LDFLAGS=""

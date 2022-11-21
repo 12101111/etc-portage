@@ -1,2 +1,6 @@
 dev-java/openjdk-bin -gentoo-vm
 dev-java/openjdk -gentoo-vm
+dev-util/mingw64-toolchain -multilib
+www-client/firefox -clang -pgo
+net-im/telegram-desktop -qt6
+

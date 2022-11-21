@@ -1,0 +1,88 @@
+diff --git a/Telegram/SourceFiles/platform/linux/notifications_manager_linux.cpp b/Telegram/SourceFiles/platform/linux/notifications_manager_linux.cpp
+index 1d96b11..5dae545 100644
+--- a/Telegram/SourceFiles/platform/linux/notifications_manager_linux.cpp
++++ b/Telegram/SourceFiles/platform/linux/notifications_manager_linux.cpp
+@@ -72,7 +72,7 @@ std::unique_ptr<base::Platform::DBus::ServiceWatcher> CreateServiceWatcher() {
+ 			try {
+ 				return ranges::contains(
+ 					base::Platform::DBus::ListActivatableNames(connection),
+-					Glib::ustring(std::string(kService)));
++					std::string(kService));
+ 			} catch (...) {
+ 				// avoid service restart loop in sandboxed environments
+ 				return true;
+@@ -120,7 +120,7 @@ void StartServiceAsync(Fn<void()> callback) {
+ 							"org.freedesktop.DBus.Error.ServiceUnknown",
+ 						};
+ 
+-						const auto errorName =
++						const std::string errorName =
+ 							Gio::DBus::ErrorUtils::get_remote_error(e);
+ 
+ 						if (!ranges::contains(NotSupportedErrors, errorName)) {
+@@ -158,7 +158,7 @@ bool GetServiceRegistered() {
+ 			try {
+ 				return ranges::contains(
+ 					DBus::ListActivatableNames(connection),
+-					Glib::ustring(std::string(kService)));
++					std::string(kService));
+ 			} catch (...) {
+ 				return false;
+ 			}
+diff --git a/Telegram/lib_base/base/platform/linux/base_last_input_linux.cpp b/Telegram/lib_base/base/platform/linux/base_last_input_linux.cpp
+index ef5529e..709a5f5 100644
+--- a/Telegram/lib_base/base/platform/linux/base_last_input_linux.cpp
++++ b/Telegram/lib_base/base/platform/linux/base_last_input_linux.cpp
+@@ -103,7 +103,7 @@ std::optional<crl::time> FreedesktopDBusLastUserInputTime() {
+ 			"org.freedesktop.DBus.Error.AccessDenied",
+ 		};
+ 
+-		const auto errorName = Gio::DBus::ErrorUtils::get_remote_error(e);
++		const std::string errorName = Gio::DBus::ErrorUtils::get_remote_error(e);
+ 		if (ranges::contains(NotSupportedErrors, errorName)) {
+ 			NotSupported = true;
+ 			return std::nullopt;
+@@ -163,7 +163,7 @@ std::optional<crl::time> MutterDBusLastUserInputTime() {
+ 			"org.freedesktop.DBus.Error.AccessDenied",
+ 		};
+ 
+-		const auto errorName = Gio::DBus::ErrorUtils::get_remote_error(e);
++		const std::string errorName = Gio::DBus::ErrorUtils::get_remote_error(e);
+ 		if (ranges::contains(NotSupportedErrors, errorName)) {
+ 			NotSupported = true;
+ 			return std::nullopt;
+diff --git a/Telegram/lib_base/base/platform/linux/base_linux_dbus_utilities.cpp b/Telegram/lib_base/base/platform/linux/base_linux_dbus_utilities.cpp
+index b43f2d2..9bafea9 100644
+--- a/Telegram/lib_base/base/platform/linux/base_linux_dbus_utilities.cpp
++++ b/Telegram/lib_base/base/platform/linux/base_linux_dbus_utilities.cpp
+@@ -23,7 +23,7 @@ bool NameHasOwner(
+ 	return GlibVariantCast<bool>(reply.get_child(0));
+ }
+ 
+-std::vector<Glib::ustring> ListActivatableNames(
++std::vector<std::string> ListActivatableNames(
+ 		const Glib::RefPtr<Gio::DBus::Connection> &connection) {
+ 	auto reply = connection->call_sync(
+ 		std::string(kDBusObjectPath),
+@@ -32,7 +32,7 @@ std::vector<Glib::ustring> ListActivatableNames(
+ 		{},
+ 		std::string(kDBusService));
+ 
+-	return GlibVariantCast<std::vector<Glib::ustring>>(
++	return GlibVariantCast<std::vector<std::string>>(
+ 		reply.get_child(0));
+ }
+ 
+diff --git a/Telegram/lib_base/base/platform/linux/base_linux_dbus_utilities.h b/Telegram/lib_base/base/platform/linux/base_linux_dbus_utilities.h
+index f7c81bf..9e564f2 100644
+--- a/Telegram/lib_base/base/platform/linux/base_linux_dbus_utilities.h
++++ b/Telegram/lib_base/base/platform/linux/base_linux_dbus_utilities.h
+@@ -27,7 +27,7 @@ bool NameHasOwner(
+ 	const Glib::RefPtr<Gio::DBus::Connection> &connection,
+ 	const Glib::ustring &name);
+ 
+-std::vector<Glib::ustring> ListActivatableNames(
++std::vector<std::string> ListActivatableNames(
+ 	const Glib::RefPtr<Gio::DBus::Connection> &connection);
+ 
+ StartReply StartServiceByName(

@@ -1,15 +1,7 @@
 gui-apps/swaylock-effects **
-gui-apps/waybar **
 gui-apps/wf-recorder **
 
-app-editors/emacs **
 app-text/goldendict **
 <media-gfx/gimp-9999 **
-gui-apps/wob **
-media-video/wlrobs **
-gui-apps/wayvnc **
-gui-libs/neatvnc **
-dev-libs/aml **
 dev-lang/luajit **
-dev-lang/zig **
-dev-lang/rust **
+sys-apps/busybox::12101111-overlay **

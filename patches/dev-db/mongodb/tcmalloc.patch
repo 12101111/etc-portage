@@ -1,0 +1,32 @@
+diff --git a/src/third_party/gperftools/dist/src/malloc_hook_mmap_linux.h b/src/third_party/gperftools/dist/src/malloc_hook_mmap_linux.h
+index 2f6116fa..148daa37 100755
+--- a/src/third_party/gperftools/dist/src/malloc_hook_mmap_linux.h
++++ b/src/third_party/gperftools/dist/src/malloc_hook_mmap_linux.h
+@@ -57,6 +57,7 @@
+     || defined(__aarch64__) \
+     || (defined(_MIPS_SIM) && (_MIPS_SIM == _ABI64 || _MIPS_SIM == _ABIN32)) \
+     || defined(__s390__)
++#define __off64_t off64_t
+ 
+ static inline void* do_mmap64(void *start, size_t length,
+                               int prot, int flags,
+@@ -140,6 +141,10 @@ static inline void* do_mmap64(void *start, size_t length,
+ // Make sure mmap doesn't get #define'd away by <sys/mman.h>
+ # undef mmap
+ 
++#ifdef mmap64
++#undef mmap64
++#endif
++
+ extern "C" {
+   void* mmap64(void *start, size_t length, int prot, int flags,
+                int fd, __off64_t offset  ) __THROW
+@@ -206,7 +211,7 @@ extern "C" void* mremap(void* old_addr, size_t old_size, size_t new_size,
+   return result;
+ }
+ 
+-#ifndef __UCLIBC__
++#if defined(__GLIBC__) && !defined(__UCLIBC__)
+ // libc's version:
+ extern "C" void* __sbrk(intptr_t increment);
+ 

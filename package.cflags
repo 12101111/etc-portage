@@ -29,18 +29,13 @@ dev-java/openjdk /-flto*// # segfault
 
 # no polly
 media-gfx/krita /-mllvm// /-polly*//
+dev-db/mongodb /-mllvm// /-polly*//
 
 # no gc-sections
 dev-scheme/racket LDFLAGS-=-Wl,--gc-sections
 net-wireless/iwd LDFLAGS-=-Wl,--gc-sections
 dev-libs/ell LDFLAGS-=-Wl,--gc-sections
 net-wireless/iw LDFLAGS-=-Wl,--gc-sections
-
-# full lto
-sys-devel/llvm /-flto*/-flto=full
-sys-devel/clang /-flto*/-flto=full
-sys-devel/lld /-flto*/-flto=full
-app-emulation/qemu /-flto*/-flto=full
 
 # mozbuild bug. rustc isn't used for final link anyway
 # mozbuild.configure.options.InvalidOptionError: RUSTFLAGS takes 1 value
@@ -73,10 +68,8 @@ x11-base/xorg-server /-fno-plt//
 #unused-command-line-argument
 dev-util/cmake C*FLAGS+=-Qunused-arguments
 net-libs/libssh C*FLAGS+=-Qunused-arguments
-dev-dotnet/coreclr C*FLAGS+=-Qunused-arguments
-dev-dotnet/corefx C*FLAGS+=-Qunused-arguments
-dev-dotnet/corehost C*FLAGS+=-Qunused-arguments
 dev-libs/vc C*FLAGS+=-Qunused-arguments
+sys-devel/clang C*FLAGS+=-Qunused-arguments
 
 # missing libs
 net-libs/gtk-vnc LDFLAGS+=-lucontext
@@ -92,10 +85,13 @@ app-editors/neovim LDFLAGS+=-lexecinfo
 www-client/falkon LDFLAGS+=-lexecinfo
 sys-process/htop LDFLAGS+=-lexecinfo
 dev-qt/qt-creator LDFLAGS+=-lexecinfo
-x11-libs/libva-intel-media-driver LDFLAGS+=-lexecinfo
+x11-libs/cairo LDFLAGS+=-lexecinfo
+media-libs/libva-intel-media-driver LDFLAGS+=-lexecinfo
 
 # misc
 dev-util/colm NOLAFILEREMOVE=true
 dev-java/openjdk /-fomit-frame-pointer//
 dev-libs/libedit CFLAGS+=-D__STDC_ISO_10646__
 kde-apps/kio-extras CFLAGS+=-D_GNU_SOURCE
+dev-perl/XS-Parse-Keyword LD=clang
+dev-perl/Syntax-Keyword-Try LD=clang

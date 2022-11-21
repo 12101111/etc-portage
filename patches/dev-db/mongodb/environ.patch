@@ -1,0 +1,12 @@
+diff --git a/src/third_party/gperftools/dist/src/base/sysinfo.cc b/src/third_party/gperftools/dist/src/base/sysinfo.cc
+index 36f7067..3a7bf82 100644
+--- a/src/third_party/gperftools/dist/src/base/sysinfo.cc
++++ b/src/third_party/gperftools/dist/src/base/sysinfo.cc
+@@ -152,6 +152,7 @@ static size_t slow_strlen(const char *s) {
+ // system calls to read the file, and thus avoid setting errno.
+ // /proc/self/environ has a limit of how much data it exports (around
+ // 8K), so it's not an ideal solution.
++#define __environ environ
+ const char* GetenvBeforeMain(const char* name) {
+   const int namelen = slow_strlen(name);
+ #if defined(HAVE___ENVIRON)   // if we have it, it's declared in unistd.h

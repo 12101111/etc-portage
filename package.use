@@ -2,15 +2,17 @@
 sys-devel/gcc fortran openmp jit -pgo -lto
 dev-lang/rust system-llvm system-bootstrap rustfmt wasm nightly wasi clippy -miri -rls rust-src profiler
 dev-lang/go system-bootstrap # to upgrade itself
-sys-devel/llvm libedit gold exegesis polly mlir
+sys-devel/llvm libedit gold exegesis polly mlir zstd
 dev-util/lldb libedit lzma
 sys-devel/clang xml default-lld # lldb
 sys-libs/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray libfuzzer profile
 dev-java/openjdk gentoo-vm
+dev-lang/zig -stage2
+dev-lang/ghc -doc
 
 # Graphic
-media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind
-x11-base/xorg-server xvfb libglvnd elogind -suid
+media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind d3d9 osmesa vulkan-overlay zink
+x11-base/xorg-server xvfb libglvnd elogind -suid -xorg
 x11-wm/awesome dbus doc gnome lua_single_target_luajit
 x11-misc/picom dbus
 media-libs/freetype harfbuzz infinality
@@ -20,12 +22,12 @@ gui-apps/waybar network tray mpd wifi
 # Apps
 www-client/firefox hwaccel clang lto pgo screencast geckodriver system-png
 mail-client/thunderbird hwaccel clang lto
-app-editors/emacs jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars xft
+app-editors/emacs webp jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars xft
 app-editors/vim X python
 media-video/mpv archive cli drm libass opengl lua vaapi libmpv -vulkan lua_single_target_luajit
 net-misc/remmina rdp vnc appindicator gnome-keyring spice ssh
 media-sound/mpd flac
-media-video/ffmpeg dav1d fontconfig truetype openh264 xcb jpeg2k libaom libass libdrm openssl opus v4l mp3 webp x264 x265 vaapi vpx
+media-video/ffmpeg fdk dav1d fontconfig truetype openh264 xcb jpeg2k libaom libass libdrm openssl opus v4l mp3 webp x264 x265 vaapi vpx
 net-misc/freerdp ffmpeg gstreamer openh264 usb server smartcard xinerama xv
 media-libs/libsdl2 gles2 udev vulkan haptic
 net-misc/aria2 bittorrent libuv sqlite xmlrpc -jemalloc
@@ -67,17 +69,20 @@ app-editors/neovim lua_single_target_luajit
 gui-apps/wayvnc gbm
 www-client/luakit LUA_SINGLE_TARGET: luajit
 gnome-extra/nm-applet appindicator
+gui-apps/swaybg gdk-pixbuf
+games-util/mangohud gamescope
+games-util/gamescope screencast
+net-firewall/iptables nftables
 
 # VM / Emulator
-app-emulation/qemu udev zstd jemalloc gtk usb usbredir spice virgl -pin-upstream-blobs virtfs static-user -slirp io-uring virgl vte gnutls vhost-user-fs
+app-emulation/qemu udev zstd -jemalloc gtk usb usbredir spice virgl pin-upstream-blobs virtfs static-user slirp io-uring virgl vte gnutls vhost-user-fs
 app-emulation/libvirt zfs virt-network -parted dbus
-app-emulation/virt-manager gtk
+app-emulation/virt-manager gui
 app-emulation/spice gstreamer
 net-misc/spice-gtk gstaudio usbredir #gstvideo
-#sys-firmware/edk2-ovmf -binary
 app-emulation/pcem networking
-app-emulation/dosbox-x opengl ffmpeg
-app-emulation/bochs avx debugger
+games-emulation/dosbox-x opengl ffmpeg fluidsynth freetype slirp
+games-emulation/dolphin ffmpeg upnp mgba
 
 # System
 sys-kernel/linux-firmware savedconfig
@@ -95,6 +100,7 @@ x11-drivers/nvidia-drivers -tools -X -wayland
 sys-apps/systemd elfutils fido2 xkb
 
 # libs
+sys-libs/libxcrypt static-libs # openssh
 x11-libs/libxcb xkb # xorg-server awesome
 media-libs/libpng apng # firefox: animation png
 media-libs/libass harfbuzz # ffmpeg
@@ -109,7 +115,7 @@ dev-libs/glib static-libs # qemu-user-static
 sys-libs/zlib static-libs minizip # qemu-user-static telegram
 sys-apps/attr static-libs # qemu-user-static
 dev-libs/libpcre static-libs # qemu-user-static
-dev-libs/libpcre2 pcre16 pcre32 # qtcore
+dev-libs/libpcre2 pcre16 pcre32 static-libs # qtcore qemu-user-static
 dev-qt/qtgui egl dbus # wayland qt5ct
 app-i18n/fcitx-qt qt5
 gnome-base/librsvg tools # icon theme
@@ -146,11 +152,11 @@ dev-python/matplotlib gtk3 cairo
 net-vpn/tor caps lzma zstd tor-hardening
 dev-python/PyQt5 webchannel printsupport gui widgets svg dbus opengl declarative multimedia network sql websockets
 dev-qt/qtmultimedia widgets
-gui-libs/wlroots icccm x11-backend seatd
+gui-libs/wlroots icccm x11-backend seatd tinywl
 media-video/pipewire pulseaudio sdl aptx aac extra pipewire-alsa v4l
 media-libs/libtgvoip pulseaudio
 media-libs/tg_owt pulseaudio
-net-im/telegram-desktop pulseaudio lto webkit screencast
+net-im/telegram-desktop pulseaudio lto webkit screencast qt6 qt6-imageformats
 media-libs/tg_owt screencast
 app-crypt/pinentry gnome-keyring gtk qt5
 media-libs/phonon gstreamer
@@ -193,9 +199,20 @@ kde-plasma/kwin screencast
 kde-plasma/plasma-workspace screencast
 media-libs/libsdl2 pipewire
 sys-apps/xdg-desktop-portal screencast
-net-misc/networkmanager connection-sharing -dhcpcd nftables -iwd -lto
+net-misc/networkmanager connection-sharing -dhcpcd nftables -lto iwd
 net-wireless/wpa_supplicant ap -crda
 dev-qt/qt-docs script webengine
+dev-lang/deno static-libs
+dev-util/xdelta lzma
+app-arch/brotli python
+net-libs/webkit-gtk gnome-keyring libnotify spell avif gamepad gles2-only lcms
+dev-libs/libgudev introspection # webkit
+media-libs/gst-plugins-base gles2 # webkit
+media-libs/gst-plugins-bad gles2 # webkit
+app-emulation/wine-staging mingw sdl usb gstreamer osmesa pcap v4l perl udisks
+app-emulation/wine-vanilla mingw custom-cflags
+dev-util/mingw64-toolchain multilib
+dev-python/pillow webp # dev-python/matplotlib
 
 # Tex
 app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra
@@ -212,7 +229,6 @@ app-arch/tar -nls
 dev-perl/libintl-perl minimal
 app-admin/sudo -sendmail # drop dependence on virtual/mta and mail-mta/nullmailer
 net-wireless/iwd -crda standalone # kernal 4.15+ have built-in support, crda don't support py3
-net-libs/webkit-gtk gnome-keyring libnotify spell
 media-sound/alsa-utils -libsamplerate
 app-editors/vim -nls
 app-editors/vim-core -nls
@@ -232,20 +248,22 @@ media-tv/v4l-utils -bpf
 app-text/opensp -nls #link error
 sys-apps/man-pages -l10n_zh-CN
 kde-plasma/plasma-meta -crypt -firewall -handbook -browser-integration
-sys-fs/lvm2 -thin
+sys-fs/lvm2 -thin -lvm
 media-libs/libmypaint -openmp
 sys-apps/openrc -sysv-utils -netifrc
 media-sound/pulseaudio -udev -alsa-plugin -webrtc-aec -tcpd -asyncns -daemon -alsa -bluetooth -jack -zeroconf -orc -ssl
 sys-apps/zram-generator -man
 net-wireless/bluez -mesh # remove ell
 sys-apps/bubblewrap -suid
+net-misc/modemmanager -qmi -qrtr
 
 # chromium and electron
 media-libs/libvpx svc
 net-libs/nodejs icu inspector system-icu
 dev-libs/libxml2 icu
 app-editors/vscode savedconfig system-electron system-ripgrep builtin-extensions
-media-video/pipewire ffmpeg gstreamer
+media-video/pipewire ffmpeg gstreamer sound-server
 dev-util/electron -system-allocator -libcxx gtk4 -system-png suid lto pgo custom-cflags system-icu clang wayland pipewire screencast
 dev-util/electron:19 -pgo
+dev-util/electron:20 -pgo
 www-client/chromium gtk4 -libcxx hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png
