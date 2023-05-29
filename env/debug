@@ -1,6 +1,6 @@
 CFLAGS="${CFLAGS} -g"
 CXXFLAGS="${CXXFLAGS} -g"
-RUSTFLAGS="${RUSTFLAGS} -g"
+RUSTFLAGS="${RUSTFLAGS} -g -Coverflow-checks=on"
 #FEATURES="nostrip compressdebug splitdebug installsources"
 FEATURES="nostrip installsources"
 PORTAGE_TMPDIR="/var/tmp"

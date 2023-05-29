@@ -27,9 +27,13 @@ media-libs/alsa-lib /-flto*//
 sys-fs/lvm2 /-flto*//
 dev-java/openjdk /-flto*// # segfault
 
+games-emulation/cemu /-mllvm// /-polly*// LDFLAGS-=-Wl,* /-O3/-O1/
+
 # no polly
 media-gfx/krita /-mllvm// /-polly*//
 dev-db/mongodb /-mllvm// /-polly*//
+x11-libs/wxGTK /-mllvm// /-polly*//
+media-libs/openal /-mllvm// /-polly*//
 
 # no gc-sections
 dev-scheme/racket LDFLAGS-=-Wl,--gc-sections
@@ -87,6 +91,7 @@ sys-process/htop LDFLAGS+=-lexecinfo
 dev-qt/qt-creator LDFLAGS+=-lexecinfo
 x11-libs/cairo LDFLAGS+=-lexecinfo
 media-libs/libva-intel-media-driver LDFLAGS+=-lexecinfo
+dev-util/ostree LDFLAGS+=-lgpg-error
 
 # misc
 dev-util/colm NOLAFILEREMOVE=true
@@ -95,3 +100,7 @@ dev-libs/libedit CFLAGS+=-D__STDC_ISO_10646__
 kde-apps/kio-extras CFLAGS+=-D_GNU_SOURCE
 dev-perl/XS-Parse-Keyword LD=clang
 dev-perl/Syntax-Keyword-Try LD=clang
+games-emulation/yuzu CXXFLAGS+=-fexperimental-library /-flto*//
+
+# LFS64
+app-misc/broot RUSTFLAGS+=-L/usr/local/lib RUSTFLAGS+=-lalias

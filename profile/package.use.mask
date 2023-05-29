@@ -3,4 +3,6 @@ dev-java/openjdk -gentoo-vm
 dev-util/mingw64-toolchain -multilib
 www-client/firefox -clang -pgo
 net-im/telegram-desktop -qt6
-
+app-i18n/fcitx-qt -qt6
+>=sys-devel/llvm-16.0.3 LLVM_TARGETS: -SPIRV
+>=sys-devel/clang-16.0.3 LLVM_TARGETS: -SPIRV

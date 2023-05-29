@@ -1,0 +1,13 @@
+diff --git a/src/network/net_pcap.c b/src/network/net_pcap.c
+index 8c9326e..c8d515b 100644
+--- a/src/network/net_pcap.c
++++ b/src/network/net_pcap.c
+@@ -69,6 +69,8 @@
+ #include <86box/timer.h>
+ #include <86box/network.h>
+ #include <86box/net_event.h>
++typedef unsigned char u_char;
++typedef unsigned int u_int;
+ 
+ #define PCAP_PKT_BATCH NET_QUEUE_LEN
+ 

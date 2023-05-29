@@ -6,6 +6,7 @@ virtual/jre
 virtual/jdk
 dev-lang/rust::12101111-overlay
 virtual/rust::gentoo
+app-emulation/winetricks
 
 gui-apps/wayvnc
 dev-libs/aml
@@ -37,4 +38,3 @@ dev-qt/qtwayland:6
 dev-qt/qtwebchannel:6
 dev-qt/qtwebengine:6
 dev-qt/qtwebsockets:6
-

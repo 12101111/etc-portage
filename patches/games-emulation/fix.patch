@@ -1,0 +1,69 @@
+diff --git a/include/dosbox.h b/include/dosbox.h
+index 52a6db3..1575470 100644
+--- a/include/dosbox.h
++++ b/include/dosbox.h
+@@ -456,6 +456,7 @@ void readString(std::istream& stream, std::string& data)
+ #if defined (WIN32)
+ int _wmkdir_p(const wchar_t *pathname);
+ #else
++#include <sys/stat.h>
+ int mkdir_p(const char *pathname, mode_t mode);
+ #endif
+ 
+diff --git a/src/dos/drive_local.cpp b/src/dos/drive_local.cpp
+index 259f1b9..fe5545c 100644
+--- a/src/dos/drive_local.cpp
++++ b/src/dos/drive_local.cpp
+@@ -30,7 +30,7 @@
+ #define _DARWIN_C_SOURCE
+ #endif
+ #ifndef WIN32
+-#if defined(EMSCRIPTEN)
++#if defined(EMSCRIPTEN) || !defined(__GLIBC__)
+ #include <fcntl.h>
+ #endif
+ #include <utime.h>
+diff --git a/src/hardware/adlib.cpp b/src/hardware/adlib.cpp
+index 8e38196..9f4c3e6 100644
+--- a/src/hardware/adlib.cpp
++++ b/src/hardware/adlib.cpp
+@@ -1325,7 +1325,7 @@ OPL_Mode Module::oplmode=OPL_none;
+ }	//Adlib Namespace
+ 
+ std::string getoplmode() {
+-#if !defined(__FreeBSD__) && !defined(__OpenBSD__)
++#if !defined(__clang__)
+ 	// Todo: is this needed at all? opmode cannot be null...
+ 	if (Adlib::Module::oplmode == NULL || Adlib::Module::oplmode == OPL_none) return "None";
+ #else
+diff --git a/src/hardware/voodoo_opengl.cpp b/src/hardware/voodoo_opengl.cpp
+index d8e8c5e..6e1c5a0 100644
+--- a/src/hardware/voodoo_opengl.cpp
++++ b/src/hardware/voodoo_opengl.cpp
+@@ -549,7 +549,7 @@ void voodoo_ogl_invalidate_paltex(void) {
+ }
+ 
+ 
+-#if defined(__FreeBSD__) || defined(__OpenBSD__)
++#if defined(__clang__)
+ GLhandleARB m_hProgramObject   = (GLhandleARB)0;
+ #else
+ GLhandleARB m_hProgramObject   = (GLhandleARB)NULL;
+diff --git a/src/libs/porttalk/porttalk.cpp b/src/libs/porttalk/porttalk.cpp
+index 1b64633..aa8d4af 100644
+--- a/src/libs/porttalk/porttalk.cpp
++++ b/src/libs/porttalk/porttalk.cpp
+@@ -239,9 +239,12 @@ bool setPermissionList() {
+ #ifdef LINUX
+ # if (defined(__i386__) || defined(__amd64__) || defined(__x86_64__)) && !(defined(ANDROID) || defined(__ANDROID__)) // ioperm is unavaliable on Android
+ // This Linux ioperm only works up to port 0x3FF
++#ifdef __GLIBC__
+ #include <sys/perm.h>
++#else
+ // For musl-libc based toolchain, use <sys/io.h> instead of <sys/perm.h>
+-//#include <sys/io.h>
++#include <sys/io.h>
++#endif
+ 
+ bool initPorttalk() {
+     if(ioperm(0x3da,1,1) < 0) return false;

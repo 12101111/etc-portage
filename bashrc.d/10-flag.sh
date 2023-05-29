@@ -161,6 +161,7 @@ FLAG_FILTER_NONGNU=(
 	'-flto=[0-9]*'
 	'-flto=auto'
 	'-flto=jobserver'
+	'-flto-odr-type-merging'
 	'-flto-partition=*'
 	'-flto-compression-level=*'
 	'-fmodulo*'
@@ -201,7 +202,8 @@ FLAG_FILTER_GNU=(
 	'-frewrite-includes'
 	'-fsanitize=cfi*'
 	'-fsanitize=safe-stack'
-	'-mllvm'
+	'-mllvm*'
+	'-Xclang*'
 	'-mretpoline*'
 	'-polly*'
 	'-Wl,-z,retpolineplt'
@@ -210,6 +212,25 @@ FLAG_FILTER_GNU=(
 FLAG_FILTER_CLANG_LTO_DEP=(
 	'-fsanitize=cfi*'
 	'-fwhole-program-vtables'
+)
+
+FLAG_ARGS_WITH_PARAMS=(
+	'-mllvm'		# Forward to LLVM's option processing
+	'-mmlir'		# Forward to MLIR's option processing
+	'-Xanalyzer'		# Pass to the static analyzer
+	'-Xarch_device'		# Pass to the CUDA/HIP device compilation
+	'-Xarch_host'		# Pass to the CUDA/HIP host compilation
+	'-Xassembler'		# Pass to the assembler
+	'-Xclang'		# Pass to the clang compiler
+	'-Xcuda-fatbinary'	# Pass to fatbinary invocation
+	'-Xcuda-ptxas'		# Pass to the ptxas assembler
+	'-Xlinker'		# Pass to the linker
+	'-Xoffload-linker'	# Pass to offload linkers
+	'-Xoffload-linker-*'	# Pass to specified offload linkers
+	'-Xopenmp-target'	# Pass to target offloading toolchain
+	'-Xopenmp-target=*'	# Pass to specified target offloading toolchain
+	'-Xpreprocessor'	# Pass to the preprocessor
+	'--param'
 )
 
 FlagEval() {
@@ -221,6 +242,32 @@ FlagEval() {
 	esac
 }
 
+FlagCombineParameters() {
+	local combine comb par combvar flagargs
+	combvar=$1
+	shift
+	combine=
+	par=
+	for comb
+	do	if [ -n "$par" ]
+		then	combine=$combine${combine:+\ }"'$par $comb'"
+			[ -n "$comb" ] || combine=$combine\\\'\\\'
+			par=
+			continue
+		fi
+		for flagargs in "${FLAG_ARGS_WITH_PARAMS[@]}"
+		do	case $comb in
+			$flagargs)
+				par=$comb
+				break;;
+			esac
+		done
+		[ -n "$par" ] || combine=$combine${combine:+\ }$comb
+	done
+	[ -z "$par" ] || combine=$combine${combine:+\ }$par
+	eval $combvar=\$combine
+}
+
 FlagNodupAdd() {
 	local addres addf addvar dups
 	dups=$1
@@ -228,6 +275,9 @@ FlagNodupAdd() {
 	addvar=$1
 	shift
 	eval addres=\$$addvar
+	FlagCombineParameters addf "$@"
+	eval "set -- a $addf"
+	shift
 	for addf
 	do	case " $addres $dups " in
 		*[[:space:]]"$addf"[[:space:]]*)
@@ -248,7 +298,11 @@ FlagSub() {
 	shift
 	subres=
 	eval sublist=\$$subvar
-	for subf in $sublist
+	FlagCombineParameters sublist $sublist
+	FlagCombineParameters subf "$@"
+	eval "set -- a $subf"
+	shift
+	eval "for subf in $sublist"'
 	do	for subpat
 		do	[ -n "${subpat:++}" ] || continue
 			case $subf in
@@ -258,7 +312,7 @@ FlagSub() {
 			esac
 		done
 		[ -z "${subf:++}" ] || subres=$subres${subres:+\ }$subf
-	done
+	done'
 	eval $subvar=\$subres
 }
 

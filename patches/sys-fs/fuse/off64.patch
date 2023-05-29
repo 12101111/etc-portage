@@ -1,0 +1,15 @@
+diff --git a/include/fuse_lowlevel.h b/include/fuse_lowlevel.h
+index ff0d966..0241e28 100644
+--- a/include/fuse_lowlevel.h
++++ b/include/fuse_lowlevel.h
+@@ -31,6 +31,10 @@
+ #include <sys/statvfs.h>
+ #include <sys/uio.h>
+ 
++#ifndef __off64_t
++#define __off64_t off_t
++#endif
++
+ #ifdef __cplusplus
+ extern "C" {
+ #endif

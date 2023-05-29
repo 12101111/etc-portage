@@ -1,0 +1,25 @@
+diff --git a/core/synctex/synctex_parser_utils.c b/core/synctex/synctex_parser_utils.c
+index a8b1cf6..679609b 100644
+--- a/core/synctex/synctex_parser_utils.c
++++ b/core/synctex/synctex_parser_utils.c
+@@ -13,6 +13,7 @@
+ /*  In this file, we find all the functions that may depend on the operating system. */
+ 
+ #include <stdarg.h>
++#define _GNU_SOURCE 1
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+diff --git a/core/synctex/synctex_parser.c b/core/synctex/synctex_parser.c
+index cc97ecc..cdd0973 100644
+--- a/core/synctex/synctex_parser.c
++++ b/core/synctex/synctex_parser.c
+@@ -67,6 +67,8 @@
+ #endif
+ #endif
+ 
++#define _GNU_SOURCE 1
++
+ #include <errno.h>
+ #include <limits.h>
+ #include <stdio.h>

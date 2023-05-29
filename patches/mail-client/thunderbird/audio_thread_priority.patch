@@ -1,0 +1,79 @@
+--- a/third_party/rust/audio_thread_priority/.cargo-checksum.json
++++ b/third_party/rust/audio_thread_priority/.cargo-checksum.json
+@@ -1 +1 @@
+-{"files":{"Cargo.toml":"f2a927f4fdf4171eb2111ad9f770fd113d058d6d7dffa10fce7bd7577edda582","LICENSE":"32ee9dbf6196874fc9d406c54a888a6c4cbb9aa4a7f35b46befeaff43a78fe85","Makefile":"0f9a771cfb30c7c4b9961d82fdca4e9e229a955bb2e636474a4101389e18e938","README.md":"c123692b3b50dd621b896a8269814d609cbf1e532b461bf4a77854ddd607eb7a","atp_test.cpp":"8075a040941a65fb9e3f7cbf0535853ca6661c3ac442ec35569b42b24bbec797","audio_thread_priority.h":"f0ecaf1b674f794cde0dc834028e074d4e4675d22ae96acf08b2ae1dceb3474e","generate_osx_bindings.sh":"06e4e03450f788ced18d31fff5660919e6f6ec1119ddace363ffeb82f0518a71","src/lib.rs":"975de6a74e0adb999a08bc41f08a3bd68fe11c154731bc12c43df546ddb32949","src/mach_sys.rs":"352560fcb9b41d877cff92e5b3b04d6dc68b1f30508ce4b9aed78940120a883e","src/rt_linux.rs":"4ea9f6eb1902aff0126d1b957be7f723d599e9a8bbd75ca8013a2820ef5fe68a","src/rt_mach.rs":"e4587fdf640df37f251e50c6c9313f6a73eae4d54f4b8a84cefc6bc730e94be8","src/rt_win.rs":"c41f6e277051a92f8d38939cf9d78ee6deea736a4686b3bcd185492e47e1650a"},"package":"8b7cd1bfd03dab20ad72e0c5e58d65818d62c0d199d8dec8361053d0f073dbae"}
+\ No newline at end of file
++{"files":{"Cargo.toml":"f2a927f4fdf4171eb2111ad9f770fd113d058d6d7dffa10fce7bd7577edda582","LICENSE":"32ee9dbf6196874fc9d406c54a888a6c4cbb9aa4a7f35b46befeaff43a78fe85","Makefile":"0f9a771cfb30c7c4b9961d82fdca4e9e229a955bb2e636474a4101389e18e938","README.md":"c123692b3b50dd621b896a8269814d609cbf1e532b461bf4a77854ddd607eb7a","atp_test.cpp":"8075a040941a65fb9e3f7cbf0535853ca6661c3ac442ec35569b42b24bbec797","audio_thread_priority.h":"f0ecaf1b674f794cde0dc834028e074d4e4675d22ae96acf08b2ae1dceb3474e","generate_osx_bindings.sh":"06e4e03450f788ced18d31fff5660919e6f6ec1119ddace363ffeb82f0518a71","src/lib.rs":"975de6a74e0adb999a08bc41f08a3bd68fe11c154731bc12c43df546ddb32949","src/mach_sys.rs":"352560fcb9b41d877cff92e5b3b04d6dc68b1f30508ce4b9aed78940120a883e","src/rt_linux.rs":"e941b9174ee0efb5e3797fa7e59f49d3a3ad3539bd4a584b782a06a783b77007","src/rt_mach.rs":"e4587fdf640df37f251e50c6c9313f6a73eae4d54f4b8a84cefc6bc730e94be8","src/rt_win.rs":"c41f6e277051a92f8d38939cf9d78ee6deea736a4686b3bcd185492e47e1650a"},"package":"8b7cd1bfd03dab20ad72e0c5e58d65818d62c0d199d8dec8361053d0f073dbae"}
+--- a/third_party/rust/audio_thread_priority/src/rt_linux.rs
++++ b/third_party/rust/audio_thread_priority/src/rt_linux.rs
+@@ -21,6 +21,20 @@ const RT_PRIO_DEFAULT: u32 = 10;
+ #[allow(non_camel_case_types)]
+ type kernel_pid_t = libc::c_long;
+ 
++#[cfg(not(target_env = "musl"))]
++use libc::rlimit64 as rlimit;
++#[cfg(not(target_env = "musl"))]
++use libc::setrlimit64 as setrlimit;
++#[cfg(not(target_env = "musl"))]
++use libc::getrlimit64 as getrlimit;
++
++#[cfg(target_env = "musl")]
++use libc::rlimit;
++#[cfg(target_env = "musl")]
++use libc::setrlimit;
++#[cfg(target_env = "musl")]
++use libc::getrlimit;
++
+ impl From<dbus::Error> for AudioThreadPriorityError {
+     fn from(error: dbus::Error) -> Self {
+         AudioThreadPriorityError::new(&format!(
+@@ -112,7 +126,7 @@ fn rtkit_set_realtime(thread: u64, pid: u64, prio: u32) -> Result<(), Box<dyn Er
+ 
+ /// Returns the maximum priority, maximum real-time time slice, and the current real-time time
+ /// slice for this process.
+-fn get_limits() -> Result<(i64, u64, libc::rlimit64), AudioThreadPriorityError> {
++fn get_limits() -> Result<(i64, u64, rlimit), AudioThreadPriorityError> {
+     let c = Connection::get_private(BusType::System)?;
+ 
+     let p = Props::new(
+@@ -122,7 +136,7 @@ fn get_limits() -> Result<(i64, u64, libc::rlimit64), AudioThreadPriorityError>
+         "org.freedesktop.RealtimeKit1",
+         DBUS_SOCKET_TIMEOUT,
+     );
+-    let mut current_limit = libc::rlimit64 {
++    let mut current_limit = rlimit {
+         rlim_cur: 0,
+         rlim_max: 0,
+     };
+@@ -141,7 +155,7 @@ fn get_limits() -> Result<(i64, u64, libc::rlimit64), AudioThreadPriorityError>
+         ));
+     }
+ 
+-    if unsafe { libc::getrlimit64(libc::RLIMIT_RTTIME, &mut current_limit) } < 0 {
++    if unsafe { getrlimit(libc::RLIMIT_RTTIME, &mut current_limit) } < 0 {
+         return Err(AudioThreadPriorityError::new_with_inner(
+             "getrlimit64",
+             Box::new(OSError::last_os_error()),
+@@ -154,11 +168,11 @@ fn get_limits() -> Result<(i64, u64, libc::rlimit64), AudioThreadPriorityError>
+ fn set_limits(request: u64, max: u64) -> Result<(), AudioThreadPriorityError> {
+     // Set a soft limit to the limit requested, to be able to handle going over the limit using
+     // SIGXCPU. Set the hard limit to the maxium slice to prevent getting SIGKILL.
+-    let new_limit = libc::rlimit64 {
++    let new_limit = rlimit {
+         rlim_cur: request,
+         rlim_max: max,
+     };
+-    if unsafe { libc::setrlimit64(libc::RLIMIT_RTTIME, &new_limit) } < 0 {
++    if unsafe { setrlimit(libc::RLIMIT_RTTIME, &new_limit) } < 0 {
+         return Err(AudioThreadPriorityError::new_with_inner(
+             "setrlimit64",
+             Box::new(OSError::last_os_error()),
+@@ -296,7 +310,7 @@ pub fn promote_thread_to_real_time_internal(
+     match r {
+         Ok(_) => Ok(handle),
+         Err(e) => {
+-            if unsafe { libc::setrlimit64(libc::RLIMIT_RTTIME, &limits) } < 0 {
++            if unsafe { setrlimit(libc::RLIMIT_RTTIME, &limits) } < 0 {
+                 return Err(AudioThreadPriorityError::new_with_inner(
+                     "setrlimit64",
+                     Box::new(OSError::last_os_error()),

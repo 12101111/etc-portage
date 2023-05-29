@@ -1,26 +1,27 @@
 # Compiler
 sys-devel/gcc fortran openmp jit -pgo -lto
-dev-lang/rust system-llvm system-bootstrap rustfmt wasm nightly wasi clippy -miri -rls rust-src profiler
+dev-lang/rust system-llvm system-bootstrap rustfmt wasm nightly wasi clippy rust-analyzer rust-src profiler
+virtual/rust rustfmt
 dev-lang/go system-bootstrap # to upgrade itself
-sys-devel/llvm libedit gold exegesis polly mlir zstd
+sys-devel/llvm libedit gold exegesis polly mlir zstd doc LLVM_TARGETS: SPIRV
 dev-util/lldb libedit lzma
 sys-devel/clang xml default-lld # lldb
 sys-libs/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray libfuzzer profile
 dev-java/openjdk gentoo-vm
-dev-lang/zig -stage2
 dev-lang/ghc -doc
+sys-devel/clang-toolchain-symlinks gcc-symlinks
 
 # Graphic
-media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind d3d9 osmesa vulkan-overlay zink
+media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind d3d9 osmesa vulkan-overlay zink opencl
 x11-base/xorg-server xvfb libglvnd elogind -suid -xorg
 x11-wm/awesome dbus doc gnome lua_single_target_luajit
 x11-misc/picom dbus
 media-libs/freetype harfbuzz infinality
 gui-wm/sway wallpapers tray -swaylock fish-completion seatd
-gui-apps/waybar network tray mpd wifi
+gui-apps/waybar network tray mpd wifi pulseaudio evdev experimental libinput logind mpris pipewire upower
 
 # Apps
-www-client/firefox hwaccel clang lto pgo screencast geckodriver system-png
+www-client/firefox hwaccel clang lto -pgo screencast geckodriver system-png
 mail-client/thunderbird hwaccel clang lto
 app-editors/emacs webp jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars xft
 app-editors/vim X python
@@ -34,7 +35,7 @@ net-misc/aria2 bittorrent libuv sqlite xmlrpc -jemalloc
 x11-terms/st savedconfig
 net-analyzer/wireshark qt5
 www-client/otter webkit webengine
-app-text/goldendict multimedia opencc zim ffmpeg debug -qtwebengine
+app-text/goldendict multimedia opencc zim ffmpeg xapian
 app-office/libreoffice gstreamer pdfimport java dbus kde
 net-fs/samba client syslog
 x11-apps/igt-gpu-tools overlay
@@ -61,7 +62,7 @@ net-misc/openssh libedit
 sys-block/gparted fat udf
 net-misc/dropbear multicall -pam savedconfig static
 media-gfx/krita pdf qtmedia vc fftw
-media-gfx/gimp javascript webp python unwind
+media-gfx/gimp -javascript webp python unwind
 dev-util/strace elfutils perl
 app-misc/skim tmux
 media-video/vlc dav1d archive fdk flac fontconfig gstreamer libass libnotify mp3 ogg opus speex truetype v4l vpx
@@ -73,6 +74,8 @@ gui-apps/swaybg gdk-pixbuf
 games-util/mangohud gamescope
 games-util/gamescope screencast
 net-firewall/iptables nftables
+app-admin/sysstat lm-sensors
+games-emulation/yuzu sdl
 
 # VM / Emulator
 app-emulation/qemu udev zstd -jemalloc gtk usb usbredir spice virgl pin-upstream-blobs virtfs static-user slirp io-uring virgl vte gnutls vhost-user-fs
@@ -93,11 +96,12 @@ dev-java/openjdk-bin gentoo-vm
 sys-libs/llvm-libunwind static-libs
 sys-libs/libcxx static-libs
 sys-libs/libcxxabi static-libs
+dev-libs/libclc spirv
 sys-apps/kmod zstd
 net-firewall/nftables xtables python
 sys-apps/coreutils gmp caps
 x11-drivers/nvidia-drivers -tools -X -wayland
-sys-apps/systemd elfutils fido2 xkb
+sys-apps/systemd elfutils xkb python
 
 # libs
 sys-libs/libxcrypt static-libs # openssh
@@ -117,10 +121,10 @@ sys-apps/attr static-libs # qemu-user-static
 dev-libs/libpcre static-libs # qemu-user-static
 dev-libs/libpcre2 pcre16 pcre32 static-libs # qtcore qemu-user-static
 dev-qt/qtgui egl dbus # wayland qt5ct
-app-i18n/fcitx-qt qt5
+app-i18n/fcitx-qt qt5 qt6
 gnome-base/librsvg tools # icon theme
 x11-libs/wxGTK tiff #pcem
-x11-libs/libva utils
+media-libs/libva utils
 app-i18n/fcitx-gtk -gtk2 gtk4
 dev-db/sqlite secure-delete # aria2[sqlite]
 dev-qt/qtwebchannel qml # zoom
@@ -132,7 +136,7 @@ dev-libs/xmlsec nss
 app-i18n/fcitx-chinese-addons gui
 media-gfx/imagemagick xml tiff -openmp # svg? ( xml )
 virtual/imagemagick-tools tiff
-app-text/poppler cairo qt5# materia-theme, qpdfview
+app-text/poppler cairo qt5 # materia-theme, qpdfview
 x11-misc/qt5ct dbus
 sys-apps/dbus user-session # mako
 media-plugins/gst-plugins-meta vorbis ogg mp3 aac flac ffmpeg
@@ -143,7 +147,7 @@ app-text/poppler qt5 nss #okular
 media-libs/phonon -vlc
 dev-qt/qtcore icu
 dev-qt/qtwidgets gtk
-dev-util/ostree curl # flatpak
+dev-util/ostree curl gpg # flatpak
 app-emacs/emacs-common gui
 dev-lang/ruby jit -jemalloc
 media-sound/apulse sdk
@@ -169,7 +173,6 @@ dev-qt/qtquickcontrols2 widgets # yubikey-manager-qt
 app-crypt/gpgme qt5 # mail-client/kube
 net-libs/gnutls pkcs11
 dev-python/QtPy gui printsupport #jupyter
-net-libs/zeromq drafts #jupyter
 media-libs/gegl cairo
 media-libs/babl introspection lcms
 media-libs/gegl introspection lcms
@@ -213,6 +216,11 @@ app-emulation/wine-staging mingw sdl usb gstreamer osmesa pcap v4l perl udisks
 app-emulation/wine-vanilla mingw custom-cflags
 dev-util/mingw64-toolchain multilib
 dev-python/pillow webp # dev-python/matplotlib
+dev-qt/qtbase egl
+net-analyzer/nmap lua_single_target_lua5-3
+dev-libs/sexp static-libs # mail-client/thunderbird-102.10.1::gentoo[system-librnp]
+net-libs/mbedtls cmac # yuzu
+dev-libs/boost context # yuzu
 
 # Tex
 app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra
@@ -256,6 +264,8 @@ sys-apps/zram-generator -man
 net-wireless/bluez -mesh # remove ell
 sys-apps/bubblewrap -suid
 net-misc/modemmanager -qmi -qrtr
+app-shells/bash -pgo
+app-crypt/libsecret -introspection -vala
 
 # chromium and electron
 media-libs/libvpx svc
@@ -263,7 +273,7 @@ net-libs/nodejs icu inspector system-icu
 dev-libs/libxml2 icu
 app-editors/vscode savedconfig system-electron system-ripgrep builtin-extensions
 media-video/pipewire ffmpeg gstreamer sound-server
-dev-util/electron -system-allocator -libcxx gtk4 -system-png suid lto pgo custom-cflags system-icu clang wayland pipewire screencast
+dev-util/electron -system-allocator -libcxx gtk4 -system-png suid lto pgo hevc custom-cflags system-icu clang wayland pipewire screencast
 dev-util/electron:19 -pgo
 dev-util/electron:20 -pgo
-www-client/chromium gtk4 -libcxx hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png
+www-client/chromium gtk4 -libcxx hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png qt5

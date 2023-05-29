@@ -4,6 +4,6 @@
 dev-libs/elftoolchain
 virtual/libelf::12101111-overlay
 dev-java/openjdk:11::gentoo
->=net-proxy/v2ray-5.0.0
->=sys-apps/systemd-252
-games-emulation/dosbox-x::guru
+media-sound/pulseaudio-daemon
+sys-devel/gcc
+>=net-libs/nodejs-20.0.0

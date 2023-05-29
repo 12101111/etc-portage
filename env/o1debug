@@ -1,7 +1,7 @@
 COMMON_FLAGS="-march=skylake -mtune=skylake -pipe -g"
 CFLAGS="${COMMON_FLAGS}"
 CXXFLAGS="${COMMON_FLAGS} -stdlib=libc++"
-RUSTFLAGS="-Copt-level=0  -Ctarget-feature=-crt-static"
+RUSTFLAGS="-Copt-level=0  -Ctarget-feature=-crt-static -Coverflow-checks=on"
 LDFLAGS="-fuse-ld=lld -rtlib=compiler-rt -unwindlib=libunwind \
 -march=skylake -mtune=skylake"
 FEATURES="installsources nostrip"

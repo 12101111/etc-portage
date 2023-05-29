@@ -1,2 +1,2 @@
-CXX="/usr/lib/llvm/14/bin/clang++-14"
-CC="/usr/lib/llvm/14/bin/clang-14"
+CXX="/usr/lib/llvm/15/bin/clang++"
+CC="/usr/lib/llvm/15/bin/clang"
