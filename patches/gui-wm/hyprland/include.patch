@@ -1,0 +1,15 @@
+diff --git a/src/plugins/HookSystem.cpp b/src/plugins/HookSystem.cpp
+index e52fd74..3ddff64 100644
+--- a/src/plugins/HookSystem.cpp
++++ b/src/plugins/HookSystem.cpp
+@@ -9,6 +9,10 @@
+ #include <unistd.h>
+ #include <cstring>
+ 
++#ifdef PAGESIZE
++#undef PAGESIZE
++#endif
++
+ CFunctionHook::CFunctionHook(HANDLE owner, void* source, void* destination) {
+     m_pSource      = source;
+     m_pDestination = destination;

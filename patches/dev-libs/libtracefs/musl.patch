@@ -1,0 +1,21 @@
+diff --git a/utest/tracefs-utest.c b/utest/tracefs-utest.c
+index 398c943..3f4be30 100644
+--- a/utest/tracefs-utest.c
++++ b/utest/tracefs-utest.c
+@@ -14,6 +14,7 @@
+ #include <libgen.h>
+ #include <kbuffer.h>
+ #include <pthread.h>
++#include <limits.h>
+ 
+ #include <sys/mount.h>
+ 
+@@ -846,7 +847,7 @@ static int read_trace_cpu_file(struct test_cpu_data *data)
+ 	int ret;
+ 	int cnt = 0;
+ 
+-	ret = lseek64(fd, 0, SEEK_SET);
++	ret = lseek(fd, 0, SEEK_SET);
+ 	CU_TEST(ret == 0);
+ 	if (ret)
+ 		return -1;

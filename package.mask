@@ -1,9 +1,0 @@
-*/*::mv
-*/*::pg_overlay
-
-dev-libs/elftoolchain
-virtual/libelf::12101111-overlay
-dev-java/openjdk:11::gentoo
-media-sound/pulseaudio-daemon
-sys-devel/gcc
->=net-libs/nodejs-20.0.0

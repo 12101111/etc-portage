@@ -1,5 +1,5 @@
 CC="gcc"
 CXX="g++"
-CFLAGS="-march=skylake -mtune=skylake -O2 -pipe"
+CFLAGS="-march=znver4 -mtune=znver4 -O2 -pipe"
 CXXFLAGS="${CFLAGS}"
 LDFLAGS="-Wl,--gc-sections"

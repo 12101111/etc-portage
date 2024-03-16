@@ -1,8 +1,7 @@
-COMMON_FLAGS="-march=skylake -mtune=skylake -pipe -g"
+COMMON_FLAGS="-march=znver4 -mtune=znver4 -pipe -O1 -g"
 CFLAGS="${COMMON_FLAGS}"
 CXXFLAGS="${COMMON_FLAGS} -stdlib=libc++"
-RUSTFLAGS="-Copt-level=0  -Ctarget-feature=-crt-static -Coverflow-checks=on"
+RUSTFLAGS="-Copt-level=1 -g -Ctarget-feature=-crt-static -Coverflow-checks=on"
 LDFLAGS="-fuse-ld=lld -rtlib=compiler-rt -unwindlib=libunwind \
--march=skylake -mtune=skylake"
+-march=znver4 -mtune=znver4"
 FEATURES="installsources nostrip"
-#PORTAGE_TMPDIR="/var/tmp"

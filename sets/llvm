@@ -1,5 +1,5 @@
 sys-devel/llvm
-dev-util/lldb
+dev-debug/lldb
 sys-devel/lld
 sys-devel/clang
 dev-lang/rust

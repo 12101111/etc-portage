@@ -1,0 +1,6 @@
+cross_llvm-x86_64-w64-mingw32/mingw64-runtime cross_llvm-x86_64-w64-mingw32/mingw64-runtime.conf
+cross_llvm-x86_64-w64-mingw32/mingw64-runtime cross_llvm-x86_64-w64-mingw32/llvm.conf
+cross_llvm-x86_64-w64-mingw32/compiler-rt cross_llvm-x86_64-w64-mingw32/compiler-rt.conf
+cross_llvm-x86_64-w64-mingw32/compiler-rt cross_llvm-x86_64-w64-mingw32/llvm.conf
+cross_llvm-x86_64-w64-mingw32/clang-crossdev-wrappers cross_llvm-x86_64-w64-mingw32/clang-crossdev-wrappers.conf
+cross_llvm-x86_64-w64-mingw32/clang-crossdev-wrappers cross_llvm-x86_64-w64-mingw32/llvm.conf

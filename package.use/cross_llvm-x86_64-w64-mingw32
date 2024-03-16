@@ -1,0 +1,3 @@
+cross_llvm-x86_64-w64-mingw32/clang-crossdev-wrappers -multilib
+cross_llvm-x86_64-w64-mingw32/compiler-rt -selinux -multilib
+cross_llvm-x86_64-w64-mingw32/mingw64-runtime -selinux libraries -multilib idl -tools

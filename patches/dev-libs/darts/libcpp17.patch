@@ -1,0 +1,23 @@
+diff --git a/configure.ac b/configure.ac
+index 66d41d2..ec6ec37 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -12,7 +12,7 @@ AC_PROG_INSTALL
+ 
+ AC_CONFIG_MACRO_DIR([m4])
+ 
+-AM_CXXFLAGS="-Wall -Weffc++ -I\${top_srcdir}/include"
++AM_CXXFLAGS="-std=gnu++14 -Wall -Weffc++ -I\${top_srcdir}/include"
+ 
+ # Checks for libraries.
+ 
+diff --git a/src/Makefile.am b/src/Makefile.am
+index e538584..9265a1c 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -1,4 +1,4 @@
+-AM_CXXFLAGS = -Wall -Weffc++ -I$(top_srcdir)/include
++AM_CXXFLAGS = -std=gnu++14 -Wall -Weffc++ -I$(top_srcdir)/include
+ 
+ bin_PROGRAMS = mkdarts darts darts-benchmark
+ 

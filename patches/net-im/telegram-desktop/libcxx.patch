@@ -1,0 +1,159 @@
+diff --git a/Telegram/SourceFiles/platform/linux/integration_linux.cpp b/Telegram/SourceFiles/platform/linux/integration_linux.cpp
+index fef646b..07518ca 100644
+--- a/Telegram/SourceFiles/platform/linux/integration_linux.cpp
++++ b/Telegram/SourceFiles/platform/linux/integration_linux.cpp
+@@ -228,7 +228,7 @@ void LinuxIntegration::init() {
+ 		Gio::DBusProxyFlags::NONE_,
+ 		base::Platform::XDP::kService,
+ 		base::Platform::XDP::kObjectPath,
+-		crl::guard(this, [=](GObject::Object, Gio::AsyncResult res) {
++		crl::guard(this, [=](auto, Gio::AsyncResult res) {
+ 			_inhibitProxy = XdpInhibit::InhibitProxy::new_for_bus_finish(
+ 				res,
+ 				nullptr);
+diff --git a/Telegram/SourceFiles/platform/linux/specific_linux.cpp b/Telegram/SourceFiles/platform/linux/specific_linux.cpp
+index 4122097..1ad9529 100644
+--- a/Telegram/SourceFiles/platform/linux/specific_linux.cpp
++++ b/Telegram/SourceFiles/platform/linux/specific_linux.cpp
+@@ -73,7 +73,7 @@ void PortalAutostart(bool enabled, Fn<void(bool)> done) {
+ 		Gio::DBusProxyFlags::NONE_,
+ 		base::Platform::XDP::kService,
+ 		base::Platform::XDP::kObjectPath,
+-		[=](GObject::Object, Gio::AsyncResult res) {
++		[=](auto, Gio::AsyncResult res) {
+ 			auto proxy = XdpBackground::BackgroundProxy::new_for_bus_finish(
+ 				res);
+ 
+@@ -111,7 +111,7 @@ void PortalAutostart(bool enabled, Fn<void(bool)> done) {
+ 					+ '/'
+ 					+ handleToken,
+ 				nullptr,
+-				[=](GObject::Object, Gio::AsyncResult res) mutable {
++				[=](auto, Gio::AsyncResult res) mutable {
+ 					auto requestProxy = XdpRequest::RequestProxy::new_finish(
+ 						res);
+ 
+@@ -183,7 +183,7 @@ void PortalAutostart(bool enabled, Fn<void(bool)> done) {
+ 								GLib::Variant::new_variant(
+ 									GLib::Variant::new_boolean(false))),
+ 						}),
+-						[=](GObject::Object, Gio::AsyncResult res) mutable {
++						[=](auto, Gio::AsyncResult res) mutable {
+ 							auto &sandbox = Core::Sandbox::Instance();
+ 							sandbox.customEnterFromEventLoop([&] {
+ 								const auto result =
+@@ -434,7 +434,7 @@ bool GenerateServiceFile(bool silent = false) {
+ 		Gio::DBusProxyFlags::NONE_,
+ 		base::Platform::DBus::kService,
+ 		base::Platform::DBus::kObjectPath,
+-		[=](GObject::Object, Gio::AsyncResult res) {
++		[=](auto, Gio::AsyncResult res) {
+ 			auto interface = XdgDBus::DBus(
+ 				XdgDBus::DBusProxy::new_for_bus_finish(res, nullptr));
+ 
+diff --git a/Telegram/lib_base/base/platform/linux/base_file_utilities_linux.cpp b/Telegram/lib_base/base/platform/linux/base_file_utilities_linux.cpp
+index 971fe99..d6cdc70 100644
+--- a/Telegram/lib_base/base/platform/linux/base_file_utilities_linux.cpp
++++ b/Telegram/lib_base/base/platform/linux/base_file_utilities_linux.cpp
+@@ -37,7 +37,7 @@ void PortalShowInFolder(const QString &filepath, Fn<void()> fail) {
+ 		Gio::DBusProxyFlags::NONE_,
+ 		XDP::kService,
+ 		XDP::kObjectPath,
+-		[=](GObject::Object, Gio::AsyncResult res) {
++		[=](auto, Gio::AsyncResult res) {
+ 			auto interface = XdpOpenURI::OpenURI(
+ 				XdpOpenURI::OpenURIProxy::new_for_bus_finish(res, nullptr));
+ 
+@@ -71,7 +71,7 @@ void PortalShowInFolder(const QString &filepath, Fn<void()> fail) {
+ 						fd,
+ 					}).data(), 1),
+ 					{},
+-					[=](GObject::Object, Gio::AsyncResult res) mutable {
++					[=](auto, Gio::AsyncResult res) mutable {
+ 						if (!interface.call_open_directory_finish(res)) {
+ 							fail();
+ 						}
+@@ -87,7 +87,7 @@ void DBusShowInFolder(const QString &filepath, Fn<void()> fail) {
+ 		Gio::DBusProxyFlags::NONE_,
+ 		"org.freedesktop.FileManager1",
+ 		"/org/freedesktop/FileManager1",
+-		[=](GObject::Object, Gio::AsyncResult res) {
++		[=](auto, Gio::AsyncResult res) {
+ 			auto interface = XdgFileManager1::FileManager1(
+ 				XdgFileManager1::FileManager1Proxy::new_for_bus_finish(
+ 					res,
+@@ -101,7 +101,7 @@ void DBusShowInFolder(const QString &filepath, Fn<void()> fail) {
+ 			RunWithXdgActivationToken([=](const QString &startupId) mutable {
+ 				const auto callbackWrap = gi::unwrap(
+ 					Gio::AsyncReadyCallback(
+-						[=](GObject::Object, Gio::AsyncResult res) mutable {
++						[=](auto, Gio::AsyncResult res) mutable {
+ 							if (!interface.call_show_items_finish(res)) {
+ 								fail();
+ 							}
+diff --git a/Telegram/lib_base/base/platform/linux/base_linux_dbus_utilities.cpp b/Telegram/lib_base/base/platform/linux/base_linux_dbus_utilities.cpp
+index de76a98..b0ae4d4 100644
+--- a/Telegram/lib_base/base/platform/linux/base_linux_dbus_utilities.cpp
++++ b/Telegram/lib_base/base/platform/linux/base_linux_dbus_utilities.cpp
+@@ -94,7 +94,7 @@ void StartServiceByNameAsync(
+ 	interface->call_start_service_by_name(name, 0, [
+ 		=,
+ 		interface = *interface
+-	](GObject::Object source_object, Gio::AsyncResult res) mutable {
++	](auto source_object, Gio::AsyncResult res) mutable {
+ 		callback([=]() mutable -> Result<StartReply> {
+ 			auto result = interface.call_start_service_by_name_finish(res);
+ 			if (!result) {
+diff --git a/Telegram/lib_base/base/platform/linux/base_power_save_blocker_linux.cpp b/Telegram/lib_base/base/platform/linux/base_power_save_blocker_linux.cpp
+index 53dabd7..7177522 100644
+--- a/Telegram/lib_base/base/platform/linux/base_power_save_blocker_linux.cpp
++++ b/Telegram/lib_base/base/platform/linux/base_power_save_blocker_linux.cpp
+@@ -66,7 +66,7 @@ public:
+ 			Gio::DBusProxyFlags::NONE_,
+ 			XDP::kService,
+ 			XDP::kObjectPath,
+-			crl::guard(this, [=](GObject::Object, Gio::AsyncResult res) {
++			crl::guard(this, [=](auto, Gio::AsyncResult res) {
+ 				auto proxy = XdpInhibit::InhibitProxy::new_for_bus_finish(
+ 					res,
+ 					nullptr);
+@@ -95,7 +95,7 @@ public:
+ 						+ handleToken,
+ 					nullptr,
+ 					crl::guard(this, [=](
+-							GObject::Object,
++							auto,
+ 							Gio::AsyncResult res) mutable {
+ 						_request = XdpRequest::RequestProxy::new_finish(
+ 							res,
+diff --git a/Telegram/lib_base/base/platform/linux/base_url_scheme_linux.cpp b/Telegram/lib_base/base/platform/linux/base_url_scheme_linux.cpp
+index ded7fb0..71fb948 100644
+--- a/Telegram/lib_base/base/platform/linux/base_url_scheme_linux.cpp
++++ b/Telegram/lib_base/base/platform/linux/base_url_scheme_linux.cpp
+@@ -29,7 +29,7 @@ void SnapDefaultHandler(const QString &protocol) {
+         Gio::DBusProxyFlags::NONE_,
+         "io.snapcraft.Settings",
+         "/io/snapcraft/Settings",
+-        [=](GObject::Object, Gio::AsyncResult res) {
++        [=](auto, Gio::AsyncResult res) {
+             auto interface = Snapcraft::Settings(
+                 Snapcraft::SettingsProxy::new_for_bus_finish(res, nullptr));
+ 
+@@ -40,7 +40,7 @@ void SnapDefaultHandler(const QString &protocol) {
+             interface.call_get_sub(
+                 "default-url-scheme-handler",
+                 protocol.toStdString(),
+-                [=](GObject::Object, Gio::AsyncResult res) mutable {
++                [=](auto, Gio::AsyncResult res) mutable {
+                     const auto currentHandler = [&]()
+                     -> std::optional<std::string> {
+                         if (auto result = interface.call_get_sub_finish(
+@@ -71,7 +71,7 @@ void SnapDefaultHandler(const QString &protocol) {
+                         "default-url-scheme-handler",
+                         protocol.toStdString(),
+                         expectedHandler.toStdString(),
+-                        [=](GObject::Object, Gio::AsyncResult) {
++                        [=](auto, Gio::AsyncResult) {
+                             (void)window; // don't destroy until finish
+                         });
+                 });

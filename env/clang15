@@ -1,3 +1,0 @@
-CC="clang-15"
-CXX="clang++-15"
-LD="/usr/lib/llvm/15/bin/ld.lld"

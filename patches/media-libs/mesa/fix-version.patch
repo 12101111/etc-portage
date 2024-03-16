@@ -1,0 +1,13 @@
+diff --git a/src/gallium/drivers/llvmpipe/lp_screen.c b/src/gallium/drivers/llvmpipe/lp_screen.c
+index 329dbdf7d01..d7fb283c3f7 100644
+--- a/src/gallium/drivers/llvmpipe/lp_screen.c
++++ b/src/gallium/drivers/llvmpipe/lp_screen.c
+@@ -578,7 +578,7 @@ static void
+ llvmpipe_get_device_uuid(struct pipe_screen *pscreen, char *uuid)
+ {
+    memset(uuid, 0, PIPE_UUID_SIZE);
+-   snprintf(uuid, PIPE_UUID_SIZE, "mesa" PACKAGE_VERSION);
++   snprintf(uuid, PIPE_UUID_SIZE, "mesa");
+ }
+ 
+ 

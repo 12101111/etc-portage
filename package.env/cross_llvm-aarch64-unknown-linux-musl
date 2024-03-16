@@ -1,0 +1,8 @@
+cross_llvm-aarch64-unknown-linux-musl/linux-headers cross_llvm-aarch64-unknown-linux-musl/linux-headers.conf
+cross_llvm-aarch64-unknown-linux-musl/linux-headers cross_llvm-aarch64-unknown-linux-musl/llvm.conf
+cross_llvm-aarch64-unknown-linux-musl/musl cross_llvm-aarch64-unknown-linux-musl/musl.conf
+cross_llvm-aarch64-unknown-linux-musl/musl cross_llvm-aarch64-unknown-linux-musl/llvm.conf
+cross_llvm-aarch64-unknown-linux-musl/compiler-rt cross_llvm-aarch64-unknown-linux-musl/compiler-rt.conf
+cross_llvm-aarch64-unknown-linux-musl/compiler-rt cross_llvm-aarch64-unknown-linux-musl/llvm.conf
+cross_llvm-aarch64-unknown-linux-musl/clang-crossdev-wrappers cross_llvm-aarch64-unknown-linux-musl/clang-crossdev-wrappers.conf
+cross_llvm-aarch64-unknown-linux-musl/clang-crossdev-wrappers cross_llvm-aarch64-unknown-linux-musl/llvm.conf

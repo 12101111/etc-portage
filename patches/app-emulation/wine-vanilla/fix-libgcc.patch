@@ -1,0 +1,12 @@
+diff --git a/tools/winegcc/winegcc.c b/tools/winegcc/winegcc.c
+index 56fe179c92b..f75bf428183 100644
+--- a/tools/winegcc/winegcc.c
++++ b/tools/winegcc/winegcc.c
+@@ -300,6 +300,7 @@ static struct strarray build_tool_name( struct options *opts, enum tool tool )
+         }
+         strarray_add( &ret, "-Wno-unused-command-line-argument" );
+         strarray_add( &ret, "-fuse-ld=lld" );
++        strarray_add( &ret, "--rtlib=compiler-rt");
+         if (opts->no_default_config) strarray_add( &ret, "--no-default-config" );
+     }
+     return ret;

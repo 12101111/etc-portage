@@ -1,0 +1,14 @@
+diff --git a/src/attributes.h b/src/attributes.h
+index 2b17b09..1673711 100644
+--- a/src/attributes.h
++++ b/src/attributes.h
+@@ -16,6 +16,9 @@
+  */
+ #include <glibmm/value.h>
+ #include <vector>
++#ifdef PAGE_SIZE
++#undef PAGE_SIZE
++#endif
+ 
+ /*
+  * Do not change order of attributes and properties. Attribute and

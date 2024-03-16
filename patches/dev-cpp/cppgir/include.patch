@@ -1,0 +1,12 @@
+diff --git a/tools/genbase.hpp b/tools/genbase.hpp
+index 124e992..55cce96 100644
+--- a/tools/genbase.hpp
++++ b/tools/genbase.hpp
+@@ -6,6 +6,7 @@
+ #include "repository.hpp"
+ 
+ #include <set>
++#include <map>
+ 
+ struct GeneratorOptions
+ {

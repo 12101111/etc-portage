@@ -1,0 +1,12 @@
+diff --git a/src/hud_elements.h b/src/hud_elements.h
+index 61d1de0..542ac9a 100644
+--- a/src/hud_elements.h
++++ b/src/hud_elements.h
+@@ -8,6 +8,7 @@
+ #include "winesync.h"
+ #include "vulkan/vulkan.h"
+ #include <array>
++#include <map>
+ 
+ struct Function {
+     std::function<void()> run;  // Using std::function instead of a raw function pointer for more flexibility

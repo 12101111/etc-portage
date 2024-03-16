@@ -1,0 +1,24 @@
+diff --git a/src/86box.c b/src/86box.c
+index 5865823..5fc397c 100644
+--- a/src/86box.c
++++ b/src/86box.c
+@@ -27,6 +27,7 @@
+ #include <stdbool.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <strings.h>
+ #include <time.h>
+ #include <wchar.h>
+ #include <stdatomic.h>
+diff --git a/src/86box.c b/src/86box.c
+index d537ea5..1d6601a 100644
+--- a/src/86box.c
++++ b/src/86box.c
+@@ -31,6 +31,7 @@
+ #include <time.h>
+ #include <wchar.h>
+ #include <stdatomic.h>
++#define _GNU_SOURCE
+ #include <unistd.h>
+ 
+ #ifndef _WIN32

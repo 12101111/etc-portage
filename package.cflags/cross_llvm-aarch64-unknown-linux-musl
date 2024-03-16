@@ -1,0 +1,1 @@
+cross_llvm-aarch64-unknown-linux-musl/rust-std RUSTFLAGS="-Ccodegen-units=1 -Ctarget-feature=-crt-static"

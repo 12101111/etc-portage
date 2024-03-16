@@ -1,0 +1,28 @@
+From d6e04fcc3b098c1d1dd4390b915219b5bffbcb75 Mon Sep 17 00:00:00 2001
+From: "David C. Manuelda" <StormByte@gmail.com>
+Date: Fri, 16 Jun 2023 15:59:38 +0200
+Subject: [PATCH 2/2] Added a missing include
+
+---
+ cdrecord/cdrecord.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/cdrecord/cdrecord.c b/cdrecord/cdrecord.c
+index 6b098c0..93cd30f 100644
+--- a/cdrecord/cdrecord.c
++++ b/cdrecord/cdrecord.c
+@@ -61,6 +61,10 @@ static	UConst char sccsid[] =
+ #include <vms_init.h>
+ #endif
+ 
++#if defined(HAVE_MLOCKALL)
++#include <sys/mman.h>
++#endif
++
+ #include "version.h"
+ 
+ char	cdr_version[] = VERSION;
+-- 
+2.41.0
+
+

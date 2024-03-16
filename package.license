@@ -1,6 +1,0 @@
-app-i18n/cldr-emoji-annotation Unicode_License
-app-arch/unrar unRAR
-sys-kernel/linux-firmware linux-fw-redistributable no-source-code
-media-libs/faac MPEG-4
-media-libs/libva-intel-media-driver no-source-code
-dev-db/mongodb::gentoo SSPL-1

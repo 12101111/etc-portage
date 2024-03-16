@@ -1,0 +1,50 @@
+# autotools workaround
+app-text/texlive-core ax_cv_c_float_words_bigendian
+media-libs/x264 ax_cv_c_float_words_bigendian
+dev-lang/python ax_cv_c_float_words_bigendian
+x11-libs/cairo ax_cv_c_float_words_bigendian
+sys-devel/binutils clang_dont_supports_ada
+sys-libs/binutils-libs clang_dont_supports_ada
+dev-util/mingw64-toolchain clang_dont_supports_ada
+dev-debug/gdb clang_dont_supports_ada
+sys-devel/gcc clang_dont_supports_ada
+
+dev-java/openjdk noccache
+dev-util/bazel noccache
+dev-lang/mono noccache
+
+media-video/obs-studio ccache
+
+dev-db/mongodb mongodb
+
+net-fs/nfs-utils o1debug
+
+# debug
+sys-libs/musl debug
+dev-libs/wayland debug
+gui-wm/sway debug
+gui-libs/wlroots debug
+dev-libs/glib debug
+x11-libs/gtk+ debug
+app-emulation/bochs debug
+gui-apps/wob debug
+x11-base/xwayland debug
+gui-apps/waybar debug
+dev-debug/lldb debug
+dev-lang/python debug
+media-libs/libwebp debug
+kde-frameworks/kio o1debug
+gnome-base/gnome-keyring o1debug
+sci-mathematics/z3 o1debug
+sys-libs/gcompat debug
+sys-devel/clang debug
+app-emulation/wine-staging wine
+app-emulation/dxvk wine
+app-emulation/vkd3d wine
+app-emulation/wine-vanilla wine
+
+dev-util/binaryen o1debug
+dev-util/perf o1debug
+app-cdr/cdrtools o1debug
+
+#dev-scheme/racket clang17

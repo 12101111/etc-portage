@@ -1,0 +1,12 @@
+diff --git a/common/common-cpu.h b/common/common-cpu.h
+index 3c8df27..e3f2ffb 100644
+--- a/common/common-cpu.h
++++ b/common/common-cpu.h
+@@ -31,6 +31,7 @@ POSSIBILITY OF SUCH DAMAGE.
+ 
+ #pragma once
+ 
++#define _GNU_SOURCE
+ #include <sched.h>
+ #include <stdlib.h>
+ 

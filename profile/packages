@@ -16,7 +16,7 @@ sys-libs/musl-legacy-compat
 sys-devel/llvm
 sys-devel/clang
 sys-devel/lld
-dev-util/lldb
+dev-debug/lldb
 # kernel
 net-wireless/wireless-regdb
 sys-devel/bc

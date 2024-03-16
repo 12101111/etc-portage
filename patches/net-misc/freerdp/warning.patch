@@ -1,0 +1,13 @@
+diff --git a/client/Wayland/wlfreerdp.c b/client/Wayland/wlfreerdp.c
+index 65e29bc..47a4313 100644
+--- a/client/Wayland/wlfreerdp.c
++++ b/client/Wayland/wlfreerdp.c
+@@ -634,7 +634,7 @@ static BOOL wlf_client_new(freerdp* instance, rdpContext* context)
+ 		return FALSE;
+ 
+ 	obj = ArrayList_Object(wfl->events);
+-	obj->fnObjectNew = uwac_event_clone;
++	obj->fnObjectNew = (OBJECT_NEW_FN)uwac_event_clone;
+ 	obj->fnObjectFree = free;
+ 
+ 	InitializeCriticalSection(&wfl->critical);

@@ -1,0 +1,202 @@
+diff --git a/vendor/adb/sysdeps.h b/vendor/adb/sysdeps.h
+index 316afe7..3816014 100644
+--- a/vendor/adb/sysdeps.h
++++ b/vendor/adb/sysdeps.h
+@@ -521,8 +521,8 @@ static inline int adb_read(borrowed_fd fd, void* buf, size_t len) {
+     return TEMP_FAILURE_RETRY(read(fd.get(), buf, len));
+ }
+ 
+-static inline int adb_pread(borrowed_fd fd, void* buf, size_t len, off64_t offset) {
+-#if defined(__APPLE__)
++static inline int adb_pread(borrowed_fd fd, void* buf, size_t len, off_t offset) {
++#if defined(__APPLE__) || defined(__linux__) && !defined(__GLIBC__)
+     return TEMP_FAILURE_RETRY(pread(fd.get(), buf, len, offset));
+ #else
+     return TEMP_FAILURE_RETRY(pread64(fd.get(), buf, len, offset));
+@@ -543,8 +543,8 @@ static inline int adb_write(borrowed_fd fd, const void* buf, size_t len) {
+     return TEMP_FAILURE_RETRY(write(fd.get(), buf, len));
+ }
+ 
+-static inline int adb_pwrite(int fd, const void* buf, size_t len, off64_t offset) {
+-#if defined(__APPLE__)
++static inline int adb_pwrite(int fd, const void* buf, size_t len, off_t offset) {
++#if defined(__APPLE__) || defined(__linux__) && !defined(__GLIBC__)
+     return TEMP_FAILURE_RETRY(pwrite(fd, buf, len, offset));
+ #else
+     return TEMP_FAILURE_RETRY(pwrite64(fd, buf, len, offset));
+@@ -557,7 +557,7 @@ static inline int adb_pwrite(int fd, const void* buf, size_t len, off64_t offset
+ #define pwrite ___xxx_pwrite
+ 
+ static inline int64_t adb_lseek(borrowed_fd fd, int64_t pos, int where) {
+-#if defined(__APPLE__)
++#if defined(__APPLE__) || defined(__linux__) && !defined(__GLIBC__)
+     return lseek(fd.get(), pos, where);
+ #else
+     return lseek64(fd.get(), pos, where);
+diff --git a/vendor/base/libs/androidfw/Asset.cpp b/vendor/base/libs/androidfw/Asset.cpp
+index 43a70c1..3766271 100644
+--- a/vendor/base/libs/androidfw/Asset.cpp
++++ b/vendor/base/libs/androidfw/Asset.cpp
+@@ -160,12 +160,12 @@ Asset::Asset(void)
+      */
+     // TODO(kroot): replace this with fstat despite the plea above.
+ #if 1
+-    length = lseek64(fd, 0, SEEK_END);
++    length = lseek(fd, 0, SEEK_END);
+     if (length < 0) {
+         ::close(fd);
+         return NULL;
+     }
+-    (void) lseek64(fd, 0, SEEK_SET);
++    (void) lseek(fd, 0, SEEK_SET);
+ #else
+     struct stat st;
+     if (fstat(fd, &st) < 0) {
+@@ -416,7 +416,7 @@ status_t _FileAsset::openChunk(const char* fileName, int fd, off64_t offset, siz
+      * Seek to end to get file length.
+      */
+     off64_t fileLength;
+-    fileLength = lseek64(fd, 0, SEEK_END);
++    fileLength = lseek(fd, 0, SEEK_END);
+     if (fileLength == (off64_t) -1) {
+         // probably a bad file descriptor
+         ALOGD("failed lseek (errno=%d)\n", errno);
+@@ -675,7 +675,7 @@ int _FileAsset::openFileDescriptor(off64_t* outStart, off64_t* outLength) const
+                 ALOGE("Unable to dup fd (%d).", mFd.get());
+                 return -1;
+             }
+-            lseek64(fd, 0, SEEK_SET);
++            lseek(fd, 0, SEEK_SET);
+             return fd;
+         }
+         const char* fname = mMap->file_name();
+diff --git a/vendor/base/libs/androidfw/ObbFile.cpp b/vendor/base/libs/androidfw/ObbFile.cpp
+index 95332a3..04072a1 100644
+--- a/vendor/base/libs/androidfw/ObbFile.cpp
++++ b/vendor/base/libs/androidfw/ObbFile.cpp
+@@ -116,7 +116,7 @@ bool ObbFile::readFrom(int fd)
+ 
+ bool ObbFile::parseObbFile(int fd)
+ {
+-    off64_t fileLength = lseek64(fd, 0, SEEK_END);
++    off_t fileLength = lseek(fd, 0, SEEK_END);
+ 
+     if (fileLength < kFooterMinSize) {
+         if (fileLength < 0) {
+@@ -131,7 +131,7 @@ bool ObbFile::parseObbFile(int fd)
+     size_t footerSize;
+ 
+     {
+-        lseek64(fd, fileLength - kFooterTagSize, SEEK_SET);
++        lseek(fd, fileLength - kFooterTagSize, SEEK_SET);
+ 
+         char footer[kFooterTagSize];
+         actual = TEMP_FAILURE_RETRY(read(fd, footer, kFooterTagSize));
+@@ -162,8 +162,8 @@ bool ObbFile::parseObbFile(int fd)
+         }
+     }
+ 
+-    off64_t fileOffset = fileLength - footerSize - kFooterTagSize;
+-    if (lseek64(fd, fileOffset, SEEK_SET) != fileOffset) {
++    off_t fileOffset = fileLength - footerSize - kFooterTagSize;
++    if (lseek(fd, fileOffset, SEEK_SET) != fileOffset) {
+         ALOGW("seek %lld failed: %s\n", (long long int)fileOffset, strerror(errno));
+         return false;
+     }
+@@ -248,7 +248,7 @@ bool ObbFile::writeTo(int fd)
+         return false;
+     }
+ 
+-    lseek64(fd, 0, SEEK_END);
++    lseek(fd, 0, SEEK_END);
+ 
+     if (mPackageName.size() == 0 || mVersion == -1) {
+         ALOGW("tried to write uninitialized ObbFile data\n");
+diff --git a/vendor/core/libutils/FileMap.cpp b/vendor/core/libutils/FileMap.cpp
+index 0abb861..7aee897 100644
+--- a/vendor/core/libutils/FileMap.cpp
++++ b/vendor/core/libutils/FileMap.cpp
+@@ -132,7 +132,7 @@ FileMap::~FileMap(void)
+ // claim ownership of the fd.
+ //
+ // Returns "false" on failure.
+-bool FileMap::create(const char* origFileName, int fd, off64_t offset, size_t length,
++bool FileMap::create(const char* origFileName, int fd, off_t offset, size_t length,
+         bool readOnly)
+ {
+ #if defined(__MINGW32__)
+@@ -188,7 +188,7 @@ bool FileMap::create(const char* origFileName, int fd, off64_t offset, size_t le
+     }
+ 
+     int adjust = offset % mPageSize;
+-    off64_t adjOffset = offset - adjust;
++    off_t adjOffset = offset - adjust;
+     size_t adjLength;
+     if (__builtin_add_overflow(length, adjust, &adjLength)) {
+         ALOGE("adjusted length overflow: length %zu adjust %d", length, adjust);
+@@ -199,7 +199,7 @@ bool FileMap::create(const char* origFileName, int fd, off64_t offset, size_t le
+     int prot = PROT_READ;
+     if (!readOnly) prot |= PROT_WRITE;
+ 
+-    void* ptr = mmap64(nullptr, adjLength, prot, flags, fd, adjOffset);
++    void* ptr = mmap(nullptr, adjLength, prot, flags, fd, adjOffset);
+     if (ptr == MAP_FAILED) {
+         if (errno == EINVAL && length == 0) {
+             ptr = nullptr;
+diff --git a/vendor/core/libutils/include/utils/FileMap.h b/vendor/core/libutils/include/utils/FileMap.h
+index f9f8f3c..7cf0875 100644
+--- a/vendor/core/libutils/include/utils/FileMap.h
++++ b/vendor/core/libutils/include/utils/FileMap.h
+@@ -64,7 +64,7 @@ public:
+      * Returns "false" on failure.
+      */
+     bool create(const char* origFileName, int fd,
+-                off64_t offset, size_t length, bool readOnly);
++                off_t offset, size_t length, bool readOnly);
+ 
+     ~FileMap(void);
+ 
+@@ -86,7 +86,7 @@ public:
+     /*
+      * Get the data offset used to create this map.
+      */
+-    off64_t getDataOffset(void) const { return mDataOffset; }
++    off_t getDataOffset(void) const { return mDataOffset; }
+ 
+     /*
+      * This maps directly to madvise() values, but allows us to avoid
+@@ -113,7 +113,7 @@ private:
+     char*       mFileName;      // original file name, if known
+     void*       mBasePtr;       // base of mmap area; page aligned
+     size_t      mBaseLength;    // length, measured from "mBasePtr"
+-    off64_t     mDataOffset;    // offset used when map was created
++    off_t     mDataOffset;    // offset used when map was created
+     void*       mDataPtr;       // start of requested data, offset from base
+     size_t      mDataLength;    // length, measured from "mDataPtr"
+ #if defined(__MINGW32__)
+diff --git a/vendor/libbase/include/android-base/off64_t.h b/vendor/libbase/include/android-base/off64_t.h
+index e6b71b8..cb82ad8 100644
+--- a/vendor/libbase/include/android-base/off64_t.h
++++ b/vendor/libbase/include/android-base/off64_t.h
+@@ -16,7 +16,7 @@
+ 
+ #pragma once
+ 
+-#if defined(__APPLE__)
++#if defined(__APPLE__) || defined(__linux__) && !defined(__GLIBC__)
+ /** Mac OS has always had a 64-bit off_t, so it doesn't have off64_t. */
+ typedef off_t off64_t;
+ #endif
+diff --git a/vendor/libziparchive/zip_archive.cc b/vendor/libziparchive/zip_archive.cc
+index c5b5ae8..9ba4d5d 100644
+--- a/vendor/libziparchive/zip_archive.cc
++++ b/vendor/libziparchive/zip_archive.cc
+@@ -42,7 +42,7 @@
+ #include <span>
+ #include <vector>
+ 
+-#if defined(__APPLE__)
++#if defined(__APPLE__) || defined(__linux__) && !defined(__GLIBC__)
+ #define lseek64 lseek
+ #endif
+ 

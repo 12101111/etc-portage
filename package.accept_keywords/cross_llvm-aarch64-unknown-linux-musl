@@ -1,0 +1,5 @@
+cross_llvm-aarch64-unknown-linux-musl/linux-headers arm64 ~arm64 -amd64 -~amd64
+cross_llvm-aarch64-unknown-linux-musl/musl arm64 ~arm64 -amd64 -~amd64
+cross_llvm-aarch64-unknown-linux-musl/compiler-rt arm64 ~arm64 -amd64 -~amd64
+cross_llvm-aarch64-unknown-linux-musl/clang-crossdev-wrappers arm64 ~arm64 -amd64 -~amd64 **
+cross_llvm-aarch64-unknown-linux-musl/rust-std **

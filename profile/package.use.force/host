@@ -1,0 +1,3 @@
+dev-util/perf -clang
+dev-qt/qt-creator -clang
+app-emulation/wine-vanilla -clang

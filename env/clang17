@@ -1,0 +1,3 @@
+CC="clang-17"
+CXX="clang++-17"
+LD="/usr/lib/llvm/17/bin/ld.lld"

@@ -1,0 +1,13 @@
+diff --git a/compat/systemd.c b/compat/systemd.c
+index 6f790a3..14aaa15 100644
+--- a/compat/systemd.c
++++ b/compat/systemd.c
+@@ -16,6 +16,8 @@
+  * OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+ 
++#include <stdlib.h>
++#include <unistd.h>
+ #include <sys/types.h>
+ #include <sys/un.h>
+ 

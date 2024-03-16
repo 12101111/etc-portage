@@ -1,18 +1,5 @@
-diff --git a/src/dos/dos_programs.cpp b/src/dos/dos_programs.cpp
-index 1dc26d3..d3a211b 100644
---- a/src/dos/dos_programs.cpp
-+++ b/src/dos/dos_programs.cpp
-@@ -5854,7 +5854,7 @@ private:
-                             FILE* newDisk = fopen_lock(fname, ro ? "rb" : "rb+", ro);
-                             if(!newDisk) {
-                                 if(!qmount) WriteOut("Unable to open '%s'\n", fname);
--                                return NULL;
-+                                return 0;
-                             }
-                             QCow2Image::QCow2Header qcow2_header = QCow2Image::read_header(newDisk);
-                             uint64_t sectors;
 diff --git a/src/dos/drive_local.cpp b/src/dos/drive_local.cpp
-index 0f9ce53..01771d9 100644
+index c25d005..aeb1198 100644
 --- a/src/dos/drive_local.cpp
 +++ b/src/dos/drive_local.cpp
 @@ -52,7 +52,7 @@
@@ -20,7 +7,7 @@ index 0f9ce53..01771d9 100644
  #include "jfont.h"
  
 -#if defined(EMSCRIPTEN) || defined(HAIKU)
-+#if defined(EMSCRIPTEN) || defined(HAIKU) || !defined(__GLIBC__) && defined(__linux__)
++#if defined(EMSCRIPTEN) || defined(HAIKU) || defined(__linux__)
  #include <fcntl.h>
  #endif
  

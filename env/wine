@@ -1,2 +1,3 @@
-CFLAGS="-march=skylake -mtune=skylake -pipe -O2"
+CFLAGS="-march=znver4 -mtune=znver4 -pipe -O2 -g"
 LDFLAGS=""
+FEATURES="installsources nostrip"

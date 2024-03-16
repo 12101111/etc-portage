@@ -1,0 +1,22 @@
+diff --git a/sys/v4l2/gstv4l2object.c b/sys/v4l2/gstv4l2object.c
+index 1c08b45..9150f53 100644
+--- a/sys/v4l2/gstv4l2object.c
++++ b/sys/v4l2/gstv4l2object.c
+@@ -528,6 +528,8 @@ gst_v4l2_object_new (GstElement * element,
+   v4l2object->poll = gst_poll_new (TRUE);
+   v4l2object->can_poll_device = TRUE;
+ 
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Wincompatible-function-pointer-types"
+   /* We now disable libv4l2 by default, but have an env to enable it. */
+ #ifdef HAVE_LIBV4L2
+   if (g_getenv ("GST_V4L2_USE_LIBV4L2")) {
+@@ -549,7 +551,7 @@ gst_v4l2_object_new (GstElement * element,
+     v4l2object->mmap = mmap;
+     v4l2object->munmap = munmap;
+   }
+-
++#pragma clang diagnostic pop
+   return v4l2object;
+ }
+ 

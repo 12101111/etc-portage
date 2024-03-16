@@ -1,0 +1,47 @@
+From 6a6f100db2dee1f5ad6f387f741cdbaee5fa7908 Mon Sep 17 00:00:00 2001
+From: 12101111 <w12101111@gmail.com>
+Date: Tue, 14 Nov 2023 17:23:59 +0800
+Subject: [PATCH 2/2] not implemented in
+ 5573d0146c1ae71ac5b3e4ba6a12c00585646a1a
+
+---
+ include/libnftnl/object.h | 1 -
+ src/libnftnl.map          | 3 ---
+ 2 files changed, 4 deletions(-)
+
+diff --git a/include/libnftnl/object.h b/include/libnftnl/object.h
+index 9bd83a5..0ed0142 100644
+--- a/include/libnftnl/object.h
++++ b/include/libnftnl/object.h
+@@ -122,7 +122,6 @@ struct nftnl_obj *nftnl_obj_alloc(void);
+ void nftnl_obj_free(const struct nftnl_obj *ne);
+ 
+ bool nftnl_obj_is_set(const struct nftnl_obj *ne, uint16_t attr);
+-void nftnl_obj_unset(struct nftnl_obj *ne, uint16_t attr);
+ void nftnl_obj_set_data(struct nftnl_obj *ne, uint16_t attr, const void *data,
+ 			uint32_t data_len);
+ void nftnl_obj_set(struct nftnl_obj *ne, uint16_t attr, const void *data) __attribute__((deprecated));
+diff --git a/src/libnftnl.map b/src/libnftnl.map
+index 64ed559..02d8b34 100644
+--- a/src/libnftnl.map
++++ b/src/libnftnl.map
+@@ -172,8 +172,6 @@ global:
+   nftnl_set_elems_nlmsg_build_payload;
+   nftnl_set_elems_nlmsg_parse;
+ 
+-  nftnl_set_elems_foreach;
+-
+   nftnl_set_elems_iter_create;
+   nftnl_set_elems_iter_cur;
+   nftnl_set_elems_iter_next;
+@@ -272,7 +270,6 @@ global:
+   nftnl_obj_alloc;
+   nftnl_obj_free;
+   nftnl_obj_is_set;
+-  nftnl_obj_unset;
+   nftnl_obj_set;
+   nftnl_obj_get;
+   nftnl_obj_set_u8;
+-- 
+2.42.1
+

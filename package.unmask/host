@@ -1,0 +1,14 @@
+app-portage/portage-bashrc-mv
+app-shells/runtitle
+app-emulation/winetricks
+
+gui-apps/wayvnc
+dev-libs/aml
+net-misc/neatvnc
+
+dev-libs/elfutils
+app-office/libreoffice::gentoo
+app-office/libreoffice-l10n::gentoo
+app-text/po4a
+
+<dev-util/pkgconf-9999

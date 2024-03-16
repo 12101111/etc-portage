@@ -1,0 +1,13 @@
+diff --git a/lldb/source/Plugins/TypeSystem/Clang/TypeSystemClang.cpp b/lldb/source/Plugins/TypeSystem/Clang/TypeSystemClang.cpp
+index 5bc7a4724102..fb7b99c6ffcc 100644
+--- a/lldb/source/Plugins/TypeSystem/Clang/TypeSystemClang.cpp
++++ b/lldb/source/Plugins/TypeSystem/Clang/TypeSystemClang.cpp
+@@ -9322,7 +9322,7 @@ clang::ClassTemplateDecl *TypeSystemClang::ParseClassTemplateDecl(
+     clang::DeclContext *decl_ctx, OptionalClangModuleID owning_module,
+     lldb::AccessType access_type, const char *parent_name, int tag_decl_kind,
+     const TypeSystemClang::TemplateParameterInfos &template_param_infos) {
+-  if (template_param_infos.IsValid()) {
++  if (template_param_infos.IsValid() && parent_name != nullptr) {
+     std::string template_basename(parent_name);
+     // With -gsimple-template-names we may omit template parameters in the name.
+     if (auto i = template_basename.find('<'); i != std::string::npos)

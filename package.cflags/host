@@ -1,0 +1,147 @@
+# no lto
+sys-libs/musl /-flto*/-fno-lto
+app-emulation/libvirt /-flto*/-fno-lto #segfault
+dev-python/libvirt-python /-flto*/-fno-lto # bus error
+media-libs/mesa /-flto*/-fno-lto #dont build
+media-libs/libglvnd /-flto*/-fno-lto #link error
+dev-cpp/glog /-flto*/-fno-lto
+sys-libs/libomp /-flto*/-fno-lto
+dev-libs/libgcrypt /-flto*/-fno-lto/ /-O3/-O2/
+media-libs/libvpx /-flto*/-fno-lto/ #strip not recognized
+dev-util/perf /-flto*/-fno-lto/ #file not recognized: file format not recognized
+net-libs/nodejs /-flto*/-fno-lto/ # build time
+dev-dotnet/coreclr /-flto*/-fno-lto/
+media-gfx/imagemagick /-flto*/-fno-lto/ # llvm pacnic
+media-libs/libwebp /-flto*/-fno-lto/ # miscompile
+# sci-libs/* *FLAGS-=-flto* *FLAGS-=-rtlib=*
+media-libs/dav1d /-flto*/-fno-lto/ # GE
+x11-misc/qt5ct /-flto*/-fno-lto
+games-misc/typespeed /-flto*/-fno-lto/
+app-emulation/bochs /-flto*/-fno-lto/
+app-text/ghostscript-gpl /-flto*/-fno-lto/
+sys-apps/attr /-flto*/-fno-lto/
+dev-lang/mono /-flto*//
+sys-apps/pciutils /-flto*// # symver break
+sys-fs/fuse /-flto*// # symver
+media-libs/alsa-lib /-flto*//
+sys-fs/lvm2 /-flto*//
+dev-java/openjdk /-flto*// LDFLAGS-=-Wl,* # segfault
+dev-lang/ghc /-flto*// LDFLAGS-=-Wl,* HCFLAGS+=-fPIC
+net-fs/nfs-utils /-flto*//
+sys-fs/xfsprogs /-flto*//
+net-misc/networkmanager /-flto*//
+
+# LLVM 18
+dev-lang/rust /-flto*//
+
+# no polly
+media-gfx/krita /-mllvm// /-polly*//
+dev-db/mongodb /-mllvm// /-polly*//
+x11-libs/wxGTK /-mllvm// /-polly*//
+media-libs/openal /-mllvm// /-polly*//
+sys-libs/binutils-libs /-mllvm// /-polly*//
+app-crypt/gpgme /-mllvm// /-polly*//
+dev-libs/libksba /-mllvm// /-polly*//
+
+# no gc-sections
+dev-scheme/racket LDFLAGS-=-Wl,--gc-sections
+net-wireless/iwd LDFLAGS-=-Wl,--gc-sections
+dev-libs/ell LDFLAGS-=-Wl,--gc-sections
+net-wireless/iw LDFLAGS-=-Wl,--gc-sections
+x11-libs/libxkbcommon LDFLAGS-=-Wl,--gc-sections
+
+# mozbuild bug. rustc isn't used for final link anyway
+# mozbuild.configure.options.InvalidOptionError: RUSTFLAGS takes 1 value
+dev-lang/spidermonkey RUSTFLAGS-=-Clink-arg=-Wl,*
+www-client/firefox RUSTFLAGS-=-Clink-arg=-Wl,*
+mail-client/thunderbird RUSTFLAGS-=-Clink-arg=-Wl,*
+
+# stack overflow
+sys-devel/clang LDFLAGS+=-Wl,-z,stack-size=0x800000
+sys-devel/lld LDFLAGS+=-Wl,-z,stack-size=0x800000
+sys-devel/binutils LDFLAGS+=-Wl,-z,stack-size=0x200000
+dev-lang/python LDFLAGS+=-Wl,-z,stack-size=0x200000
+dev-debug/lldb LDFLAGS+=-Wl,-z,stack-size=0x800000
+dev-dotnet/coreclr LDFLAGS+=-Wl,-z,stack-size=0x800000
+dev-dotnet/corehost LDFLAGS+=-Wl,-z,stack-size=0x800000
+app-text/goldendict LDFLAGS+=-Wl,-z,stack-size=0x800000
+# See https://gitlab.gnome.org/GNOME/librsvg/-/issues/595
+x11-libs/pixman LDFLAGS+=-Wl,-z,stack-size=0x200000
+net-libs/libtorrent-rasterbar LDFLAGS+=-Wl,-z,stack-size=0x200000
+dev-java/openjdk LDFLAGS+=-Wl,-z,stack-size=0x800000
+
+# no-plt
+dev-libs/nss /-fno-plt//
+media-video/ffmpeg /-fno-plt//
+sys-libs/glibc /-fno-plt//
+sys-libs/musl /-fno-plt//
+sys-libs/compiler-rt-sanitizers /-fno-plt//
+x11-base/xorg-server /-fno-plt//
+dev-db/mongodb /-fno-plt// # clang17 fontend ICE
+
+#unused-command-line-argument
+dev-util/cmake C*FLAGS+=-Qunused-arguments
+net-libs/libssh C*FLAGS+=-Qunused-arguments
+dev-libs/vc C*FLAGS+=-Qunused-arguments
+sys-devel/clang C*FLAGS+=-Qunused-arguments
+
+# missing libs
+net-libs/gtk-vnc LDFLAGS+=-lucontext
+net-misc/spice-gtk LDFLAGS+=-lucontext
+sys-libs/liburing LDFLAGS+=-lucontext CFLAGS+=-Wl,-lucontext
+app-arch/dpkg LDFLAGS+=-lobstack
+sys-devel/dwz LDFLAGS+=-lobstack
+dev-libs/sink LDFLAGS+=-lexecinfo
+app-arch/rpm LDFLAGS+=-lelf
+media-tv/v4l-utils LDFLAGS+=-largp
+dev-qt/qtcore LDFLAGS+=-lexecinfo
+app-editors/neovim LDFLAGS+=-lexecinfo
+www-client/falkon LDFLAGS+=-lexecinfo
+sys-process/htop LDFLAGS+=-lexecinfo
+dev-qt/qt-creator LDFLAGS+=-lexecinfo
+x11-libs/cairo LDFLAGS+=-lexecinfo
+dev-util/rizin LDFLAGS+=-lexecinfo
+media-libs/libva-intel-media-driver LDFLAGS+=-lexecinfo
+dev-util/ostree LDFLAGS+=-lgpg-error
+
+# misc
+dev-util/colm NOLAFILEREMOVE=true
+dev-java/openjdk /-fomit-frame-pointer//
+dev-libs/libedit CFLAGS+=-D__STDC_ISO_10646__
+kde-apps/kio-extras CFLAGS+=-D_GNU_SOURCE
+dev-perl/XS-Parse-Keyword LD=clang
+dev-perl/Syntax-Keyword-Try LD=clang
+games-emulation/yuzu CXXFLAGS+=-fexperimental-library /-flto*//
+
+# LFS64
+app-misc/broot RUSTFLAGS+=-L/usr/local/lib RUSTFLAGS+=-lalias
+sys-apps/zram-generator RUSTFLAGS+=-L/usr/local/lib RUSTFLAGS+=-lalias
+
+# LLD17
+sys-apps/keyutils LDFLAGS+=-Wl,--undefined-version
+dev-libs/libbsd LDFLAGS+=-Wl,--undefined-version
+sys-libs/binutils-libs LDFLAGS+=-Wl,--undefined-version
+media-libs/libva LDFLAGS+=-Wl,--undefined-version
+dev-libs/libbpf LDFLAGS+=-Wl,--undefined-version
+sys-libs/talloc LDFLAGS+=-Wl,--undefined-version
+sys-libs/tevent LDFLAGS+=-Wl,--undefined-version
+media-libs/alsa-lib LDFLAGS+=-Wl,--undefined-version
+sys-libs/tdb LDFLAGS+=-Wl,--undefined-version
+sys-libs/ldb LDFLAGS+=-Wl,--undefined-version
+dev-cpp/tbb LDFLAGS+=-Wl,--undefined-version
+net-misc/spice-gtk LDFLAGS+=-Wl,--undefined-version
+gnome-extra/nm-applet LDFLAGS+=-Wl,--undefined-version
+dev-java/openjdk LDFLAGS+=-Wl,--undefined-version
+media-sound/sox LDFLAGS+=-Wl,--undefined-version
+net-fs/samba LDFLAGS+=-Wl,--undefined-version
+net-libs/gtk-vnc LDFLAGS+=-Wl,--undefined-version
+net-misc/networkmanager LDFLAGS+=-Wl,--undefined-version
+net-wireless/bluez LDFLAGS+=-Wl,--undefined-version
+sys-libs/slang LDFLAGS+=-Wl,--undefined-version
+x11-libs/wxGTK LDFLAGS+=-Wl,--undefined-version
+media-libs/mesa LDFLAGS+=-Wl,--undefined-version
+www-client/chromium LDFLAGS+=-Wl,--undefined-version
+dev-util/electron LDFLAGS+=-Wl,--undefined-version
+games-util/mangohud LDFLAGS+=-Wl,--undefined-version
+sys-libs/liburing LDFLAGS+=-Wl,--undefined-version
+media-libs/libv4l LDFLAGS+=-Wl,--undefined-version

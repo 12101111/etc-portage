@@ -1,0 +1,639 @@
+diff --git a/docs/rsmu_commands.md b/docs/rsmu_commands.md
+index 935cf2b..a8da3c2 100755
+--- a/docs/rsmu_commands.md
++++ b/docs/rsmu_commands.md
+@@ -3,73 +3,280 @@
+ The following commands are known to be valid for RSMU supported processors. The table below
+ indicates various mnemonics and their meanings. Optional details may be shown if applicable.
+ 
+-| **Mnemonic**  | **Description**                                                                       |
+-|:-------------:| ------------------------------------------------------------------------------------- |
+-| PBO Scalar    | Precision Boost Overdrive Aggressiveness                                              |
+-| PBO           | Precision Boost Overdrive                                                             |
+-| PPT           | Package Power Tracking                                                                |
+-| TDC           | Thermal Design Current                                                                |
+-| EDC           | Electrical Design Current                                                             |
+-| AutoOC        | Automatic Overclocking                                                                |
+-| ArgX          | Command Request Argument X (1-6)                                                      |
+-| ResX          | Command Response Argument X (1-6)                                                     |
+-| mW            | Milliwatt                                                                             |
+-| mA            | Milliampere                                                                           |
+-| C             | Celcius                                                                               |
+-| VID           | Voltage ID Index (Value Applied = 1.55 - (VID * 0.00625))                             |
+-| PhyAddr       | Physical Address                                                                      |
+-| BitField      | Bit Field Containing Values                                                           |
++| **Mnemonic** | **Description**                                            |
++| :----------: | ---------------------------------------------------------- |
++|  PBO Scalar  | Precision Boost Overdrive Aggressiveness                   |
++|     PBO      | Precision Boost Overdrive                                  |
++|     PPT      | Package Power Tracking                                     |
++|     TDC      | Thermal Design Current                                     |
++|     EDC      | Electrical Design Current                                  |
++|    AutoOC    | Automatic Overclocking                                     |
++|     ArgX     | Command Request Argument X (1-6)                           |
++|     ResX     | Command Response Argument X (1-6)                          |
++|      mW      | Milliwatt                                                  |
++|      mA      | Milliampere                                                |
++|      C       | Celcius                                                    |
++|     VID      | Voltage ID Index (Voltage Applied = 1.55 (VID \* 0.00625)) |
++|   PhyAddr    | Physical Address                                           |
++|   BitField   | Bit Field Containing Values                                |
+ 
+ # Global Commands
+ 
+ The following commands work on all processors supporting MP1 or RSMU:
+ 
+-| **Function**              | **Command ID** | **Details**                                              |
+-|:-------------------------:|:--------------:| -------------------------------------------------------- |
+-| TestMessage               | 0x01           | Arg0:X, Res0:(X+1)                                       |
+-| GetSMUVersion             | 0x02           | Res0:Version                                             |
++| **Function**  | **Command ID** | **Details**        |
++| :-----------: | :------------: | ------------------ |
++|  TestMessage  |      0x01      | Arg0:X, Res0:(X+1) |
++| GetSMUVersion |      0x02      | Res0:Version       |
+ 
+ ## Matisse & Vermeer
+ 
+-<small>*Commands shown to be used in Ryzen Master.*</small>
+-
+-| **Function**              | **Command ID** | **Details**                                              |
+-|:-------------------------:|:--------------:| -------------------------------------------------------- |
+-| TransferTableSmu2Dram     | 0x05           |                                                          |
+-| GetDramBaseAddress        | 0x06           | Res0:PhyAddr                                             |
+-| GetPMTableVersion         | 0x08           | Res0:Version                                             |
+-| SetVDDCRSoC               | 0x14           | Arg0:VID                                                 |
+-| SetPPTLimit               | 0x53           | Arg0:mW                                                  |
+-| SetTDCLimit               | 0x54           | Arg0:mA                                                  |
+-| SetEDCLimit               | 0x55           | Arg0:mA                                                  |
+-| SetcHTCLimit              | 0x56           | Arg0:C                                                   |
+-| SetPBOScalar              | 0x58           | Arg0:(PBO Scalar * 100)                                  |
+-| GetFastestCoreOfSocket    | 0x59           | Res0:(16 * BYTE2(Res0)) | (Res0 + 4 * BYTE1(Res0)) & 0xF |
+-| SetPROCHOTStatus          | 0x5A           | Arg0:Status, Disabled(0x1000000)                         |
+-| EnableOverclocking        | 0x5A           | Arg0:Status, Enabled(0)                                  |
+-| DisableOverclocking       | 0x5B           | Arg0:Status, Disabled(0x1000000)                         |
+-| SetOverclockFreqAllCores  | 0x5C           | Arg0:Frequency                                           |
+-| SetOverclockFreqPerCore   | 0x5D           | Arg0:Value                                               |
+-| SetOverclockCPUVID        | 0x61           | Arg0:VID                                                 |
+-| GetPBOScalar              | 0x6C           | Res0:PBO Scalar:(1-10)                                   |
+-| GetMaxFrequency           | 0x6E           | Res0:MHz                                                 |
+-| GetProcessorParameters(?) | 0x6F           | Res0:BitField                                            |
++<small>_Commands shown to be used in Ryzen Master._</small>
++
++|       **Function**        | **Command ID** | **Details**                      |
++| :-----------------------: | :------------: | -------------------------------- | ------------------------------- |
++|   TransferTableSmu2Dram   |      0x05      |                                  |
++|    GetDramBaseAddress     |      0x06      | Res0:PhyAddr                     |
++|     GetPMTableVersion     |      0x08      | Res0:Version                     |
++|        SetVDDCRSoC        |      0x14      | Arg0:VID                         |
++|        SetPPTLimit        |      0x53      | Arg0:mW                          |
++|        SetTDCLimit        |      0x54      | Arg0:mA                          |
++|        SetEDCLimit        |      0x55      | Arg0:mA                          |
++|       SetcHTCLimit        |      0x56      | Arg0:C                           |
++|       SetPBOScalar        |      0x58      | Arg0:(PBO Scalar \* 100)         |
++|  GetFastestCoreOfSocket   |      0x59      | Res0:(16 \* BYTE2(Res0))         | (Res0 + 4 \* BYTE1(Res0)) & 0xF |
++|     SetPROCHOTStatus      |      0x5A      | Arg0:Status, Disabled(0x1000000) |
++|    EnableOverclocking     |      0x5A      | Arg0:Status, Enabled(0)          |
++|    DisableOverclocking    |      0x5B      | Arg0:Status, Disabled(0x1000000) |
++| SetOverclockFreqAllCores  |      0x5C      | Arg0:Frequency                   |
++|  SetOverclockFreqPerCore  |      0x5D      | Arg0:Value                       |
++|    SetOverclockCPUVID     |      0x61      | Arg0:VID                         |
++|       GetPBOScalar        |      0x6C      | Res0:PBO Scalar:(1-10)           |
++|      GetMaxFrequency      |      0x6E      | Res0:MHz                         |
++| GetProcessorParameters(?) |      0x6F      | Res0:BitField                    |
+ 
+ ### GetProcessorParameters Bit Field
+ 
+-| Bit  | Description                 |
+-|:----:|:---------------------------:|
+-| 0    | IsOverclockable             |
+-| 1    | FusedMOCStatus/PBO Support  |
++| Bit |        Description         |
++| :-: | :------------------------: |
++|  0  |      IsOverclockable       |
++|  1  | FusedMOCStatus/PBO Support |
+ 
+ ### SetOverclockFreqPerCore Value Mask
+ 
+-Value supplied is calculated as follows:
++#### Architectural Note
++
++Generally, multiple cores are contained within a core-complex (CCX), one or many CCXs are contained within a CPU complex die (CCD), and one or many CCDs are contained
++within a central processing unit (CPU).
++
++As a rule, all cores within the same CCX of a CCD should generally be set to the same frequency. Otherwise, anecdotally, actual outputted frequency is unpredictable.
++
++#### Variable Definitions
++
++All below indices and count values are zero-indexed.
++
++- let `frequency` be the intended frequency for the specified core.
++- let `core_id` be the index of the core within its containing CCX.
++- let `core_complex` be the index of the CCX within its containing CCD.
++- let `ccd_id` be the index of the CCD within its CPU.
++- let `MAX_CORE_FREQ` be the maximum allowed of frequency for a core in the specified CPU.
++- let `CORE_COUNT_PER_CCX` be the number of cores in per CCX in the specified CPU.
++- let `CCX_COUNT_PER_CCD` be the number of CCXs in a CCD in the specified CPU.
++- let `CCD_COUNT_PER_CPU` be the number of CCDs in the specified CPU.
++
++Value supplied is calculated as follows, with all of `CORE_COUNT_PER_CCX`, `CCX_COUNT_PER_CCD`, and `CCD_COUNT_PER_CPU` being zero-indexed values:
++
++#### Value Mask Operations as a Function
++
++##### Example Function
++
++```c
++unsigned int mask_core_freq(unsigned short int frequency, char core_id, char core_complex, char ccd_id) {
++    // Ensures all arguments are within allowed bounds
++    if (frequency > MAX_CORE_FREQ || core_id > CORE_COUNT_PER_CCX || core_complex > CCX_COUNT_PER_CCD || ccd_id > CCD_COUNT_PER_CPU)
++        exit(0xDEAD);
++
++    return frequency & 0xFFFFF | ((core_id & 0xF | (16 * (core_complex & 0xF | (16 * ccd_id)))) << 20);
++}
++```
++
++##### Example Usage
++
++The following is an example usage of the mask_core_freq with an AMD Ryzen 7950x CPU.
++
++Maximum core frequency is an AMD configured value, and in this example, is assumed to have the same value in Raphael as the known value of 8000MHz in Matisse and Vermeer.
++
++The 7950x has 16 (15 zero-indexed) total cores, structured as:
+ 
+-```cpp
+-// Invalid.
+-if (frequency > 8000 || core_id > 3 || core_complex > 1 || ccd_id > 1)
+-    exit(0xDEAD);
++- 2 (1 zero-indexed) CCDs per CPU
++- 1 (0 zero-indexed) CCX per CPU
++- 8 (7 zero-indexed) cores per CCX
++
++```c
++
++//Specific for AMD Ryzen 7950x CPU
++#define MAX_CORE_FREQ 8000
++#define CORE_COUNT_PER_CCX 7
++#define CCX_COUNT_PER_CCD 0
++#define CCD_COUNT_PER_CPU 0
++
++unsigned int mask_core_freq(unsigned short int frequency, char core_id, char core_complex, char ccd_id) {
++    /* ... */
++}
++
++int main() {
++
++    /*
++    Sets the first core (core 0) to frequency of 5250MHz.
++    Core 0 is the first (0) core of the first (0) CCX of the first (0) CCD.
++    */
++    unsigned short int frequency = 5250;
++    char core_id = 0;
++    char core_complex = 0;
++    char ccd_id = 0;
++    unsigned int first_core_freq_masked = mask_core_freq(frequency, core_id, core_complex, ccd_id);
++
++    /*
++    Sets the 9th core (core 8) to a frequency of 5250MHz.
++    Core 8 is the first (0) core in the first (0) CCX of the second (1) CCD.
++    */
++    unsigned short int frequency = 5250;
++    char core_id = 0
++    char core_complex = 0;
++    char ccd_id = 1;
++    unsigned int ninth_core_freq_masked = mask_core_freq(frequency, core_id, core_complex, ccd_id);
++
++    /*
++    Sets the 16th core (core 15) to a frequency of 5250MHz.
++    Core 15 is the 8th (7) core in the first (0) CCX of the second(1) CCD.
++    Core 15 is within the same CCX and CCD as core 8, which has already been configured to 5250MHz. Core 15 must either be configured to the same frequency of 5250MHz,
++    or both configured to a new, but identical value.
++    */
++    unsigned short int frequency = 5250;
++    char core_id = 7;
++    char core_complex = 0;
++    char ccd_id = 1;
++    unsigned int sixteenth_core_freq_masked = mask_core_freq(frequency, core_id, core_complex, ccd_id);
++}
++
++```
++
++### Argument Format
++
++Unless a different formatting or mask is specified otherwise, function arguments must be formatted as follows:
++
++1. Convert argument to hex
++2. Pad hex value to a length of 48 bits
++3. Split padded value to two-bit chunks
++4. Reverse order of chunks - hex argument value will be first chunk.
++
++#### Bash Example
++
++The following bash code, with an inputted VID of 150<sub>10</sub> (96<sub>16</sub>), will give `FORMATTED_ARG` a binary value with a two-byte hexadecimal formatted hexdump representation of:
++
++```hex
++0000000    0096    0000    0000    0000    0000    0000    0000    0000
++0000010    0000    0000    0000    0000
++0000018
++```
+ 
+-value = frequency & 0xFFFFF | ((core_id & 0xF | (16 * (core_complex & 0xF | (16 * ccd_id)))) << 20)
++```bash
++ARG=150
++FORMATTED_ARG=$(printf '%0*x' 48 $ARG | fold -w 2 | tac | tr -d '\n' | xxd -r -p)
+ ```
++
++##### Steps
++
++The following outlines the operation performed at each step of `FORMATTED_ARG`'s computation:
++
++1. `printf '%0*x' 48 $ARG`: converts ARG to hex and pads to length of 48 bits.
++2. `fold -w 2`: splits to two-bit chunks, one chunk on each line
++3. `tac`: Reverses order of lines (chunks)
++4. `tr -d '\n'`: Removes new lines - moves all bits to one line.
++5. `xxd -r -p`: parses hex-formatted string representation of ARG bytes, converts to raw binary value.
++
++### Configuring Load Core Voltage
++
++#### Accounting For V<sub>droop</sub>
++
++The RSMU function SetOverclockCPUVID configures the _idle_ VID for all cores. VID will instaneously decrease/increase under load depending on your motherboard's configured V<sub>droop</sub>
++(often configured via the Load-Line Calibration setting in BIOS menus), instaneous average core frequency, and countless other factors.
++
++While V<sub>droop</sub> cannot be directly configured, but its effect proportional to any given instaneous average core frequency can be determined to an applicable degree of accuracy, and thus
++accounted for via the following process.
++
++Proceed with caution, as a sufficiently large V<sub>droop</sub> can cause a dangerously high idle voltage, when applied VID is incremented to account for the large V<sub>droop</sub>.
++
++Note: RSMU functions will be referred to by name, and calling the functions correctly is left as an exercise to the reader.
++
++##### Data Collection Steps
++
++###### Initial Measurements
++
++1. Set all-core overclock frequency to a relatively low value for your platform.
++2. Set VID to a safe and stable value for your platform and configured frequency.
++3. Ensure cores are idle (frequencies rapidly fluctuating at values well-below configured frequency, generally at < 1000MHz ). Record real, applied VID to cores.
++4. Run an all-core, CPU-intensive software. Record the real, applied VID to cores.
++5. Determine the difference between VID values recorded in steps 3 and 4.
++6. Divide configured frequency by the difference calculated in step 5, then record value.
++
++###### Calibration
++
++7. Determine a new frequency to configure.
++8. Repeat steps 1-6 with the new frequency determined in step 7.
++9. Repeat step 8 for five iterations.
++10. Find the rounded average of resulting values of step 6 in the aforementioned five iterations and initial measurement.
++
++###### V<sub>droop</sub> Calculation
++
++Given results of the data collection, we can now calculate V<sub>droop</sub> for an instaneous average core frequency, and account for it in applied VID.
++
++The variables used in calculation are defined below:
++
++- Let `let step_six_avg` be the results of the data collection.
++- Let `let avg_core_freq` be the average of the applied frequencies to all cores.
++- Let `let intended_vid` be the intended VID to be used when CPU is under load.
++- Let `let incremented_vid` be the VID value used in the SetOverclockCPUVID function call argument, which accounts for V<sub>droop</sub> and ensures VID used under load is equal to intended_vid.
++
++`incremented_vid` is then finally calculated as follows:
++`incremented_vid = intended_vid + (avg_core_freq/step_six_avg)`
++
++##### Example
++
++The following example outlines the steps taken as outlined above for an AMD Ryzen 7950x, and the determined results.
++
++###### Data Collection
++
++1. Set frequency to 3800MHz.
++2. Set VID to 180.
++3. Used application corefreq to determine real, applied VID in idle was 180.
++4. Load was applied to cores using Y-cruncher. VID under load was determined to be 174.
++5. 180 - 174 = 6
++6. 3800/6 = 600 + (100/3) -> 633.333333...
++
++###### Results
++
++- VID argument: 180
++- Frequency inputs: 3800, 4050, 4300, 4550, 4800, 5050, 5250
++- Step 5 results: 6, 7, 7, 7, 8, 8, 8
++- Step 6 results: 633.33, 578.57, 614.29, 650, 600, 656.25
++  Average of step 6 results, rounded: 622
++
++Incremented VID values were then calculated and used, consistently achieving intended VID under load.
++
++Notes:
++
++- Discrepancies between step 6 results are assumed to be the result of rounding float values to integers. The average of these values allows calculation of a reasonable approximation of
++  real V<sub>droop</sub>, though the formula used internally is currently unknown.
++- Referring to Raphael voltage calculation formula shown below, featuring a constant multiplier of `0.00625`, the following formula, anecdotally, also correctly calculated V<sub>droop</sub>,
++  though the relation and domain of applicability is currently uncertain - `incremented_vid = 0.25 * 0.00625 * intended_vid`.
++
++### Raphael
++
++All above information should generally apply to Raphael as well, with the following known differences:
++
++- Applied voltage is now calculated as: `Voltage = 0.00625 * VID`, where VID is a decimal value, and Voltage is measured in volts.
++- EnableOverclocking command ID is now 0x5D
++- DisableOverclocking command ID is now 0x5E
++- SetOverclockFreqAllCores command ID is now 0x5F
++- SetOverclockFreqPerCore command ID is now 0x60
+diff --git a/drv.c b/drv.c
+index 2183bc1..0fb1068 100755
+--- a/drv.c
++++ b/drv.c
+@@ -26,10 +26,20 @@ MODULE_LICENSE("GPL");
+ 
+ #define MSEC_TO_NSEC(x)                    (x * 1000000)
+ 
+-#define PCI_DEVICE_ID_AMD_17H_ROOT         0x1450
+-#define PCI_DEVICE_ID_AMD_17H_M10H_ROOT    0x15d0
+-#define PCI_DEVICE_ID_AMD_17H_M60H_ROOT    0x1630
+-#define PCI_DEVICE_ID_AMD_17H_M30H_ROOT    0x1480
++
++#define PCI_DEVICE_ID_AMD_17H_ROOT		0x1450
++#define PCI_DEVICE_ID_AMD_17H_M10H_ROOT		0x15d0
++#define PCI_DEVICE_ID_AMD_17H_M30H_ROOT		0x1480
++#define PCI_DEVICE_ID_AMD_17H_M60H_ROOT		0x1630
++#define PCI_DEVICE_ID_AMD_17H_MA0H_ROOT		0x14b5
++#define PCI_DEVICE_ID_AMD_19H_M10H_ROOT		0x14a4
++#define PCI_DEVICE_ID_AMD_19H_M40H_ROOT		0x14b5
++#define PCI_DEVICE_ID_AMD_19H_M60H_ROOT		0x14d8
++#define PCI_DEVICE_ID_AMD_19H_M70H_ROOT		0x14e8
++#define PCI_DEVICE_ID_AMD_1AH_M00H_ROOT		0x153a
++#define PCI_DEVICE_ID_AMD_1AH_M20H_ROOT		0x1507
++#define PCI_DEVICE_ID_AMD_MI200_ROOT		0x14bb
++#define PCI_DEVICE_ID_AMD_MI300_ROOT		0x14f8
+ 
+ #define MAX_ATTRS_LEN                      13
+ 
+@@ -39,11 +49,11 @@ MODULE_LICENSE("GPL");
+ 
+ #define __RO_ATTR(attr) \
+     static struct kobj_attribute dev_attr_##attr = \
+-        __ATTR(attr, S_IRUSR, attr##_show, attr_store_null);
++        __ATTR(attr, S_IRUSR | S_IRGRP | S_IROTH, attr##_show, attr_store_null);
+ 
+ #define __RW_ATTR(attr) \
+     static struct kobj_attribute dev_attr_##attr = \
+-        __ATTR(attr, S_IRUSR | S_IWUSR, attr##_show, attr##_store);
++        __ATTR(attr, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH, attr##_show, attr##_store);
+ 
+ static struct ryzen_smu_data {
+     struct pci_dev*         device;
+@@ -428,6 +438,15 @@ static struct pci_device_id ryzen_smu_id_table[] = {
+     { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M10H_ROOT) },
+     { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M30H_ROOT) },
+     { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_M60H_ROOT) },
++    { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_17H_MA0H_ROOT) },
++    { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M10H_ROOT) },
++    { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M40H_ROOT) },
++    { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M60H_ROOT) },
++    { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_19H_M70H_ROOT) },
++    { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_1AH_M00H_ROOT) },
++    { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_1AH_M20H_ROOT) },
++    { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_MI200_ROOT) },
++    { PCI_DEVICE(PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_MI300_ROOT) }, 
+     { }
+ };
+ MODULE_DEVICE_TABLE(pci, ryzen_smu_id_table);
+diff --git a/lib/libsmu.c b/lib/libsmu.c
+index 6d85482..9ce8689 100755
+--- a/lib/libsmu.c
++++ b/lib/libsmu.c
+@@ -450,6 +450,8 @@ const char* smu_codename_to_str(smu_obj_t* obj) {
+             return "Thread Ripper";
+         case CODENAME_REMBRANDT:
+             return "Rembrandt";
++        case CODENAME_RAPHAEL:
++            return "Raphael";
+         case CODENAME_VERMEER:
+             return "Vermeer";
+         case CODENAME_VANGOGH:
+@@ -464,6 +466,8 @@ const char* smu_codename_to_str(smu_obj_t* obj) {
+             return "Lucienne";
+         case CODENAME_NAPLES:
+             return "Naples";
++        case CODENAME_PHOENIX:
++            return "Phoenix";
+         default:
+             return "Undefined";
+     }
+diff --git a/lib/libsmu.h b/lib/libsmu.h
+index 6b68b19..efddc38 100755
+--- a/lib/libsmu.h
++++ b/lib/libsmu.h
+@@ -86,6 +86,7 @@ typedef enum {
+     CODENAME_SUMMITRIDGE,
+     CODENAME_PINNACLERIDGE,
+     CODENAME_REMBRANDT,
++    CODENAME_RAPHAEL,
+     CODENAME_VERMEER,
+     CODENAME_VANGOGH,
+     CODENAME_CEZANNE,
+@@ -94,6 +95,7 @@ typedef enum {
+     CODENAME_LUCIENNE,
+     CODENAME_NAPLES,
+     CODENAME_CHAGALL,
++    CODENAME_PHOENIX,
+ 
+     CODENAME_COUNT
+ } smu_processor_codename;
+diff --git a/scripts/dump_pm_table.py b/scripts/dump_pm_table.py
+index 2b3ebcc..91b6ae9 100755
+--- a/scripts/dump_pm_table.py
++++ b/scripts/dump_pm_table.py
+@@ -74,7 +74,12 @@ def getCodeName():
+         "Vangogh",
+         "Cezanne",
+         "Milan",
+-        "Dali"
++        "Dali",
++        "Lucienne",
++        "Naples",
++        "Chagall",
++        "Raphael",
++        "Phoenix"
+     ]
+     args = read_file_str(CN_PATH, 2)
+ 
+diff --git a/scripts/test.py b/scripts/test.py
+index 301e457..6bb2ff3 100755
+--- a/scripts/test.py
++++ b/scripts/test.py
+@@ -179,7 +179,12 @@ def test_get_codename():
+         "Vangogh",
+         "Cezanne",
+         "Milan",
+-        "Dali"
++        "Dali",
++        "Lucienne",
++        "Naples",
++        "Chagall",
++        "Raphael",
++        "Phoenix"
+     ]
+     args = read_file_str(CN_PATH, 3)
+ 
+diff --git a/smu.c b/smu.c
+index 40a57c1..620e2e6 100755
+--- a/smu.c
++++ b/smu.c
+@@ -289,7 +289,7 @@ int smu_resolve_cpu_class(struct pci_dev* dev) {
+         return 0;
+     }
+ 
+-    // Zen3 (model IDs for unreleased silicon not confirmed yet).
++    // Zen3/4 (model IDs for unreleased silicon not confirmed yet).
+     else if (cpu_family == 0x19) {
+         switch(cpu_model) {
+             case 0x01:
+@@ -303,6 +303,7 @@ int smu_resolve_cpu_class(struct pci_dev* dev) {
+                 g_smu.codename = CODENAME_VERMEER;
+                 break;
+             case 0x40:
++            case 0x44:
+                 g_smu.codename = CODENAME_REMBRANDT;
+                 break;
+             case 0x50:
+@@ -311,6 +312,9 @@ int smu_resolve_cpu_class(struct pci_dev* dev) {
+             case 0x61:
+                 g_smu.codename = CODENAME_RAPHAEL;
+                 break;
++            case 0x74:
++                g_smu.codename = CODENAME_PHOENIX;
++                break;
+             default:
+                 pr_err("CPUID: Unknown Zen3/4 processor model: 0x%X (CPUID: 0x%08X)", cpu_model, cpuid);
+                 return -2;
+@@ -319,7 +323,7 @@ int smu_resolve_cpu_class(struct pci_dev* dev) {
+     }
+ 
+     else {
+-        pr_err("CPUID: failed to detect Zen/Zen+/Zen2/Zen3 processor family (%Xh).", cpu_family);
++        pr_err("CPUID: failed to detect Zen/Zen+/Zen2/Zen3/Zen4 processor family (%Xh).", cpu_family);
+         return -1;
+     }
+ }
+@@ -360,12 +364,13 @@ int smu_init(struct pci_dev* dev) {
+         case CODENAME_RAVENRIDGE:
+         case CODENAME_RAVENRIDGE2:
+         case CODENAME_DALI:
++        case CODENAME_REMBRANDT:
++        case CODENAME_PHOENIX:
+             g_smu.addr_rsmu_mb_cmd  = 0x3B10A20;
+             g_smu.addr_rsmu_mb_rsp  = 0x3B10A80;
+             g_smu.addr_rsmu_mb_args = 0x3B10A88;
+             goto LOG_RSMU;
+-        case CODENAME_VANGOGH:
+-        case CODENAME_REMBRANDT:
++        case CODENAME_VANGOGH:        
+             pr_debug("RSMU Mailbox: Not supported or unknown, disabling use.");
+             goto MP1_DETECT;
+         default:
+@@ -403,6 +408,7 @@ LOG_RSMU:
+         case CODENAME_DALI:
+         case CODENAME_VANGOGH:
+         case CODENAME_REMBRANDT:
++        case CODENAME_PHOENIX:
+             goto MP1_DETECT;
+         default:
+             pr_err("Unknown processor codename: %d", g_smu.codename);
+@@ -457,6 +463,7 @@ MP1_DETECT:
+             break;
+         case CODENAME_VANGOGH:
+         case CODENAME_REMBRANDT:
++        case CODENAME_PHOENIX:
+             g_smu.mp1_if_ver       = IF_VERSION_13;
+             g_smu.addr_mp1_mb_cmd   = 0x3B10528;
+             g_smu.addr_mp1_mb_rsp   = 0x3B10578;
+@@ -500,6 +507,7 @@ const char* getCodeName(enum smu_processor_codename codename)
+       case CODENAME_NAPLES: return "Naples";
+       case CODENAME_CHAGALL: return "Chagall";
+       case CODENAME_RAPHAEL: return "Raphael";
++      case CODENAME_PHOENIX: return "Phoenix";
+       default: return "Undefined";
+    }
+ }
+@@ -570,6 +578,8 @@ u64 smu_get_dram_base_address(struct pci_dev* dev) {
+         case CODENAME_RENOIR:
+         case CODENAME_LUCIENNE:
+         case CODENAME_CEZANNE:
++        case CODENAME_REMBRANDT:
++        case CODENAME_PHOENIX:
+             fn[0] = 0x66;
+             goto BASE_ADDR_CLASS_1;
+         case CODENAME_COLFAX:
+@@ -680,6 +690,8 @@ enum smu_return_val smu_transfer_table_to_dram(struct pci_dev* dev) {
+             break;
+         case CODENAME_RENOIR:
+         case CODENAME_LUCIENNE:
++        case CODENAME_REMBRANDT:
++        case CODENAME_PHOENIX:
+             args.s.arg0 = 3;
+             fn = 0x65;
+             break;
+@@ -768,6 +780,8 @@ enum smu_return_val smu_get_pm_table_version(struct pci_dev* dev, u32* version)
+         case CODENAME_RENOIR:
+         case CODENAME_LUCIENNE:
+         case CODENAME_CEZANNE:
++        case CODENAME_REMBRANDT:
++        case CODENAME_PHOENIX:
+             fn = 0x06;
+             break;
+         default:
+@@ -884,6 +898,16 @@ u32 smu_update_pmtable_size(u32 version) {
+                     goto UNKNOWN_PM_TABLE_VERSION;
+             }
+             break;
++        case CODENAME_REMBRANDT:
++            switch (version) {
++                case 0x450004:
++                case 0x450005:
++                    g_smu.pm_dram_map_size = 0xA44;
++                    break;
++                default:
++                    goto UNKNOWN_PM_TABLE_VERSION;
++            }
++            break;
+         case CODENAME_PICASSO:
+         case CODENAME_RAVENRIDGE:
+         case CODENAME_RAVENRIDGE2:
+@@ -909,6 +933,18 @@ u32 smu_update_pmtable_size(u32 version) {
+                     goto UNKNOWN_PM_TABLE_VERSION;
+             }
+             break;
++        case CODENAME_PHOENIX:
++            switch (version) {
++                case 0x4C0006:
++                case 0x4C0007:
++                case 0x4C0008:
++                    g_smu.pm_dram_map_size = 0xAA0;
++                    break;
++                default:
++                    goto UNKNOWN_PM_TABLE_VERSION;
++            }
++            break;
++
+         default:
+             return SMU_Return_Unsupported;
+     }
+@@ -941,6 +977,8 @@ enum smu_return_val smu_read_pm_table(struct pci_dev* dev, unsigned char* dst, s
+             g_smu.codename == CODENAME_RAPHAEL  ||
+             g_smu.codename == CODENAME_RENOIR   ||
+             g_smu.codename == CODENAME_LUCIENNE ||
++            g_smu.codename == CODENAME_REMBRANDT  ||
++            g_smu.codename == CODENAME_PHOENIX  ||
+             g_smu.codename == CODENAME_CEZANNE  ||
+             g_smu.codename == CODENAME_CHAGALL  ||
+             g_smu.codename == CODENAME_MILAN) {
+diff --git a/smu.h b/smu.h
+index 62bc256..525e326 100755
+--- a/smu.h
++++ b/smu.h
+@@ -85,6 +85,7 @@ enum smu_processor_codename {
+     CODENAME_NAPLES,
+     CODENAME_CHAGALL,
+     CODENAME_RAPHAEL,
++    CODENAME_PHOENIX,
+ 
+     CODENAME_COUNT
+ };

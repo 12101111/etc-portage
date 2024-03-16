@@ -1,0 +1,24 @@
+gui-apps/swaylock-effects **
+gui-apps/wf-recorder **
+
+dev-util/bpftrace **
+
+app-text/goldendict **
+<media-gfx/gimp-9999 **
+dev-lang/luajit **
+games-emulation/yuzu **
+dev-debug/lldb-mi **
+
+media-libs/mesa **
+dev-util/intel_clc **
+
+media-libs/vulkan-loader **
+dev-util/vulkan-headers **
+dev-util/vulkan-tools **
+dev-util/glslang **
+dev-util/spirv-tools **
+dev-util/spirv-headers **
+dev-util/volk **
+
+dev-lang/zig **
+dev-lang/rust **
