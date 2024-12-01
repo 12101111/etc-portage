@@ -1,14 +1,15 @@
 app-portage/portage-bashrc-mv
 app-shells/runtitle
-app-emulation/winetricks
 
-gui-apps/wayvnc
-dev-libs/aml
-net-misc/neatvnc
-
-dev-libs/elfutils
-app-office/libreoffice::gentoo
-app-office/libreoffice-l10n::gentoo
-app-text/po4a
-
-<dev-util/pkgconf-9999
+kde-frameworks/*
+kde-plasma/*
+kde-apps/*
+kde-misc/*
+dev-libs/kirigami-addons
+sys-auth/polkit-qt
+net-libs/kdsoap
+net-libs/kdsoap-ws-discovery-client
+dev-libs/appstream
+media-libs/phonon
+www-client/falkon
+media-libs/mesa

@@ -1,26 +1,24 @@
 diff --git a/getcifsacl.c b/getcifsacl.c
-index 1c01062..d31b4c0 100644
+index 123d11e..905e33c 100644
 --- a/getcifsacl.c
 +++ b/getcifsacl.c
-@@ -35,6 +35,8 @@
- #include <limits.h>
+@@ -37,6 +37,7 @@
  #include <ctype.h>
+ #include <linux/limits.h>
  #include <sys/xattr.h>
-+#include <linux/limits.h>
-+#include <endian.h>
++#include <libgen.h>
  #include "cifsacl.h"
  #include "idmap_plugin.h"
  #include <ftw.h>
 diff --git a/setcifsacl.c b/setcifsacl.c
-index db9cf2c..9adeec8 100644
+index 0bdc176..aefa724 100644
 --- a/setcifsacl.c
 +++ b/setcifsacl.c
-@@ -49,6 +49,8 @@
- #include <limits.h>
+@@ -51,6 +51,7 @@
  #include <ctype.h>
+ #include <linux/limits.h>
  #include <sys/xattr.h>
-+#include <linux/limits.h>
-+#include <endian.h>
++#include <libgen.h>
  
  #include "cifsacl.h"
  #include "idmap_plugin.h"

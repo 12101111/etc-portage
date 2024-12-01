@@ -1,5 +1,6 @@
 # no lto
 sys-libs/musl /-flto*/-fno-lto
+dev-lang/rust /*lto*// RUSTFLAGS-=-Clinker* RUSTFLAGS-=-Clink-arg=-f* RUSTFLAGS-=-*lto*
 app-emulation/libvirt /-flto*/-fno-lto #segfault
 dev-python/libvirt-python /-flto*/-fno-lto # bus error
 media-libs/mesa /-flto*/-fno-lto #dont build
@@ -30,9 +31,11 @@ dev-lang/ghc /-flto*// LDFLAGS-=-Wl,* HCFLAGS+=-fPIC
 net-fs/nfs-utils /-flto*//
 sys-fs/xfsprogs /-flto*//
 net-misc/networkmanager /-flto*//
-
-# LLVM 18
-dev-lang/rust /-flto*//
+cross_llvm-loongarch64-unknown-linux-musl/compiler-rt /-flto*//
+cross_llvm-wasm32-wasi/compiler-rt /-flto*//
+cross_llvm-wasm32-wasip1/compiler-rt /-flto*//
+kde-frameworks/breeze-icons /-flto*//
+net-fs/nfs-utils /-flto*// /-Wl,*//
 
 # no polly
 media-gfx/krita /-mllvm// /-polly*//
@@ -49,6 +52,7 @@ net-wireless/iwd LDFLAGS-=-Wl,--gc-sections
 dev-libs/ell LDFLAGS-=-Wl,--gc-sections
 net-wireless/iw LDFLAGS-=-Wl,--gc-sections
 x11-libs/libxkbcommon LDFLAGS-=-Wl,--gc-sections
+dev-util/rizin LDFLAGS-=-Wl,--gc-sections /-flto*//
 
 # mozbuild bug. rustc isn't used for final link anyway
 # mozbuild.configure.options.InvalidOptionError: RUSTFLAGS takes 1 value
@@ -112,6 +116,9 @@ kde-apps/kio-extras CFLAGS+=-D_GNU_SOURCE
 dev-perl/XS-Parse-Keyword LD=clang
 dev-perl/Syntax-Keyword-Try LD=clang
 games-emulation/yuzu CXXFLAGS+=-fexperimental-library /-flto*//
+app-cdr/cdrtools /-ffunction-sections//
+dev-lang/rust /-Coverflow-checks=on//
+media-video/ffmpeg CFLAGS+=-D__musl__
 
 # LFS64
 app-misc/broot RUSTFLAGS+=-L/usr/local/lib RUSTFLAGS+=-lalias
@@ -145,3 +152,6 @@ dev-util/electron LDFLAGS+=-Wl,--undefined-version
 games-util/mangohud LDFLAGS+=-Wl,--undefined-version
 sys-libs/liburing LDFLAGS+=-Wl,--undefined-version
 media-libs/libv4l LDFLAGS+=-Wl,--undefined-version
+sys-apps/util-linux LDFLAGS+=-Wl,--undefined-version
+dev-libs/libayatana-appindicator LDFLAGS+=-Wl,--undefined-version
+net-vpn/networkmanager-openvpn LDFLAGS+=-Wl,--undefined-version

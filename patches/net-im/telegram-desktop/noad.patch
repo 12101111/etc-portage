@@ -1,13 +1,16 @@
-diff --git a/Telegram/SourceFiles/data/data_sponsored_messages.cpp b/Telegram/SourceFiles/data/data_sponsored_messages.cpp
-index 9b49070..e44c5de 100644
---- a/Telegram/SourceFiles/data/data_sponsored_messages.cpp
-+++ b/Telegram/SourceFiles/data/data_sponsored_messages.cpp
-@@ -82,7 +82,7 @@ bool SponsoredMessages::append(not_null<History*> history) {
- }
+diff --git a/Telegram/SourceFiles/data/components/sponsored_messages.cpp b/Telegram/SourceFiles/data/components/sponsored_messages.cpp
+index d2746ad..86a7359 100644
+--- a/Telegram/SourceFiles/data/components/sponsored_messages.cpp
++++ b/Telegram/SourceFiles/data/components/sponsored_messages.cpp
+@@ -196,9 +196,9 @@ void SponsoredMessages::inject(
  
  bool SponsoredMessages::canHaveFor(not_null<History*> history) const {
--	return history->peer->isChannel();
-+	return false;
+ 	if (history->peer->isChannel()) {
+-		return true;
++		return false;
+ 	} else if (const auto user = history->peer->asUser()) {
+-		return user->isBot();
++		return false;
+ 	}
+ 	return false;
  }
- 
- void SponsoredMessages::request(not_null<History*> history) {

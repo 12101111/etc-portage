@@ -1,0 +1,4 @@
+cross_llvm-loongarch64-unknown-linux-musl/linux-headers loong ~loong -amd64 -~amd64 **
+cross_llvm-loongarch64-unknown-linux-musl/musl loong ~loong -amd64 -~amd64 **
+cross_llvm-loongarch64-unknown-linux-musl/compiler-rt loong ~loong -amd64 -~amd64 **
+cross_llvm-loongarch64-unknown-linux-musl/clang-crossdev-wrappers loong ~loong -amd64 -~amd64 **

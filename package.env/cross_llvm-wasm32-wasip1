@@ -1,0 +1,6 @@
+cross_llvm-wasm32-wasip1/linux-headers cross_llvm-wasm32-wasip1/linux-headers.conf
+cross_llvm-wasm32-wasip1/linux-headers cross_llvm-wasm32-wasip1/llvm.conf
+cross_llvm-wasm32-wasip1/compiler-rt cross_llvm-wasm32-wasip1/compiler-rt.conf
+cross_llvm-wasm32-wasip1/compiler-rt cross_llvm-wasm32-wasip1/llvm.conf
+cross_llvm-wasm32-wasip1/clang-crossdev-wrappers cross_llvm-wasm32-wasip1/clang-crossdev-wrappers.conf
+cross_llvm-wasm32-wasip1/clang-crossdev-wrappers cross_llvm-wasm32-wasip1/llvm.conf

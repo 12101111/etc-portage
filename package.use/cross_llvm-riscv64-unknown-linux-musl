@@ -1,0 +1,4 @@
+cross_llvm-riscv64-unknown-linux-musl/clang-crossdev-wrappers -multilib
+cross_llvm-riscv64-unknown-linux-musl/compiler-rt -selinux -multilib
+cross_llvm-riscv64-unknown-linux-musl/linux-headers -selinux -multilib
+cross_llvm-riscv64-unknown-linux-musl/musl -selinux -libraries -multilib

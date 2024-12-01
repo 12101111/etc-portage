@@ -1,0 +1,6 @@
+COMMON_FLAGS="-march=znver4 -mtune=znver4 -pipe -O2 -g"
+CFLAGS="${COMMON_FLAGS}"
+CXXFLAGS="${COMMON_FLAGS} -stdlib=libc++"
+RUSTFLAGS="-Copt-level=2 -g -Ctarget-feature=-crt-static"
+LDFLAGS="-fuse-ld=lld -rtlib=compiler-rt -unwindlib=libunwind"
+FEATURES="nostrip"

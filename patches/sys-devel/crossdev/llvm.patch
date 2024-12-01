@@ -1,0 +1,32 @@
+diff --git a/crossdev b/crossdev
+index 887cf7a..66b30c2 100755
+--- a/crossdev
++++ b/crossdev
+@@ -1637,8 +1637,9 @@ esac
+ if [[ "${LLVM}" == "yes" ]] ; then
+ 	cat <<-EOF > "${CONFIGROOT}/env/${CROSSDEV_OVERLAY_CATEGORY}/llvm.conf"
+ 	AR=llvm-ar
+-	AS="${CTARGET}-clang -c"
++	AS="${CTARGET}-as"
+ 	CC="${CTARGET}-clang"
++	CPP="${CTARGET}-cpp"
+ 	CROSS_COMPILE="${CTARGET}-"
+ 	CXX="${CTARGET}-clang++"
+ 	DLLTOOL=llvm-dlltool
+diff --git a/wrappers/emerge-wrapper b/wrappers/emerge-wrapper
+index eab8f96..f4a245c 100755
+--- a/wrappers/emerge-wrapper
++++ b/wrappers/emerge-wrapper
+@@ -89,9 +89,11 @@ cross_wrap_etc()
+ 
+ 	if [[ "${LLVM}" == "yes" ]] ; then
+ 		cat <<-EOF >>${SYSROOT}/etc/portage/profile/make.defaults
++	CTARGET="${CHOST}"
+ 	AR=llvm-ar
+-	AS=llvm-as
++	AS="${CHOST}-as"
+ 	CC="${CHOST}-clang"
++	CPP="${CHOST}-cpp"
+ 	CROSS_COMPILE="${CHOST}-"
+ 	CXX="${CHOST}-clang++"
+ 	DLLTOOL=llvm-dlltool

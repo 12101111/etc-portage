@@ -1,0 +1,23 @@
+diff --git a/plugins/ssstc/ssstc-nvme.c b/plugins/ssstc/ssstc-nvme.c
+index 03e4fe3..346e0e9 100644
+--- a/plugins/ssstc/ssstc-nvme.c
++++ b/plugins/ssstc/ssstc-nvme.c
+@@ -3,6 +3,7 @@
+ #include <errno.h>
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <stdint.h>
+ #include <unistd.h>
+ #include <inttypes.h>
+ 
+@@ -16,6 +17,10 @@
+ #define CREATE_CMD
+ #include "ssstc-nvme.h"
+ 
++#ifndef __uint16_t
++#define __uint16_t uint64_t
++#endif
++
+ struct  __packed nvme_additional_smart_log_item
+ {
+ 	__u8 key;

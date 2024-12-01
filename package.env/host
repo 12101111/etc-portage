@@ -13,11 +13,14 @@ dev-java/openjdk noccache
 dev-util/bazel noccache
 dev-lang/mono noccache
 
-media-video/obs-studio ccache
+# no file descriptor available
+# dev-dotnet/dotnet-sdk notmpfs
 
 dev-db/mongodb mongodb
 
-net-fs/nfs-utils o1debug
+dev-util/electron ccache
+www-client/chromium ccache
+games-emulation/yuzu ccache
 
 # debug
 sys-libs/musl debug
@@ -26,25 +29,21 @@ gui-wm/sway debug
 gui-libs/wlroots debug
 dev-libs/glib debug
 x11-libs/gtk+ debug
-app-emulation/bochs debug
-gui-apps/wob debug
 x11-base/xwayland debug
-gui-apps/waybar debug
-dev-debug/lldb debug
-dev-lang/python debug
-media-libs/libwebp debug
 kde-frameworks/kio o1debug
-gnome-base/gnome-keyring o1debug
-sci-mathematics/z3 o1debug
+kde-apps/kio-extras o1debug
+gnome-base/gnome-keyring debug
+sci-mathematics/z3 debug
 sys-libs/gcompat debug
-sys-devel/clang debug
+dev-util/binaryen debug
+dev-util/perf debug
+app-shells/zsh debug
+dev-util/ccache debug
 app-emulation/wine-staging wine
 app-emulation/dxvk wine
 app-emulation/vkd3d wine
 app-emulation/wine-vanilla wine
-
-dev-util/binaryen o1debug
-dev-util/perf o1debug
-app-cdr/cdrtools o1debug
-
-#dev-scheme/racket clang17
+gui-wm/gamescope debug
+sys-libs/libcxx debug
+sys-libs/libcxxabi debug
+sys-libs/llvm-libgcc debug

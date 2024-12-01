@@ -1,0 +1,3 @@
+cross_llvm-wasm32-wasi/linux-headers  multilib
+cross_llvm-wasm32-wasi/compiler-rt  multilib
+cross_llvm-wasm32-wasi/clang-crossdev-wrappers  multilib

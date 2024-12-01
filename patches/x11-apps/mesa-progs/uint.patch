@@ -1,0 +1,15 @@
+diff --git a/src/vulkan/wsi/wayland.c b/src/vulkan/wsi/wayland.c
+index 444d2bb..ca10674 100644
+--- a/src/vulkan/wsi/wayland.c
++++ b/src/vulkan/wsi/wayland.c
+@@ -50,6 +50,10 @@
+ 
+ #include "wsi.h"
+ 
++#ifndef uint
++#define uint unsigned int
++#endif
++
+ static struct wsi_callbacks wsi_callbacks;
+ 
+ static struct wl_display *display;

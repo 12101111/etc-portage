@@ -1,6 +1,5 @@
 */*::mv
 */*::pg_overlay
 
-dev-libs/elftoolchain
-virtual/libelf::12101111-overlay
-media-sound/pulseaudio-daemon
+sys-devel/gcc
+dev-lang/python:3.13
