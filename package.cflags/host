@@ -53,6 +53,7 @@ dev-libs/ell LDFLAGS-=-Wl,--gc-sections
 net-wireless/iw LDFLAGS-=-Wl,--gc-sections
 x11-libs/libxkbcommon LDFLAGS-=-Wl,--gc-sections
 dev-util/rizin LDFLAGS-=-Wl,--gc-sections /-flto*//
+dev-embedded/u-boot-tools LDFLAGS-=-Wl,--gc-sections /-flto*//
 
 # mozbuild bug. rustc isn't used for final link anyway
 # mozbuild.configure.options.InvalidOptionError: RUSTFLAGS takes 1 value
@@ -61,11 +62,11 @@ www-client/firefox RUSTFLAGS-=-Clink-arg=-Wl,*
 mail-client/thunderbird RUSTFLAGS-=-Clink-arg=-Wl,*
 
 # stack overflow
-sys-devel/clang LDFLAGS+=-Wl,-z,stack-size=0x800000
-sys-devel/lld LDFLAGS+=-Wl,-z,stack-size=0x800000
+llvm-core/clang LDFLAGS+=-Wl,-z,stack-size=0x800000
+llvm-core/lld LDFLAGS+=-Wl,-z,stack-size=0x800000
 sys-devel/binutils LDFLAGS+=-Wl,-z,stack-size=0x200000
 dev-lang/python LDFLAGS+=-Wl,-z,stack-size=0x200000
-dev-debug/lldb LDFLAGS+=-Wl,-z,stack-size=0x800000
+llvm-core/lldb LDFLAGS+=-Wl,-z,stack-size=0x800000
 dev-dotnet/coreclr LDFLAGS+=-Wl,-z,stack-size=0x800000
 dev-dotnet/corehost LDFLAGS+=-Wl,-z,stack-size=0x800000
 app-text/goldendict LDFLAGS+=-Wl,-z,stack-size=0x800000
@@ -79,7 +80,7 @@ dev-libs/nss /-fno-plt//
 media-video/ffmpeg /-fno-plt//
 sys-libs/glibc /-fno-plt//
 sys-libs/musl /-fno-plt//
-sys-libs/compiler-rt-sanitizers /-fno-plt//
+llvm-runtimes/compiler-rt-sanitizers /-fno-plt//
 x11-base/xorg-server /-fno-plt//
 dev-db/mongodb /-fno-plt// # clang17 fontend ICE
 
@@ -87,7 +88,7 @@ dev-db/mongodb /-fno-plt// # clang17 fontend ICE
 dev-util/cmake C*FLAGS+=-Qunused-arguments
 net-libs/libssh C*FLAGS+=-Qunused-arguments
 dev-libs/vc C*FLAGS+=-Qunused-arguments
-sys-devel/clang C*FLAGS+=-Qunused-arguments
+llvm-core/clang C*FLAGS+=-Qunused-arguments
 
 # missing libs
 net-libs/gtk-vnc LDFLAGS+=-lucontext
@@ -155,3 +156,4 @@ media-libs/libv4l LDFLAGS+=-Wl,--undefined-version
 sys-apps/util-linux LDFLAGS+=-Wl,--undefined-version
 dev-libs/libayatana-appindicator LDFLAGS+=-Wl,--undefined-version
 net-vpn/networkmanager-openvpn LDFLAGS+=-Wl,--undefined-version
+dev-libs/glib LDFLAGS+=-Wl,--undefined-version

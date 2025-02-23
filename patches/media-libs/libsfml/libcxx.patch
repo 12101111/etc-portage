@@ -1,0 +1,51 @@
+diff --git a/include/SFML/System/String.hpp b/include/SFML/System/String.hpp
+index 202f451..2dd2810 100644
+--- a/include/SFML/System/String.hpp
++++ b/include/SFML/System/String.hpp
+@@ -34,6 +34,46 @@
+ #include <locale>
+ #include <string>
+ 
++template<class CharT, class BaseT>
++class traits_cloner
++{
++public:
++    using char_type = CharT;
++
++    using base_type = BaseT;
++    using base_traits = std::char_traits<base_type>;
++
++    static std::size_t length(char_type const* s) {
++        return base_traits::length(reinterpret_cast<base_type const*>(s));
++    }
++    static int compare(char_type const* s1, char_type const* s2, std::size_t count) {
++        return base_traits::compare(reinterpret_cast<base_type const*>(s1), reinterpret_cast<base_type const*>(s2), count);
++    }
++    static char_type* copy(char_type* dest, char_type const* src, std::size_t count) {
++        return reinterpret_cast<char_type*>(base_traits::copy(reinterpret_cast<base_type*>(dest), reinterpret_cast<base_type const*>(src), count));
++    }
++    static void assign(char_type& c1, char_type const& c2) noexcept {
++        c1 = c2;
++    }
++    static char_type const* find(char_type const* ptr, std::size_t count, char_type const& ch) {
++        return reinterpret_cast<char_type const*>(base_traits::find(reinterpret_cast<base_type const*>(ptr), count, reinterpret_cast<base_type const&>(ch)));
++    }
++    static char_type* move(char_type* s1, const char_type* s2, std::size_t count) {
++        return reinterpret_cast<char_type *>(base_traits::move(reinterpret_cast<base_type*>(s1), reinterpret_cast<base_type const*>(s2), count));
++    }
++};
++
++template<>
++class std::char_traits<unsigned char> : public traits_cloner<unsigned char, char>
++{};
++
++template<>
++class std::char_traits<unsigned short> : public traits_cloner<unsigned short, char16_t>
++{};
++
++template<>
++class std::char_traits<unsigned int> : public traits_cloner<unsigned int, char32_t>
++{};
+ 
+ namespace sf
+ {

@@ -1,5 +1,9 @@
-sys-devel/llvm
-dev-debug/lldb
-sys-devel/lld
-sys-devel/clang
+# move sys-devel/llvm llvm-core/llvm
+llvm-core/llvm
+# move dev-debug/lldb llvm-core/lldb
+llvm-core/lldb
+# move sys-devel/lld llvm-core/lld
+llvm-core/lld
+# move sys-devel/clang llvm-core/clang
+llvm-core/clang
 dev-lang/rust

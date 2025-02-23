@@ -1,22 +1,22 @@
 # remove gcc
 -*sys-devel/gcc
 # system libraries
-sys-libs/compiler-rt
-sys-libs/compiler-rt-sanitizers
-sys-libs/libcxx
-sys-libs/libcxxabi
-sys-libs/libomp
-sys-libs/llvm-libunwind
+llvm-runtimes/compiler-rt
+llvm-runtimes/compiler-rt-sanitizers
+llvm-runtimes/libcxx
+llvm-runtimes/libcxxabi
+llvm-runtimes/libunwind
+llvm-runtimes/openmp
 sys-libs/libucontext
 sys-libs/fts-standalone
 sys-libs/obstack-standalone
 sys-libs/libexecinfo
 sys-libs/musl-legacy-compat
 # compiler and binutils
-sys-devel/llvm
-sys-devel/clang
-sys-devel/lld
-dev-debug/lldb
+llvm-core/llvm
+llvm-core/clang
+llvm-core/lld
+llvm-core/lldb
 # kernel
 net-wireless/wireless-regdb
 sys-devel/bc

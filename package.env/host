@@ -8,6 +8,9 @@ sys-libs/binutils-libs clang_dont_supports_ada
 dev-util/mingw64-toolchain clang_dont_supports_ada
 dev-debug/gdb clang_dont_supports_ada
 sys-devel/gcc clang_dont_supports_ada
+cross-aarch64-unknown-linux-gnu/binutils clang_dont_supports_ada
+cross-aarch64-unknown-linux-gnu/gdb clang_dont_supports_ada
+cross-aarch64-unknown-linux-gnu/gcc clang_dont_supports_ada
 
 dev-java/openjdk noccache
 dev-util/bazel noccache
@@ -44,6 +47,6 @@ app-emulation/dxvk wine
 app-emulation/vkd3d wine
 app-emulation/wine-vanilla wine
 gui-wm/gamescope debug
-sys-libs/libcxx debug
-sys-libs/libcxxabi debug
-sys-libs/llvm-libgcc debug
+llvm-runtimes/libcxx debug
+llvm-runtimes/libcxxabi debug
+llvm-runtimes/libgcc debug

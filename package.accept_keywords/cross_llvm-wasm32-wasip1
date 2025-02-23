@@ -1,3 +1,3 @@
 cross_llvm-wasm32-wasip1/compiler-rt * ~* -amd64 -~amd64
-cross_llvm-wasm32-wasip1/clang-crossdev-wrappers * ~* -amd64 -~amd64
+cross_llvm-wasm32-wasip1/clang-crossdev-wrappers ** ~* -amd64 -~amd64
 cross_llvm-wasm32-wasip1/rust-std **

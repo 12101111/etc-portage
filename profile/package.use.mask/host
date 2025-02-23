@@ -4,5 +4,7 @@ dev-util/mingw64-toolchain -multilib
 www-client/firefox -clang -pgo
 net-im/telegram-desktop -qt6
 app-i18n/fcitx-qt -qt6
->=sys-devel/llvm-16.0.3 LLVM_TARGETS: -SPIRV
->=sys-devel/clang-16.0.3 LLVM_TARGETS: -SPIRV
+# move sys-devel/llvm llvm-core/llvm
+>=llvm-core/llvm-16.0.3 LLVM_TARGETS: -SPIRV
+# move sys-devel/clang llvm-core/clang
+>=llvm-core/clang-16.0.3 LLVM_TARGETS: -SPIRV

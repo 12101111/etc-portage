@@ -1,0 +1,15 @@
+diff --git a/src/gl/shim.c b/src/gl/shim.c
+index 5ac335e..98b61e9 100644
+--- a/src/gl/shim.c
++++ b/src/gl/shim.c
+@@ -9,6 +9,10 @@
+ #include <stdbool.h>
+ #include <stdlib.h>
+ 
++#ifndef RTLD_DEEPBIND
++#define RTLD_DEEPBIND 0
++#endif
++
+ static void* handle = NULL;
+ static bool mangoHudLoaded = false;
+ 

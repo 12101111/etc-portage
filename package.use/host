@@ -4,16 +4,13 @@ dev-lang/rust system-llvm system-bootstrap rustfmt wasm -nightly wasi clippy rus
 dev-lang/rust-bin rustfmt profiler
 virtual/rust rustfmt profiler
 dev-lang/go system-bootstrap # to upgrade itself
-sys-devel/llvm libedit gold exegesis polly mlir zstd doc LLVM_TARGETS: SPIRV
-sys-devel/llvm:19 debuginfod xml LLVM_TARGETS: DirectX M68k Xtensa
-dev-debug/lldb libedit lzma
->=dev-debug/lldb-19.1.0 debuginfod
-sys-devel/clang xml default-lld LLVM_TARGETS: SPIRV # lldb
-sys-devel/clang:19 LLVM_TARGETS: DirectX M68k Xtensa
-sys-libs/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray libfuzzer profile
+llvm-core/llvm libedit gold exegesis polly mlir zstd doc debuginfod xml LLVM_TARGETS: DirectX M68k Xtensa SPIRV
+llvm-core/lldb libedit lzma debuginfod
+llvm-core/clang xml default-lld LLVM_TARGETS: SPIRV DirectX M68k Xtensa
+llvm-runtimes/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray libfuzzer profile
 dev-java/openjdk gentoo-vm
 dev-lang/ghc doc ghcbootstrap elfutils
-sys-devel/clang-toolchain-symlinks gcc-symlinks
+llvm-core/clang-toolchain-symlinks gcc-symlinks
 */* llvm_slot_19 -llvm_slot_18
 
 # Graphic
@@ -26,7 +23,7 @@ gui-wm/sway wallpapers tray -swaylock fish-completion seatd
 gui-apps/waybar network tray mpd wifi pulseaudio evdev experimental libinput logind mpris pipewire upower
 
 # Apps
-www-client/firefox wasm hwaccel clang lto pgo screencast system-png openh264
+www-client/firefox wasm-sandbox hwaccel clang lto pgo screencast system-png openh264
 mail-client/thunderbird hwaccel clang lto
 app-editors/emacs webp -jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars -X tree-sitter sqlite
 app-emacs/emacs-common gsettings
@@ -85,16 +82,17 @@ games-emulation/yuzu sdl -system-vulkan webengine
 dev-util/hotspot rust
 dev-util/ghidra -lldb
 games-action/prismlauncher qt6
+x11-misc/rofi ime
 
 # VM / Emulator
-app-emulation/qemu udev zstd -jemalloc gtk usb usbredir spice virgl pin-upstream-blobs virtfs static-user slirp io-uring virgl vte gnutls vhost-user-fs
+app-emulation/qemu udev zstd -jemalloc gtk usb usbredir spice virgl pin-upstream-blobs virtfs static-user slirp io-uring virgl vte gnutls vhost-user-fs -plugins capstone fuse bpf nfs pipewire vde
 app-emulation/libvirt zfs virt-network parted dbus virtiofsd libssh2 fuse
 app-emulation/virt-manager gui
 app-emulation/spice gstreamer
 net-misc/spice-gtk gstaudio usbredir #gstvideo
 app-emulation/pcem networking
 games-emulation/dosbox-x opengl ffmpeg fluidsynth freetype slirp
-games-emulation/dolphin ffmpeg upnp mgba
+games-emulation/dolphin ffmpeg upnp mgba egl sdl
 
 # System
 sys-kernel/linux-firmware savedconfig
@@ -102,16 +100,15 @@ dev-lang/python sqlite tk jit # firefox
 sys-apps/busybox math syslog savedconfig static -pam
 app-portage/portage-bashrc-mv ccache
 dev-java/openjdk-bin gentoo-vm
-sys-libs/llvm-libunwind static-libs
-sys-libs/libcxx static-libs
-sys-libs/libcxxabi static-libs
-dev-libs/libclc spirv
+llvm-runtimes/libunwind static-libs
+llvm-runtimes/libcxx static-libs
+llvm-runtimes/libcxxabi static-libs
+llvm-core/libclc spirv
 sys-apps/kmod zstd
 net-firewall/nftables xtables python
 sys-apps/coreutils gmp caps
 x11-drivers/nvidia-drivers -tools -X -wayland
-sys-apps/systemd elfutils xkb python boot kernel-install
-sys-apps/systemd-utils boot kernel-install
+sys-apps/systemd bpf elfutils xkb python boot
 sys-kernel/installkernel -dracut -systemd
 dev-util/ccache -static-c++
 sys-fs/zfs -unwind
@@ -257,6 +254,7 @@ dev-qt/qtbase libproxy
 dev-libs/openssl quic
 app-i18n/opencc python #fcitx-pinyin-zhwiki
 dev-python/qtpy -pyqt5
+dev-libs/appstream compose # flatpak-builder
 
 # Tex
 app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra

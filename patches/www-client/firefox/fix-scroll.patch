@@ -1,0 +1,137 @@
+
+# HG changeset patch
+# User Botond Ballo <botond@mozilla.com>
+# Date 1738023827 0
+# Node ID 7f6c162d69d24c3abc076a63505226fb908ec7a2
+# Parent  70cabc8df49e79271982f4484a15a2a259d5159b
+Bug 1932985 - Do not cancel animations when starting a new wheel block. r=dlrobertson,hiro
+
+Differential Revision: https://phabricator.services.mozilla.com/D234115
+
+diff --git a/gfx/layers/apz/src/InputQueue.cpp b/gfx/layers/apz/src/InputQueue.cpp
+--- a/gfx/layers/apz/src/InputQueue.cpp
++++ b/gfx/layers/apz/src/InputQueue.cpp
+@@ -354,17 +354,16 @@ APZEventResult InputQueue::ReceiveScroll
+     block = new WheelBlockState(aTarget, aFlags, aEvent);
+     INPQ_LOG("started new scroll wheel block %p id %" PRIu64
+              " for %starget %p\n",
+              block.get(), block->GetBlockId(),
+              aFlags.mTargetConfirmed ? "confirmed " : "", aTarget.get());
+ 
+     mActiveWheelBlock = block;
+ 
+-    CancelAnimationsForNewBlock(block, ExcludeWheel);
+     MaybeRequestContentResponse(aTarget, block);
+   } else {
+     INPQ_LOG("received new wheel event in block %p\n", block.get());
+   }
+ 
+   result.mInputBlockId = block->GetBlockId();
+ 
+   // Note that the |aTarget| the APZCTM sent us may contradict the confirmed
+diff --git a/gfx/layers/apz/test/mochitest/helper_custom_scrolling_bug1932985.html b/gfx/layers/apz/test/mochitest/helper_custom_scrolling_bug1932985.html
+new file mode 100644
+--- /dev/null
++++ b/gfx/layers/apz/test/mochitest/helper_custom_scrolling_bug1932985.html
+@@ -0,0 +1,76 @@
++<!DOCTYPE HTML>
++<meta charset="utf-8">
++<meta name="viewport" content="width=device-width, minimum-scale=1.0">
++<title>Test that a custom scrolling implementation using scrollBy() is
++       not much slower than native wheel event handling</title>
++<script src="apz_test_utils.js"></script>
++<script src="apz_test_native_event_utils.js"></script>
++<script src="/tests/SimpleTest/paint_listener.js"></script>
++<style>
++  html {
++    scroll-behavior: smooth;
++  }
++  .spacer {
++    height: 2000vh;
++  }
++</style>
++<div class="spacer"></div>
++<script>
++  async function test() {
++    // The test will be sending 10 events and expecting each to
++    // accomplish a full 50 pixels of scrolling.
++    let wheelDelta = 50;
++    let eventCount = 10;
++    let finalDestination = eventCount * wheelDelta;
++
++    // Set up a custom scrolling mechanism which emulates the one in
++    // arrowscrollbox.js in important respects:
++    //   - Listen for wheel events but preventDefault() them and scroll
++    //     using scrollBy() instead.
++    //   - Track the scroll destination in script.
++    //   - Reset the destination when a `scrollend` is received.
++    let currentDestination = 0;
++    let isScrolling = false;
++    window.addEventListener("wheel", e => {
++      if (!isScrolling) {
++        currentDestination = window.scrollY;
++        isScrolling = true;
++      }
++      currentDestination += wheelDelta;
++      let delta = currentDestination - window.scrollY;
++      window.scrollBy(0, delta);
++      e.preventDefault();
++    }, { passive: false });
++    window.addEventListener("scrollend", () => {
++      isScrolling = false;
++    });
++
++    // Make sure APZ is aware of the active event listener.
++    await promiseApzFlushedRepaints();
++
++    // Set up a promise that is resolved when we reach the expected
++    // destination.
++    let destinationPromise = new Promise(resolve => {
++      window.addEventListener("scroll", () => {
++        info(`Scrolled to ${window.scrollY}`);
++        if (window.scrollY >= finalDestination) {
++          ok(true, "Scroll destination reached");
++          resolve();
++        }
++      });
++    });
++
++    // Send 10 wheel events in fairly quick succession (one frame between each).
++    for (var i = 0; i < eventCount; i++) {
++      await synthesizeNativeWheel(window, 50, 50, 0, -50);
++      await promiseFrame();
++    }
++
++    // Wait for us to reach the destination.
++    await destinationPromise;
++  }
++
++  waitUntilApzStable()
++  .then(test)
++  .then(subtestDone, subtestFailed);
++</script>
+diff --git a/gfx/layers/apz/test/mochitest/test_group_wheelevents.html b/gfx/layers/apz/test/mochitest/test_group_wheelevents.html
+--- a/gfx/layers/apz/test/mochitest/test_group_wheelevents.html
++++ b/gfx/layers/apz/test/mochitest/test_group_wheelevents.html
+@@ -52,16 +52,20 @@ var subtests = [
+   {"file": "helper_scroll_over_scrollbar.html", "prefs": scrollbar_prefs},
+   {"file": "helper_scroll_tables_perspective.html", "prefs": prefs},
+   {"file": "helper_transform_end_on_wheel_scroll.html",
+     prefs: [["general.smoothScroll", false],
+              ["apz.test.mac.synth_wheel_input", true]]},
+   {"file": "helper_scroll_anchoring_on_wheel.html", prefs: smoothness_prefs},
+   {"file": "helper_scroll_over_subframe.html?scroll=wheel", prefs: wheel_transaction_prefs},
+   {"file": "helper_scroll_over_subframe.html?oop=true&scroll=wheel", prefs: wheel_transaction_prefs},
++  {"file": "helper_custom_scrolling_bug1932985.html", prefs: [
++    ["general.smoothScroll", true],
++    ...smoothness_prefs
++  ]}
+ ];
+ 
+ subtests.push(...buildRelativeScrollSmoothnessVariants("wheel", ["scrollBy", "scrollTo", "scrollTop"]));
+ 
+ // Only Windows has the test api implemented for this test.
+ if (getPlatform() == "windows") {
+   subtests.push(
+     {"file": "helper_dommousescroll.html", "prefs": prefs}
+

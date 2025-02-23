@@ -1,3 +1,3 @@
 cross_llvm-wasm32-wasi/linux-headers * ~* -amd64 -~amd64
 cross_llvm-wasm32-wasi/compiler-rt * ~* -amd64 -~amd64
-cross_llvm-wasm32-wasi/clang-crossdev-wrappers * ~* -amd64 -~amd64
+cross_llvm-wasm32-wasi/clang-crossdev-wrappers * ~* ** -amd64 -~amd64
