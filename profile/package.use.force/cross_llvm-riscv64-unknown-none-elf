@@ -1,0 +1,3 @@
+cross_llvm-riscv64-unknown-none-elf/newlib  multilib
+cross_llvm-riscv64-unknown-none-elf/compiler-rt  multilib
+cross_llvm-riscv64-unknown-none-elf/clang-crossdev-wrappers  multilib

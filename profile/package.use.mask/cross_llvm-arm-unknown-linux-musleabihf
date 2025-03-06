@@ -1,0 +1,4 @@
+cross_llvm-arm-unknown-linux-musleabihf/linux-headers  multilib
+cross_llvm-arm-unknown-linux-musleabihf/musl  cet multilib
+cross_llvm-arm-unknown-linux-musleabihf/compiler-rt  multilib
+cross_llvm-arm-unknown-linux-musleabihf/clang-crossdev-wrappers  multilib

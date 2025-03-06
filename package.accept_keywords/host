@@ -11,3 +11,4 @@ sys-fs/zfs::12101111-overlay **
 
 llvm-core/llvm:20 **
 llvm-core/llvm-toolchain-symlinks:20 **
+<=llvm-core/llvmgold-20 **

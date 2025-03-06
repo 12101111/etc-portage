@@ -1,0 +1,2 @@
+cross_llvm-riscv64-unknown-none-elf/clang-crossdev-wrappers multilib
+cross_llvm-riscv64-unknown-none-elf/newlib -selinux -libraries headers-only multilib

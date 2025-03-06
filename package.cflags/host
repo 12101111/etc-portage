@@ -1,6 +1,6 @@
 # no lto
 sys-libs/musl /-flto*/-fno-lto
-dev-lang/rust /*lto*// RUSTFLAGS-=-Clinker* RUSTFLAGS-=-Clink-arg=-f* RUSTFLAGS-=-*lto*
+dev-lang/rust /*lto*// RUSTFLAGS-=-Clinker* RUSTFLAGS-=-Clink-arg=-f* RUSTFLAGS-=-*lto* RUSTFLAGS-=-Ctarget-cpu=znver4 RUSTFLAGS+=-Ctarget-cpu=znver3
 app-emulation/libvirt /-flto*/-fno-lto #segfault
 dev-python/libvirt-python /-flto*/-fno-lto # bus error
 media-libs/mesa /-flto*/-fno-lto #dont build
@@ -34,6 +34,7 @@ net-misc/networkmanager /-flto*//
 cross_llvm-loongarch64-unknown-linux-musl/compiler-rt /-flto*//
 cross_llvm-wasm32-wasi/compiler-rt /-flto*//
 cross_llvm-wasm32-wasip1/compiler-rt /-flto*//
+cross_llvm-arm-unknown-linux-musleabihf/compiler-rt /-flto*// /-march*// /-mtune*//
 kde-frameworks/breeze-icons /-flto*//
 net-fs/nfs-utils /-flto*// /-Wl,*//
 

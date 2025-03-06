@@ -1,0 +1,6 @@
+cross_llvm-riscv64-unknown-none-elf/newlib cross_llvm-riscv64-unknown-none-elf/newlib.conf
+cross_llvm-riscv64-unknown-none-elf/newlib cross_llvm-riscv64-unknown-none-elf/llvm.conf
+cross_llvm-riscv64-unknown-none-elf/compiler-rt cross_llvm-riscv64-unknown-none-elf/compiler-rt.conf
+cross_llvm-riscv64-unknown-none-elf/compiler-rt cross_llvm-riscv64-unknown-none-elf/llvm.conf
+cross_llvm-riscv64-unknown-none-elf/clang-crossdev-wrappers cross_llvm-riscv64-unknown-none-elf/clang-crossdev-wrappers.conf
+cross_llvm-riscv64-unknown-none-elf/clang-crossdev-wrappers cross_llvm-riscv64-unknown-none-elf/llvm.conf

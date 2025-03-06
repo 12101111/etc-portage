@@ -1,0 +1,4 @@
+cross_llvm-arm-unknown-linux-musleabihf/clang-crossdev-wrappers -multilib
+cross_llvm-arm-unknown-linux-musleabihf/compiler-rt -selinux -multilib
+cross_llvm-arm-unknown-linux-musleabihf/linux-headers -selinux -multilib
+cross_llvm-arm-unknown-linux-musleabihf/musl -selinux -libraries -multilib

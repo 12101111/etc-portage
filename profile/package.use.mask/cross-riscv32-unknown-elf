@@ -1,0 +1,4 @@
+cross-riscv32-unknown-elf/newlib  cet -multilib
+cross-riscv32-unknown-elf/binutils  cet -multilib
+cross-riscv32-unknown-elf/gcc  default-stack-clash-protection hardened ssp pie -nopie cet -multilib
+cross-riscv32-unknown-elf/gdb  -multilib

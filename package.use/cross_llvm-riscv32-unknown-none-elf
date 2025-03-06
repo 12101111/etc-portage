@@ -1,0 +1,2 @@
+cross_llvm-riscv32-unknown-none-elf/clang-crossdev-wrappers multilib
+cross_llvm-riscv32-unknown-none-elf/binutils -binutils -cet -gprof -nls -pgo

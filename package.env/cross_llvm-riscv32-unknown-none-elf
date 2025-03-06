@@ -1,0 +1,7 @@
+cross_llvm-riscv32-unknown-none-elf/picolibc cross_llvm-riscv32-unknown-none-elf/picolibc.conf
+cross_llvm-riscv32-unknown-none-elf/picolibc cross_llvm-riscv32-unknown-none-elf/llvm.conf
+cross_llvm-riscv32-unknown-none-elf/compiler-rt cross_llvm-riscv32-unknown-none-elf/compiler-rt.conf
+cross_llvm-riscv32-unknown-none-elf/compiler-rt cross_llvm-riscv32-unknown-none-elf/llvm.conf
+cross_llvm-riscv32-unknown-none-elf/clang-crossdev-wrappers cross_llvm-riscv32-unknown-none-elf/clang-crossdev-wrappers.conf
+cross_llvm-riscv32-unknown-none-elf/clang-crossdev-wrappers cross_llvm-riscv32-unknown-none-elf/llvm.conf
+cross_llvm-riscv32-unknown-none-elf/binutils clang_dont_supports_ada

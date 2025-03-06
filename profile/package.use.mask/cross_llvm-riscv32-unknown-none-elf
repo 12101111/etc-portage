@@ -1,0 +1,3 @@
+cross_llvm-riscv32-unknown-none-elf/newlib  cet -multilib
+cross_llvm-riscv32-unknown-none-elf/compiler-rt  -multilib
+cross_llvm-riscv32-unknown-none-elf/clang-crossdev-wrappers  -multilib

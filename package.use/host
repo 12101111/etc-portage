@@ -4,7 +4,7 @@ dev-lang/rust system-llvm system-bootstrap rustfmt wasm -nightly wasi clippy rus
 dev-lang/rust-bin rustfmt profiler
 virtual/rust rustfmt profiler
 dev-lang/go system-bootstrap # to upgrade itself
-llvm-core/llvm libedit gold exegesis polly mlir zstd doc debuginfod xml LLVM_TARGETS: DirectX M68k Xtensa SPIRV
+llvm-core/llvm binutils-plugin libedit gold exegesis polly mlir zstd doc debuginfod xml LLVM_TARGETS: DirectX M68k Xtensa SPIRV
 llvm-core/lldb libedit lzma debuginfod
 llvm-core/clang xml default-lld LLVM_TARGETS: SPIRV DirectX M68k Xtensa
 llvm-runtimes/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray libfuzzer profile
