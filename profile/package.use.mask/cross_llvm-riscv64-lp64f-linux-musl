@@ -1,0 +1,4 @@
+cross_llvm-riscv64-lp64f-linux-musl/linux-headers  multilib
+cross_llvm-riscv64-lp64f-linux-musl/musl  cet multilib
+cross_llvm-riscv64-lp64f-linux-musl/compiler-rt  multilib
+cross_llvm-riscv64-lp64f-linux-musl/clang-crossdev-wrappers  multilib

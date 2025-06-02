@@ -1,0 +1,4 @@
+cross_llvm-arm-unknown-linux-musleabi/linux-headers arm ~arm -amd64 -~amd64
+cross_llvm-arm-unknown-linux-musleabi/musl arm ~arm -amd64 -~amd64
+cross_llvm-arm-unknown-linux-musleabi/compiler-rt arm ~arm -amd64 -~amd64
+cross_llvm-arm-unknown-linux-musleabi/clang-crossdev-wrappers arm ~arm -amd64 -~amd64

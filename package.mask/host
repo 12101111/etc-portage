@@ -1,9 +1,5 @@
 */*::mv
 */*::pg_overlay
 
-sys-devel/gcc
-dev-lang/python:3.13
-<dev-qt/qtbase-6.8.1
-media-libs/libsdl3::guru
-media-libs/libsdl2::guru
-media-libs/libsdl2::gentoo-zh
+#sys-devel/gcc
+>=net-libs/nodejs-24.1.0

@@ -1,0 +1,6 @@
+cross_llvm-wasm32-wasi-threads/linux-headers cross_llvm-wasm32-wasi-threads/linux-headers.conf
+cross_llvm-wasm32-wasi-threads/linux-headers cross_llvm-wasm32-wasi-threads/llvm.conf
+cross_llvm-wasm32-wasi-threads/compiler-rt cross_llvm-wasm32-wasi-threads/compiler-rt.conf
+cross_llvm-wasm32-wasi-threads/compiler-rt cross_llvm-wasm32-wasi-threads/llvm.conf
+cross_llvm-wasm32-wasi-threads/clang-crossdev-wrappers cross_llvm-wasm32-wasi-threads/clang-crossdev-wrappers.conf
+cross_llvm-wasm32-wasi-threads/clang-crossdev-wrappers cross_llvm-wasm32-wasi-threads/llvm.conf

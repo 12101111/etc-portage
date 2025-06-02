@@ -1,0 +1,118 @@
+diff --git a/src/Backends/SDLBackend.cpp b/src/Backends/SDLBackend.cpp
+index 2bb8fb0..132b255 100644
+--- a/src/Backends/SDLBackend.cpp
++++ b/src/Backends/SDLBackend.cpp
+@@ -1,6 +1,7 @@
+ // For the nested case, reads input from the SDL window and send to wayland
+ 
+ #include <X11/Xlib.h>
++#include <shared_mutex>
+ #include <thread>
+ #include <mutex>
+ #include <string>
+@@ -196,9 +197,12 @@ namespace gamescope
+ 
+ 		std::atomic<bool> m_bApplicationGrabbed = { false };
+ 		std::atomic<bool> m_bApplicationVisible = { false };
+-		std::atomic<std::shared_ptr<INestedHints::CursorInfo>> m_pApplicationCursor;
+-		std::atomic<std::shared_ptr<std::string>> m_pApplicationTitle;
+-		std::atomic<std::shared_ptr<std::vector<uint32_t>>> m_pApplicationIcon;
++		std::shared_mutex m_pApplicationCursor_lock;
++		std::shared_ptr<INestedHints::CursorInfo> m_pApplicationCursor;
++		std::shared_mutex m_pApplicationTitle_lock;
++		std::shared_ptr<std::string> m_pApplicationTitle;
++		std::shared_mutex m_pApplicationIcon_lock;
++		std::shared_ptr<std::vector<uint32_t>> m_pApplicationIcon;
+ 		SDL_Surface *m_pIconSurface = nullptr;
+ 		SDL_Surface *m_pCursorSurface = nullptr;
+ 		SDL_Cursor *m_pCursor = nullptr;
+@@ -523,6 +527,7 @@ namespace gamescope
+ 
+ 	void CSDLBackend::SetCursorImage( std::shared_ptr<INestedHints::CursorInfo> info )
+ 	{
++		std::unique_lock lock(m_pApplicationCursor_lock);
+ 		m_pApplicationCursor = info;
+ 		PushUserEvent( GAMESCOPE_SDL_EVENT_CURSOR );
+ 	}
+@@ -538,11 +543,13 @@ namespace gamescope
+ 	}
+ 	void CSDLBackend::SetTitle( std::shared_ptr<std::string> szTitle )
+ 	{
++		std::unique_lock lock(m_pApplicationTitle_lock);
+ 		m_pApplicationTitle = szTitle;
+ 		PushUserEvent( GAMESCOPE_SDL_EVENT_TITLE );
+ 	}
+ 	void CSDLBackend::SetIcon( std::shared_ptr<std::vector<uint32_t>> uIconPixels )
+ 	{
++		std::unique_lock lock(m_pApplicationIcon_lock);
+ 		m_pApplicationIcon = uIconPixels;
+ 		PushUserEvent( GAMESCOPE_SDL_EVENT_ICON );
+ 	}
+@@ -887,6 +894,7 @@ namespace gamescope
+ 					}
+ 					else if ( event.type == GetUserEventIndex( GAMESCOPE_SDL_EVENT_TITLE ) )
+ 					{
++						std::shared_lock lock(m_pApplicationTitle_lock);
+ 						std::shared_ptr<std::string> pAppTitle = m_pApplicationTitle;
+ 
+ 						std::string szTitle = pAppTitle ? *pAppTitle : "gamescope";
+@@ -900,6 +908,7 @@ namespace gamescope
+ 					}
+ 					else if ( event.type == GetUserEventIndex( GAMESCOPE_SDL_EVENT_ICON ) )
+ 					{
++						std::shared_lock lock(m_pApplicationIcon_lock);
+ 						std::shared_ptr<std::vector<uint32_t>> pIcon = m_pApplicationIcon;
+ 
+ 						if ( m_pIconSurface )
+@@ -928,6 +937,7 @@ namespace gamescope
+ 					}
+ 					else if ( event.type == GetUserEventIndex( GAMESCOPE_SDL_EVENT_CURSOR ) )
+ 					{
++						std::shared_lock lock(m_pApplicationCursor_lock);
+ 						std::shared_ptr<INestedHints::CursorInfo> pCursorInfo = m_pApplicationCursor;
+ 
+ 						if ( m_pCursorSurface )
+diff --git a/src/Backends/WaylandBackend.cpp b/src/Backends/WaylandBackend.cpp
+index 664ed0e..735ca5a 100644
+--- a/src/Backends/WaylandBackend.cpp
++++ b/src/Backends/WaylandBackend.cpp
+@@ -12,6 +12,8 @@
+ #include "Utils/TempFiles.h"
+ 
+ #include <cstring>
++#include <mutex>
++#include <shared_mutex>
+ #include <unordered_map>
+ #include <unordered_set>
+ #include <csignal>
+@@ -532,7 +534,8 @@ namespace gamescope
+         std::optional<wl_fixed_t> m_ofPendingCursorX;
+         std::optional<wl_fixed_t> m_ofPendingCursorY;
+ 
+-        std::atomic<std::shared_ptr<zwp_relative_pointer_v1>> m_pRelativePointer = nullptr;
++        std::shared_mutex m_pRelativePointer_lock;
++        std::shared_ptr<zwp_relative_pointer_v1> m_pRelativePointer = nullptr;
+         std::unordered_set<uint32_t> m_uScancodesHeld;
+ 
+         void Wayland_Registry_Global( wl_registry *pRegistry, uint32_t uName, const char *pInterface, uint32_t uVersion );
+@@ -2819,7 +2822,8 @@ namespace gamescope
+ 
+     void CWaylandInputThread::SetRelativePointer( bool bRelative )
+     {
+-        if ( bRelative == !!m_pRelativePointer.load() )
++        std::unique_lock lock(m_pRelativePointer_lock);
++        if ( bRelative == !!m_pRelativePointer )
+             return;
+         // This constructors/destructors the display's mutex, so should be safe to do across threads.
+         if ( !bRelative )
+@@ -3008,7 +3012,9 @@ namespace gamescope
+     }
+     void CWaylandInputThread::Wayland_Pointer_Motion( wl_pointer *pPointer, uint32_t uTime, wl_fixed_t fSurfaceX, wl_fixed_t fSurfaceY )
+     {
+-        if ( m_pRelativePointer.load() != nullptr )
++        std::shared_lock lock(m_pRelativePointer_lock);
++
++        if ( m_pRelativePointer != nullptr )
+             return;
+ 
+         if ( !cv_wayland_mouse_warp_without_keyboard_focus && !m_bKeyboardEntered )

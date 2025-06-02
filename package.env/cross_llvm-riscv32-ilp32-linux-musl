@@ -1,0 +1,8 @@
+cross_llvm-riscv32-ilp32-linux-musl/linux-headers cross_llvm-riscv32-ilp32-linux-musl/linux-headers.conf
+cross_llvm-riscv32-ilp32-linux-musl/linux-headers cross_llvm-riscv32-ilp32-linux-musl/llvm.conf
+cross_llvm-riscv32-ilp32-linux-musl/musl cross_llvm-riscv32-ilp32-linux-musl/musl.conf
+cross_llvm-riscv32-ilp32-linux-musl/musl cross_llvm-riscv32-ilp32-linux-musl/llvm.conf
+cross_llvm-riscv32-ilp32-linux-musl/compiler-rt cross_llvm-riscv32-ilp32-linux-musl/compiler-rt.conf
+cross_llvm-riscv32-ilp32-linux-musl/compiler-rt cross_llvm-riscv32-ilp32-linux-musl/llvm.conf
+cross_llvm-riscv32-ilp32-linux-musl/clang-crossdev-wrappers cross_llvm-riscv32-ilp32-linux-musl/clang-crossdev-wrappers.conf
+cross_llvm-riscv32-ilp32-linux-musl/clang-crossdev-wrappers cross_llvm-riscv32-ilp32-linux-musl/llvm.conf

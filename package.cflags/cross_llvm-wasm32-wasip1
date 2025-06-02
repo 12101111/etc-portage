@@ -1,0 +1,2 @@
+cross_llvm-wasm32-wasip1/compiler-rt /-flto*// /-mtune*// /-march*// LDFLAGS-=-Wl,-* /-O*/-Os/
+cross_llvm-wasm32-wasip1/wasi-libc /-flto*// /-mtune*// /-march*// LDFLAGS-=-Wl,-* /-O*/-Os/

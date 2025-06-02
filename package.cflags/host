@@ -158,3 +158,4 @@ sys-apps/util-linux LDFLAGS+=-Wl,--undefined-version
 dev-libs/libayatana-appindicator LDFLAGS+=-Wl,--undefined-version
 net-vpn/networkmanager-openvpn LDFLAGS+=-Wl,--undefined-version
 dev-libs/glib LDFLAGS+=-Wl,--undefined-version
+x11-libs/wxGTK LDFLAGS+=-Wl,--undefined-version

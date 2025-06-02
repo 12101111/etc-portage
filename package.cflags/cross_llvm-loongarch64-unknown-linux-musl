@@ -1,0 +1,2 @@
+cross_llvm-loongarch64-unknown-linux-musl/rust-std RUSTFLAGS="-Ccodegen-units=1 -Ctarget-feature=-crt-static"
+cross_llvm-loongarch64-unknown-linux-musl/compiler-rt /-flto*// /-mtune*// /-march*// LDFLAGS-=-Wl,-*

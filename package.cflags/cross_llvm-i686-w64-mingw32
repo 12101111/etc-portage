@@ -1,0 +1,2 @@
+cross_llvm-i686-w64-mingw32/compiler-rt /-flto*// /-mtune*// /-march*// LDFLAGS-=-Wl,-*
+cross_llvm-i686-w64-mingw32/mingw64-runtime /-flto*// /-mtune*// /-march*// LDFLAGS-=-Wl,-*

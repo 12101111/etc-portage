@@ -21,8 +21,6 @@ dev-lang/mono noccache
 
 dev-db/mongodb mongodb
 
-dev-util/electron ccache
-www-client/chromium ccache
 games-emulation/yuzu ccache
 
 # debug
@@ -50,3 +48,5 @@ gui-wm/gamescope debug
 llvm-runtimes/libcxx debug
 llvm-runtimes/libcxxabi debug
 llvm-runtimes/libgcc debug
+
+sys-process/btop o1debug

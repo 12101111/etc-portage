@@ -1,1 +1,3 @@
+cross_llvm-arm-unknown-linux-musleabi/compiler-rt /-flto*// /-mtune*// /-march*// LDFLAGS-=-Wl,-* C*FLAGS+="-Os -pipe -march=-march=armv7-a -fomit-frame-pointer"
+cross_llvm-arm-unknown-linux-musleabi/musl /-flto*// /-mtune*// /-march*// LDFLAGS-=-Wl,-* C*FLAGS+="-Os -pipe -march=armv7-a -fomit-frame-pointer"
 cross_llvm-arm-unknown-linux-musleabihf/rust-std RUSTFLAGS="-Ccodegen-units=1 -Ctarget-feature=-crt-static"

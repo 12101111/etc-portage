@@ -1,0 +1,4 @@
+cross_llvm-riscv32-ilp32-linux-musl/linux-headers riscv ~riscv -amd64 -~amd64
+cross_llvm-riscv32-ilp32-linux-musl/musl riscv ~riscv -amd64 -~amd64
+cross_llvm-riscv32-ilp32-linux-musl/compiler-rt riscv ~riscv -amd64 -~amd64
+cross_llvm-riscv32-ilp32-linux-musl/clang-crossdev-wrappers riscv ~riscv -amd64 -~amd64

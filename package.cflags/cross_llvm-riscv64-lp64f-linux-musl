@@ -1,0 +1,3 @@
+cross_llvm-riscv64-lp64f-linux-musl/rust-std RUSTFLAGS="-Ccodegen-units=1 -Ctarget-feature=-crt-static"
+cross_llvm-riscv64-lp64f-linux-musl/compiler-rt /-flto*// /-mtune*// /-march*// LDFLAGS-=-Wl,-* C*FLAGS+="-Os -pipe -march=rv64imafc -mabi=lp64f -fomit-frame-pointer"
+cross_llvm-riscv64-lp64f-linux-musl/musl /-flto*// /-mtune*// /-march*// LDFLAGS-=-Wl,-* C*FLAGS+="-Os -pipe -march=rv64imafc -mabi=lp64f -fomit-frame-pointer"

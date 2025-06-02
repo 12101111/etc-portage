@@ -1,0 +1,8 @@
+cross_llvm-arm-unknown-linux-musleabi/linux-headers cross_llvm-arm-unknown-linux-musleabi/linux-headers.conf
+cross_llvm-arm-unknown-linux-musleabi/linux-headers cross_llvm-arm-unknown-linux-musleabi/llvm.conf
+cross_llvm-arm-unknown-linux-musleabi/musl cross_llvm-arm-unknown-linux-musleabi/musl.conf
+cross_llvm-arm-unknown-linux-musleabi/musl cross_llvm-arm-unknown-linux-musleabi/llvm.conf
+cross_llvm-arm-unknown-linux-musleabi/compiler-rt cross_llvm-arm-unknown-linux-musleabi/compiler-rt.conf
+cross_llvm-arm-unknown-linux-musleabi/compiler-rt cross_llvm-arm-unknown-linux-musleabi/llvm.conf
+cross_llvm-arm-unknown-linux-musleabi/clang-crossdev-wrappers cross_llvm-arm-unknown-linux-musleabi/clang-crossdev-wrappers.conf
+cross_llvm-arm-unknown-linux-musleabi/clang-crossdev-wrappers cross_llvm-arm-unknown-linux-musleabi/llvm.conf

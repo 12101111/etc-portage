@@ -7,11 +7,20 @@ dev-lang/go system-bootstrap # to upgrade itself
 llvm-core/llvm binutils-plugin libedit gold exegesis polly mlir zstd doc debuginfod xml LLVM_TARGETS: DirectX M68k Xtensa SPIRV
 llvm-core/lldb libedit lzma debuginfod
 llvm-core/clang xml default-lld LLVM_TARGETS: SPIRV DirectX M68k Xtensa
+llvm-core/llvm:20 debug
+llvm-core/clang:20 debug
+llvm-core/lld:20 debug
+llvm-core/lldb debug
+llvm-core/polly debug
+dev-lang/rust:9999 miri
 llvm-runtimes/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray libfuzzer profile
 dev-java/openjdk gentoo-vm
 dev-lang/ghc doc ghcbootstrap elfutils
 llvm-core/clang-toolchain-symlinks gcc-symlinks
-*/* llvm_slot_19 -llvm_slot_18
+*/* llvm_slot_20 -llvm_slot_19 -llvm_slot_18
+dev-lang/deno llvm_slot_19
+dev-util/electron:33 llvm_slot_19
+dev-util/electron:34 llvm_slot_19
 
 # Graphic
 media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind d3d9 osmesa vulkan-overlay zink opencl
@@ -23,7 +32,7 @@ gui-wm/sway wallpapers tray -swaylock fish-completion seatd
 gui-apps/waybar network tray mpd wifi pulseaudio evdev experimental libinput logind mpris pipewire upower
 
 # Apps
-www-client/firefox wasm-sandbox hwaccel clang lto pgo screencast system-png openh264
+www-client/firefox wasm-sandbox hwaccel clang lto pgo screencast system-png system-pipewire openh264
 mail-client/thunderbird hwaccel clang lto
 app-editors/emacs webp -jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars -X tree-sitter sqlite
 app-emacs/emacs-common gsettings
@@ -32,11 +41,11 @@ media-video/mpv archive cli drm libass opengl lua vaapi libmpv -vulkan lua_singl
 net-misc/remmina rdp vnc appindicator gnome-keyring spice ssh
 media-sound/mpd flac
 media-video/ffmpeg -vulkan fdk dav1d fontconfig truetype openh264 xcb jpeg2k libaom libass libdrm openssl opus v4l mp3 webp x264 x265 vaapi vpx
+media-video/ffmpeg twolame lame amrenc # net-im/telegram-desktop
 net-misc/freerdp ffmpeg gstreamer openh264 usb server smartcard xinerama xv
 media-libs/libsdl2 gles2 udev vulkan haptic
 net-misc/aria2 bittorrent libuv sqlite xmlrpc -jemalloc metalink
 x11-terms/st savedconfig
-net-analyzer/wireshark qt5
 www-client/otter webkit webengine
 app-text/goldendict multimedia opencc zim ffmpeg xapian
 app-office/libreoffice gstreamer pdfimport java dbus kde qt6
@@ -50,14 +59,13 @@ kde-plasma/ksysguard lm-sensors
 www-client/uget aria2 libnotify openssl -gnutls
 mail-client/mutt gdbm mbox pop gpgme
 media-video/obs-studio -vlc lua v4l truetype pipewire fdk speex python lua_single_target_luajit -ssl
-dev-vcs/git subversion perl
-dev-vcs/subversion perl
-dev-util/perf clang lzma libpfm perl -python libtraceevent libtracefs bpf -unwind
+dev-vcs/git perl keyring
+dev-util/perf zstd clang lzma libpfm perl -python libtraceevent libtracefs bpf -unwind
 dev-qt/qt-creator clang android autotools webassembly beautifier ctfvisualizer -doc glsl meson qmlprofiler serialterminal cmake git lsp perfprofiler python webengine
 app-shells/fish doc
 app-crypt/gnupg scd-shared-access 
 media-gfx/nomacs opencv tiff
-media-libs/opencv qt5 -openmp
+media-libs/opencv qt6 openmp
 sys-process/htop lm-sensors
 kde-apps/okular epub
 x11-terms/kitty -asan
@@ -82,7 +90,10 @@ games-emulation/yuzu sdl -system-vulkan webengine
 dev-util/hotspot rust
 dev-util/ghidra -lldb
 games-action/prismlauncher qt6
-x11-misc/rofi ime
+# move x11-misc/rofi gui-apps/rofi-wayland
+gui-apps/rofi-wayland ime
+dev-libs/libportal gtk
+sys-fs/android-file-transfer-linux gui
 
 # VM / Emulator
 app-emulation/qemu udev zstd -jemalloc gtk usb usbredir spice virgl pin-upstream-blobs virtfs static-user slirp io-uring virgl vte gnutls vhost-user-fs -plugins capstone fuse bpf nfs pipewire vde
@@ -105,7 +116,7 @@ llvm-runtimes/libcxx static-libs
 llvm-runtimes/libcxxabi static-libs
 llvm-core/libclc spirv
 sys-apps/kmod zstd
-net-firewall/nftables xtables python
+net-firewall/nftables -xtables python
 sys-apps/coreutils gmp caps
 x11-drivers/nvidia-drivers -tools -X -wayland
 sys-apps/systemd bpf elfutils xkb python boot
@@ -131,7 +142,7 @@ sys-apps/attr static-libs # qemu-user-static
 dev-libs/libpcre static-libs # qemu-user-static
 dev-libs/libpcre2 pcre16 pcre32 static-libs # qtcore qemu-user-static
 dev-qt/qtgui egl dbus # wayland qt5ct
-app-i18n/fcitx-qt qt5 qt6
+app-i18n/fcitx-qt -qt5 qt6
 gnome-base/librsvg tools # icon theme
 x11-libs/wxGTK tiff #pcem
 media-libs/libva utils
@@ -143,7 +154,7 @@ dev-qt/qtmultimedia gstreamer
 #app-arch/unzip natspec # GBK zip files
 app-crypt/gcr gtk
 dev-libs/xmlsec nss
-app-i18n/fcitx-chinese-addons gui lua
+app-i18n/fcitx-chinese-addons gui lua qt6 -qt5
 media-gfx/imagemagick xml tiff -openmp # svg? ( xml )
 virtual/imagemagick-tools tiff
 app-text/poppler cairo # materia-theme
@@ -163,13 +174,12 @@ media-sound/apulse sdk
 kde-apps/yakuake absolute-position
 dev-python/matplotlib gtk3 cairo
 net-vpn/tor caps lzma zstd tor-hardening
-dev-python/PyQt5 webchannel printsupport gui widgets svg dbus opengl declarative multimedia network sql websockets
 dev-qt/qtmultimedia widgets
 gui-libs/wlroots icccm x11-backend seatd tinywl -liftoff xcb-errors
 media-video/pipewire pulseaudio sdl aptx aac extra pipewire-alsa v4l
 media-libs/libtgvoip pulseaudio
 media-libs/tg_owt pulseaudio
-net-im/telegram-desktop webkit -jemalloc pulseaudio lto screencast qt6 qt6-imageformats
+net-im/telegram-desktop -webkit -jemalloc pulseaudio lto screencast qt6 qt6-imageformats
 media-libs/tg_owt screencast
 app-crypt/pinentry gnome-keyring gtk qt6
 media-libs/phonon gstreamer
@@ -209,7 +219,7 @@ sys-fs/e2fsprogs -lto # don't work with clang
 kde-plasma/kwin screencast
 kde-plasma/plasma-workspace screencast
 media-libs/libsdl2 pipewire
-sys-apps/xdg-desktop-portal screencast
+sys-apps/xdg-desktop-portal flatpak screencast
 net-misc/networkmanager connection-sharing -dhcpcd nftables -lto iwd
 net-wireless/wpa_supplicant ap -crda
 dev-qt/qt-docs script webengine
@@ -220,7 +230,7 @@ net-libs/webkit-gtk gnome-keyring libnotify spell avif gamepad lcms pdf
 dev-libs/libgudev introspection # webkit
 media-libs/gst-plugins-base gles2 # webkit
 media-libs/gst-plugins-bad gles2 # webkit
-app-emulation/wine-staging -crossdev-mingw -strip mingw wow64 sdl usb gstreamer osmesa pcap v4l perl udisks opencl
+app-emulation/wine-staging crossdev-mingw clang -strip ffmpeg mingw wow64 sdl usb gstreamer osmesa pcap v4l perl udisks opencl
 app-emulation/wine-vanilla crossdev-mingw clang -strip ffmpeg mingw wow64 sdl usb gstreamer osmesa pcap v4l perl udisks opencl
 app-emulation/dxvk crossdev-mingw
 dev-util/mingw64-toolchain multilib abi_x86_32
@@ -236,19 +246,18 @@ dev-qt/qttools qml designer assistant qdoc qtattributionsscanner # qt-creator
 dev-qt/qt5compat icu # qt-creator
 dev-qt/qt5compat qml # kf6
 dev-qt/qtwayland compositor qml # net-im/telegram-desktop[wayland,qt6,webkit]
-dev-libs/quazip qt6
+dev-libs/quazip qt6 -qt5
 media-libs/glfw wayland-only
 media-libs/imgui sdl glfw
 x11-libs/libdrm tools
-dev-python/pyotherside qt5
 sys-libs/argp-standalone static-libs
 app-crypt/qca qt6 # kf6
-sys-auth/polkit-qt qt6
+sys-auth/polkit-qt qt6 -qt5
 kde-frameworks/kconfig qml
 media-libs/phonon qt6
 net-libs/kdsoap qt6
 dev-qt/qtmultimedia qml
-kde-plasma/breeze qt5
+kde-plasma/breeze -qt5
 dev-libs/xerces-c curl icu
 dev-qt/qtbase libproxy
 dev-libs/openssl quic
@@ -310,4 +319,4 @@ dev-libs/libxml2 icu
 app-editors/vscode savedconfig system-electron system-ripgrep builtin-extensions
 media-video/pipewire ffmpeg gstreamer sound-server
 dev-util/electron -system-allocator -libcxx gtk4 -system-png suid lto pgo hevc custom-cflags system-icu clang wayland pipewire screencast
-www-client/chromium gtk4 hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png qt5 qt6
+www-client/chromium gtk4 hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png qt6

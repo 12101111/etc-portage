@@ -1,0 +1,3 @@
+cross_llvm-arm-unknown-linux-musleabi/compiler-rt /-flto*// /-mtune*// /-march*// C*FLAGS+="-Os -pipe -march=-march=armv7-a -mfloat-abi=softfp -fomit-frame-pointer" LDFLAGS-=-Wl,-*
+cross_llvm-arm-unknown-linux-musleabi/musl /-flto*// /-mtune*// /-march*// C*FLAGS+="-Os -pipe -march=armv7-a -mfloat-abi=softfp -fomit-frame-pointer" LDFLAGS-=-Wl,-*
+cross_llvm-arm-unknown-linux-musleabi/rust-std cross_llvm-aarch64-unknown-linux-musl/rust-std RUSTFLAGS="-Ccodegen-units=1 -Ctarget-feature=-crt-static"

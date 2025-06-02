@@ -1,0 +1,2 @@
+cross_llvm-riscv64-unknown-none-elf/compiler-rt /-flto*// /-mtune*// /-march*// LDFLAGS-=-Wl,-* C*FLAGS+="-Os -pipe -march=rv64imac -mabi=lp64 -fomit-frame-pointer"
+cross_llvm-riscv64-unknown-none-elf/picolibc /-flto*// /-mtune*// /-march*// LDFLAGS-=-Wl,-*
