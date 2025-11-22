@@ -37,6 +37,16 @@ cross_llvm-wasm32-wasip1/compiler-rt /-flto*//
 cross_llvm-arm-unknown-linux-musleabihf/compiler-rt /-flto*// /-march*// /-mtune*//
 kde-frameworks/breeze-icons /-flto*//
 net-fs/nfs-utils /-flto*// /-Wl,*//
+dev-lang/rust /-flto*// /-Wl,*// RUSTFLAGS-=-C*lto*
+dev-qt/qttools /-flto*//
+
+# flang
+sci-libs/openblas /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections//
+llvm-runtimes/openmp /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections//
+sci-libs/lapack /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections//
+sci-libs/arpack /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections//
+dev-python/scipy /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections//
+sci-libs/flexiblas /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections// 
 
 # no polly
 media-gfx/krita /-mllvm// /-polly*//
@@ -55,6 +65,7 @@ net-wireless/iw LDFLAGS-=-Wl,--gc-sections
 x11-libs/libxkbcommon LDFLAGS-=-Wl,--gc-sections
 dev-util/rizin LDFLAGS-=-Wl,--gc-sections /-flto*//
 dev-embedded/u-boot-tools LDFLAGS-=-Wl,--gc-sections /-flto*//
+sys-fs/zfs LDFLAGS-=-Wl,--gc-sections LDFLAGS+=-Wl,-z,nostart-stop-gc
 
 # mozbuild bug. rustc isn't used for final link anyway
 # mozbuild.configure.options.InvalidOptionError: RUSTFLAGS takes 1 value
@@ -109,6 +120,7 @@ x11-libs/cairo LDFLAGS+=-lexecinfo
 dev-util/rizin LDFLAGS+=-lexecinfo
 media-libs/libva-intel-media-driver LDFLAGS+=-lexecinfo
 dev-util/ostree LDFLAGS+=-lgpg-error
+sci-libs/gklib LDFLAGS+=-lexecinfo
 
 # misc
 dev-util/colm NOLAFILEREMOVE=true
@@ -121,10 +133,7 @@ games-emulation/yuzu CXXFLAGS+=-fexperimental-library /-flto*//
 app-cdr/cdrtools /-ffunction-sections//
 dev-lang/rust /-Coverflow-checks=on//
 media-video/ffmpeg CFLAGS+=-D__musl__
-
-# LFS64
-app-misc/broot RUSTFLAGS+=-L/usr/local/lib RUSTFLAGS+=-lalias
-sys-apps/zram-generator RUSTFLAGS+=-L/usr/local/lib RUSTFLAGS+=-lalias
+app-i18n/fcitx CXXFLAGS+=-fexperimental-library
 
 # LLD17
 sys-apps/keyutils LDFLAGS+=-Wl,--undefined-version

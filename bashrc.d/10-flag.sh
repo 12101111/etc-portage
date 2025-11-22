@@ -132,6 +132,9 @@ FLAG_FILTER_FORTRAN=(
 	'-Wclobbered'
 	'-Wformat*'
 	'-Wvolatile-register-var'
+	'-pipe'
+	'-ffunction-sections'
+	'-fdata-sections'
 )
 
 FLAG_FILTER_FFLAGS=(

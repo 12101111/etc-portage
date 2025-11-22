@@ -1,0 +1,105 @@
+diff --git a/src/steamcompmgr.cpp b/src/steamcompmgr.cpp
+index 281a7ea..ce312ab 100644
+--- a/src/steamcompmgr.cpp
++++ b/src/steamcompmgr.cpp
+@@ -41,6 +41,7 @@
+ #include <thread>
+ #include <condition_variable>
+ #include <mutex>
++#include <shared_mutex>
+ #include <atomic>
+ #include <vector>
+ #include <algorithm>
+@@ -141,7 +142,8 @@ bool ShouldDrawCursor();
+ gamescope_color_mgmt_tracker_t g_ColorMgmt{};
+ 
+ static gamescope_color_mgmt_luts g_ColorMgmtLutsOverride[ EOTF_Count ];
+-std::atomic<std::shared_ptr<lut3d_t>> g_ColorMgmtLooks[EOTF_Count];
++std::shared_mutex g_ColorMgmtLooks_lock;
++std::shared_ptr<lut3d_t> g_ColorMgmtLooks[EOTF_Count];
+ 
+ 
+ gamescope_color_mgmt_luts g_ColorMgmtLuts[ EOTF_Count ];
+@@ -351,6 +353,7 @@ create_color_mgmt_luts(const gamescope_color_mgmt_t& newColorMgmt, gamescope_col
+ 
+ 			EOTF inputEOTF = static_cast<EOTF>( nInputEOTF );
+ 			float flGain = 1.f;
++			std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 			std::shared_ptr<lut3d_t> pSharedLook = g_ColorMgmtLooks[ nInputEOTF ];
+ 			lut3d_t * pLook = pSharedLook && pSharedLook->lutEdgeSize > 0 ? pSharedLook.get() : nullptr;
+ 
+@@ -773,6 +776,7 @@ bool set_color_shaperlut_override(const char *path)
+ bool set_color_look_pq(const char *path)
+ {
+ 	bool bRaisesBlackLevelFloor = false;
++	std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 	g_ColorMgmtLooks[EOTF_PQ] = LoadCubeLut( path, bRaisesBlackLevelFloor );
+ 	cv_overlay_unmultiplied_alpha = bRaisesBlackLevelFloor;
+ 	g_ColorMgmt.pending.externalDirtyCtr++;
+@@ -782,6 +786,7 @@ bool set_color_look_pq(const char *path)
+ bool set_color_look_g22(const char *path)
+ {
+ 	bool bRaisesBlackLevelFloor = false;
++	std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 	g_ColorMgmtLooks[EOTF_Gamma22] = LoadCubeLut( path, bRaisesBlackLevelFloor );
+ 	cv_overlay_unmultiplied_alpha = bRaisesBlackLevelFloor;
+ 	g_ColorMgmt.pending.externalDirtyCtr++;
+diff --git a/src/wlserver.cpp b/src/wlserver.cpp
+index 721f6f2..538e9c9 100644
+--- a/src/wlserver.cpp
++++ b/src/wlserver.cpp
+@@ -1,3 +1,4 @@
++#include <shared_mutex>
+ #include <xkbcommon/xkbcommon-keysyms.h>
+ #define _GNU_SOURCE 1
+ 
+@@ -1061,7 +1062,8 @@ static void gamescope_control_display_sleep( struct wl_client *client, struct wl
+ }
+ 
+ extern gamescope::ConVar<bool> cv_overlay_unmultiplied_alpha;
+-extern std::atomic<std::shared_ptr<lut3d_t>> g_ColorMgmtLooks[EOTF_Count];
++extern std::shared_mutex g_ColorMgmtLooks_lock;
++extern std::shared_ptr<lut3d_t> g_ColorMgmtLooks[EOTF_Count];
+ 
+ static gamescope::ConCommand cc_set_look("set_look", "Set a look for a specific EOTF. Eg. set_look mylook.cube (g22 only), set_look pq mylook.cube, set_look mylook_g22.cube mylook_pq.cube",
+ []( std::span<std::string_view> args )
+@@ -1070,6 +1072,7 @@ static gamescope::ConCommand cc_set_look("set_look", "Set a look for a specific
+ 	{
+ 		std::string arg1 = std::string{ args[1] };
+ 		bool bRaisesBlackLevelFloor = false;
++		std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 		g_ColorMgmtLooks[ EOTF_Gamma22 ] = LoadCubeLut( arg1.c_str(), bRaisesBlackLevelFloor );
+ 		cv_overlay_unmultiplied_alpha = bRaisesBlackLevelFloor;
+ 		g_ColorMgmt.pending.externalDirtyCtr++;
+@@ -1079,6 +1082,7 @@ static gamescope::ConCommand cc_set_look("set_look", "Set a look for a specific
+ 	{
+ 		std::string arg2 = std::string{ args[2] };
+ 
++		std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 		bool bRaisesBlackLevelFloor = false;
+ 		if ( args[1] == "g22" || args[1] == "G22")
+ 		{
+@@ -1108,6 +1112,7 @@ static gamescope::ConCommand cc_set_look("set_look", "Set a look for a specific
+ 	}
+ 	else
+ 	{
++		std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 		cv_overlay_unmultiplied_alpha = false;
+ 		g_ColorMgmtLooks[ EOTF_Gamma22 ] = nullptr;
+ 		g_ColorMgmtLooks[ EOTF_PQ ] = nullptr;
+@@ -1157,6 +1162,7 @@ static void gamescope_control_set_look( struct wl_client *client, struct wl_reso
+ 		pq_fd = -1;
+ 	}
+ 
++	std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 	cv_overlay_unmultiplied_alpha = bRaisesBlackLevelFloor;
+ 	g_ColorMgmtLooks[ EOTF_Gamma22 ] = pG22LUT;
+ 	g_ColorMgmtLooks[ EOTF_PQ ] = pPQLUT;
+@@ -1167,6 +1173,7 @@ static void gamescope_control_set_look( struct wl_client *client, struct wl_reso
+ static void gamescope_control_unset_look( struct wl_client *client, struct wl_resource *resource )
+ {
+ 	cv_overlay_unmultiplied_alpha = false;
++	std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 	g_ColorMgmtLooks[ EOTF_Gamma22 ] = nullptr;
+ 	g_ColorMgmtLooks[ EOTF_PQ ] = nullptr;
+ 	g_ColorMgmt.pending.externalDirtyCtr++;

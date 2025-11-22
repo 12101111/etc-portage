@@ -22,20 +22,3 @@ index cd806f6..941323a 100644
  
  #include <functional>
  
-diff --git a/meson.build b/meson.build
-index 3708cc1..4c32f9b 100644
---- a/meson.build
-+++ b/meson.build
-@@ -50,10 +50,8 @@ dep_x11 = dependency('x11')
- dep_wayland = dependency('wayland-client')
- vulkan_dep = dependency('vulkan')
- 
--glm_proj = subproject('glm')
--glm_dep = glm_proj.get_variable('glm_dep')
--stb_proj = subproject('stb')
--stb_dep = stb_proj.get_variable('stb_dep')
-+glm_dep = dependency('glm', fallback: ['glm'])
-+stb_dep = dependency('stb', fallback: ['stb'])
- 
- if get_option('enable_openvr_support')
-   openvr_dep = dependency('openvr', version: '>= 2.7', required : false)

@@ -1,0 +1,24 @@
+diff --git a/vendor/go.podman.io/storage/pkg/idtools/idtools_supported.go b/vendor/go.podman.io/storage/pkg/idtools/idtools_supported.go
+index 9a17f57..8a84959 100644
+--- a/vendor/go.podman.io/storage/pkg/idtools/idtools_supported.go
++++ b/vendor/go.podman.io/storage/pkg/idtools/idtools_supported.go
+@@ -15,6 +15,10 @@ import (
+ #include <stdlib.h>
+ #include <stdio.h>
+ 
++FILE* get_stderr(void) {
++       return stderr;
++}
++
+ struct subid_range get_range(struct subid_range *ranges, int i)
+ {
+     return ranges[i];
+@@ -44,7 +48,7 @@ func readSubid(username string, isUser bool) (ranges, error) {
+ 	}
+ 
+ 	onceInit.Do(func() {
+-		C.subid_init(C.CString("storage"), C.stderr)
++		C.subid_init(C.CString("storage"), C.get_stderr())
+ 	})
+ 
+ 	cUsername := C.CString(username)

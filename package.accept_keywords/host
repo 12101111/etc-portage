@@ -6,5 +6,7 @@ dev-debug/lldb-mi **
 virtual/rust **
 dev-lang/zig **
 games-util/mangohud **
-cosmic-de/* **
+<llvm-core/llvm-22.0.0.9999 **
+llvm-core/llvm-toolchain-symlinks **
+<llvm-core/mlir-22.0.0.9999 **
 sys-fs/zfs::12101111-overlay **

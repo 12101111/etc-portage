@@ -1,26 +1,37 @@
 # Compiler
-sys-devel/gcc fortran openmp jit -pgo lto
-dev-lang/rust system-llvm system-bootstrap rustfmt wasm -nightly wasi clippy rust-analyzer rust-src profiler
+sys-devel/gcc fortran openmp jit -pgo lto -nls
+dev-lang/rust llvm-tools system-llvm system-bootstrap rustfmt wasm -nightly wasi clippy rust-analyzer rust-src profiler RUST_SYSROOTS: bpf wasm
 dev-lang/rust-bin rustfmt profiler
 virtual/rust rustfmt profiler
 dev-lang/go system-bootstrap # to upgrade itself
 llvm-core/llvm binutils-plugin libedit gold exegesis polly mlir zstd doc debuginfod xml LLVM_TARGETS: DirectX M68k Xtensa SPIRV
 llvm-core/lldb libedit lzma debuginfod
 llvm-core/clang xml default-lld LLVM_TARGETS: SPIRV DirectX M68k Xtensa
-llvm-core/llvm:20 debug
-llvm-core/clang:20 debug
-llvm-core/lld:20 debug
+llvm-core/llvm debug
+llvm-core/clang debug
+llvm-core/lld debug
 llvm-core/lldb debug
 llvm-core/polly debug
+llvm-core/flang debug
+llvm-core/mlir debug
+llvm-core/llvm:22 -binutils-plugin
+llvm-core/llvm-toolchain-symlinks:22 -native-symlinks
 dev-lang/rust:9999 miri
 llvm-runtimes/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray libfuzzer profile
 dev-java/openjdk gentoo-vm
 dev-lang/ghc doc ghcbootstrap elfutils
 llvm-core/clang-toolchain-symlinks gcc-symlinks
-*/* llvm_slot_20 -llvm_slot_19 -llvm_slot_18
-dev-lang/deno llvm_slot_19
-dev-util/electron:33 llvm_slot_19
-dev-util/electron:34 llvm_slot_19
+dev-lang/python tail-call-interp
+dev-lang/python:3.14 -pgo
+*/* llvm_slot_21 -llvm_slot_20 -llvm_slot_19 -llvm_slot_18
+app-editors/imhex llvm_slot_20
+dev-dotnet/dotnet-sdk llvm_slot_20
+dev-lang/deno llvm_slot_20
+dev-util/electron:36 llvm_slot_20
+app-text/doxygen llvm_slot_20
+app-crypt/sequoia-sq llvm_slot_20
+dev-util/bpftool llvm_slot_20
+dev-util/bcc llvm_slot_20 -llvm_slot_21
 
 # Graphic
 media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind d3d9 osmesa vulkan-overlay zink opencl
@@ -40,7 +51,7 @@ app-editors/vim X python
 media-video/mpv archive cli drm libass opengl lua vaapi libmpv -vulkan lua_single_target_luajit
 net-misc/remmina rdp vnc appindicator gnome-keyring spice ssh
 media-sound/mpd flac
-media-video/ffmpeg -vulkan fdk dav1d fontconfig truetype openh264 xcb jpeg2k libaom libass libdrm openssl opus v4l mp3 webp x264 x265 vaapi vpx
+media-video/ffmpeg -vulkan dav1d fontconfig truetype openh264 xcb jpeg2k libaom libass libdrm openssl opus v4l mp3 webp x264 x265 vaapi vpx
 media-video/ffmpeg twolame lame amrenc # net-im/telegram-desktop
 net-misc/freerdp ffmpeg gstreamer openh264 usb server smartcard xinerama xv
 media-libs/libsdl2 gles2 udev vulkan haptic
@@ -96,7 +107,8 @@ dev-libs/libportal gtk
 sys-fs/android-file-transfer-linux gui
 
 # VM / Emulator
-app-emulation/qemu udev zstd -jemalloc gtk usb usbredir spice virgl pin-upstream-blobs virtfs static-user slirp io-uring virgl vte gnutls vhost-user-fs -plugins capstone fuse bpf nfs pipewire vde
+app-emulation/qemu udev zstd -jemalloc gtk usb usbredir spice virgl pin-upstream-blobs virtfs static-user slirp io-uring vte gnutls vhost-user-fs -plugins capstone fuse bpf nfs pipewire vde
+media-libs/virglrenderer venus
 app-emulation/libvirt zfs virt-network parted dbus virtiofsd libssh2 fuse
 app-emulation/virt-manager gui
 app-emulation/spice gstreamer
@@ -104,6 +116,7 @@ net-misc/spice-gtk gstaudio usbredir #gstvideo
 app-emulation/pcem networking
 games-emulation/dosbox-x opengl ffmpeg fluidsynth freetype slirp
 games-emulation/dolphin ffmpeg upnp mgba egl sdl
+app-emulation/86Box new-dynarec vnc vde
 
 # System
 sys-kernel/linux-firmware savedconfig
@@ -122,7 +135,7 @@ x11-drivers/nvidia-drivers -tools -X -wayland
 sys-apps/systemd bpf elfutils xkb python boot
 sys-kernel/installkernel -dracut -systemd
 dev-util/ccache -static-c++
-sys-fs/zfs -unwind
+sys-fs/zfs -unwind -initramfs -modules
 
 # libs
 sys-libs/libxcrypt static-libs # openssh
@@ -155,7 +168,7 @@ dev-qt/qtmultimedia gstreamer
 app-crypt/gcr gtk
 dev-libs/xmlsec nss
 app-i18n/fcitx-chinese-addons gui lua qt6 -qt5
-media-gfx/imagemagick xml tiff -openmp # svg? ( xml )
+media-gfx/imagemagick xml tiff openmp # svg? ( xml )
 virtual/imagemagick-tools tiff
 app-text/poppler cairo # materia-theme
 sys-apps/dbus user-session # mako
@@ -172,10 +185,10 @@ app-emacs/emacs-common gui
 dev-lang/ruby jit -jemalloc
 media-sound/apulse sdk
 kde-apps/yakuake absolute-position
-dev-python/matplotlib gtk3 cairo
+dev-python/matplotlib gtk3 cairo qt6 -latex
 net-vpn/tor caps lzma zstd tor-hardening
 dev-qt/qtmultimedia widgets
-gui-libs/wlroots icccm x11-backend seatd tinywl -liftoff xcb-errors
+gui-libs/wlroots icccm x11-backend seatd tinywl liftoff xcb-errors lcms
 media-video/pipewire pulseaudio sdl aptx aac extra pipewire-alsa v4l
 media-libs/libtgvoip pulseaudio
 media-libs/tg_owt pulseaudio
@@ -226,7 +239,7 @@ dev-qt/qt-docs script webengine
 dev-lang/deno static-libs denort
 dev-util/xdelta lzma
 app-arch/brotli python
-net-libs/webkit-gtk gnome-keyring libnotify spell avif gamepad lcms pdf
+net-libs/webkit-gtk examples keyring libnotify spell avif gamepad lcms pdf jpegxl
 dev-libs/libgudev introspection # webkit
 media-libs/gst-plugins-base gles2 # webkit
 media-libs/gst-plugins-bad gles2 # webkit
@@ -264,9 +277,15 @@ dev-libs/openssl quic
 app-i18n/opencc python #fcitx-pinyin-zhwiki
 dev-python/qtpy -pyqt5
 dev-libs/appstream compose # flatpak-builder
+gui-libs/neatvnc gbm # wayvnc
+llvm-runtimes/openmp fortran
+sci-libs/openblas index64
+virtual/lapack index64
+sci-libs/lapack index64
+*/* perl_features_ithreads
 
 # Tex
-app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra
+app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra luatex
 app-text/texlive-core cjk xetex
 media-libs/gd fontconfig truetype
 
@@ -293,7 +312,7 @@ sys-apps/findutils -nls
 net-misc/remmina -nls # segfault at ../Remmina-v1.4.12/src/remmina_file_editor.c:736
 net-vpn/tor -server
 media-libs/libcanberra -gtk
-dev-libs/elfutils -nls debuginfod
+dev-libs/elfutils -nls libarchive debuginfod
 media-tv/v4l-utils -bpf
 app-text/opensp -nls #link error
 sys-apps/man-pages -l10n_zh-CN
@@ -308,9 +327,9 @@ sys-apps/bubblewrap -suid
 net-misc/modemmanager -qmi -qrtr -mbim
 app-shells/bash -pgo
 app-crypt/libsecret -introspection -vala
-dev-python/numpy -lapack
 app-arch/xz-utils -pgo
 kde-frameworks/kio:5 -kwallet
+media-video/pipewire -X
 
 # chromium and electron
 media-libs/libvpx svc
@@ -319,4 +338,4 @@ dev-libs/libxml2 icu
 app-editors/vscode savedconfig system-electron system-ripgrep builtin-extensions
 media-video/pipewire ffmpeg gstreamer sound-server
 dev-util/electron -system-allocator -libcxx gtk4 -system-png suid lto pgo hevc custom-cflags system-icu clang wayland pipewire screencast
-www-client/chromium gtk4 hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png qt6
+www-client/chromium gtk4 hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png qt6 -rar

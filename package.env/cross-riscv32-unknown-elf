@@ -1,4 +1,0 @@
-cross-riscv32-unknown-elf/newlib cross-riscv32-unknown-elf/newlib.conf
-cross-riscv32-unknown-elf/binutils cross-riscv32-unknown-elf/binutils.conf
-cross-riscv32-unknown-elf/gcc cross-riscv32-unknown-elf/gcc.conf
-cross-riscv32-unknown-elf/gdb cross-riscv32-unknown-elf/gdb.conf

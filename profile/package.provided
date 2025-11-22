@@ -1,8 +1,10 @@
-sys-fs/zfs-kmod-2.3.2
+sys-fs/zfs-kmod-2.3.4
+sys-fs/zfs-kmod-2.3.3
 virtual/linux-sources-3-r111
 virtual/linux-sources-3-r11
 net-misc/x11-ssh-askpass-1.2.4.1-r2
 media-fonts/arphicfonts-0.2.20080216.1-r2
 app-i18n/man-pages-zh_CN-1.6.3.2
 sys-libs/libunwind-1.5.0-r1
-kde-plasma/xdg-desktop-portal-kde-6.3.5
+kde-plasma/xdg-desktop-portal-kde-6.5.3
+

@@ -1,0 +1,13 @@
+diff --git a/flang-rt/lib/runtime/stop.cpp b/flang-rt/lib/runtime/stop.cpp
+index 66b3c1d..50dd9ff 100644
+--- a/flang-rt/lib/runtime/stop.cpp
++++ b/flang-rt/lib/runtime/stop.cpp
+@@ -188,7 +188,7 @@ void RTNAME(PauseStatementText)(const char *code, std::size_t length) {
+ }
+ 
+ static RT_NOINLINE_ATTR void PrintBacktrace() {
+-#ifdef HAVE_BACKTRACE
++#if 0
+   // TODO: Need to parse DWARF information to print function line numbers
+   constexpr int MAX_CALL_STACK{999};
+   void *buffer[MAX_CALL_STACK];

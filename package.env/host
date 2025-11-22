@@ -15,13 +15,21 @@ cross-aarch64-unknown-linux-gnu/gcc clang_dont_supports_ada
 dev-java/openjdk noccache
 dev-util/bazel noccache
 dev-lang/mono noccache
+dev-lang/deno ccache
 
 # no file descriptor available
 # dev-dotnet/dotnet-sdk notmpfs
 
 dev-db/mongodb mongodb
 
+dev-db/sqlite ccache
+net-libs/tdlib ccache
+dev-cpp/ada ccache
 games-emulation/yuzu ccache
+dev-util/electron ccache
+
+sci-libs/openblas test
+sci-libs/lapack test
 
 # debug
 sys-libs/musl debug
@@ -48,5 +56,4 @@ gui-wm/gamescope debug
 llvm-runtimes/libcxx debug
 llvm-runtimes/libcxxabi debug
 llvm-runtimes/libgcc debug
-
 sys-process/btop o1debug

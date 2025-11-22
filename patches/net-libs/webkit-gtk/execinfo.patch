@@ -1,0 +1,12 @@
+diff --git a/Source/bmalloc/CMakeLists.txt b/Source/bmalloc/CMakeLists.txt
+index 37b8182..2b49ede 100644
+--- a/Source/bmalloc/CMakeLists.txt
++++ b/Source/bmalloc/CMakeLists.txt
+@@ -697,6 +697,7 @@ endif ()
+ 
+ set(bmalloc_LIBRARIES
+     ${CMAKE_DL_LIBS}
++    execinfo
+ )
+ 
+ if (ENABLE_MALLOC_HEAP_BREAKDOWN)

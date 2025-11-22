@@ -1,0 +1,105 @@
+From 33b2c26560f7083755fd0fabe1f74cddf02eb0a4 Mon Sep 17 00:00:00 2001
+From: Abhishek Kaushik <abhishek.kaushik@intel.com>
+Date: Thu, 28 Aug 2025 07:20:47 -0700
+Subject: [PATCH] [X86] Fix assertion in AVX512 setcc combine due to invalid
+ APInt mask width (#155775)
+
+The AVX512 setcc combine in X86ISelLowering was calling
+`APInt::getLowBitsSet` with a mask width (`Len`) that could exceed the
+bit width of the broadcasted scalar operand
+(`BroadcastOpVT.getSizeInBits()`), leading to assertion failures.
+
+This patch replaces `Len` with the number of defined (non-undef)
+elements in the constant pool vector.
+
+This ensures the generated mask is valid and avoids crashes when the
+constant pool contains more elements than the scalar bit width can
+represent.
+
+Fixes #155762
+---
+ llvm/lib/Target/X86/X86ISelLowering.cpp |  8 +++-
+ llvm/test/CodeGen/X86/kmov.ll           | 51 +++++++++++++++++++++++++
+ 2 files changed, 58 insertions(+), 1 deletion(-)
+
+diff --git a/llvm/lib/Target/X86/X86ISelLowering.cpp b/llvm/lib/Target/X86/X86ISelLowering.cpp
+index ab21cf534b304..7749ef82ee3dd 100644
+--- a/llvm/lib/Target/X86/X86ISelLowering.cpp
++++ b/llvm/lib/Target/X86/X86ISelLowering.cpp
+@@ -56278,7 +56278,13 @@ static SDValue combineAVX512SetCCToKMOV(EVT VT, SDValue Op0, ISD::CondCode CC,
+ 
+   SDValue Masked = BroadcastOp;
+   if (N != 0) {
+-    APInt Mask = APInt::getLowBitsSet(BroadcastOpVT.getSizeInBits(), Len);
++    unsigned BroadcastOpBitWidth = BroadcastOpVT.getSizeInBits();
++    unsigned NumDefinedElts = UndefElts.countTrailingZeros();
++
++    if (NumDefinedElts > BroadcastOpBitWidth)
++      return SDValue();
++
++    APInt Mask = APInt::getLowBitsSet(BroadcastOpBitWidth, NumDefinedElts);
+     SDValue ShiftedValue = DAG.getNode(ISD::SRL, DL, BroadcastOpVT, BroadcastOp,
+                                        DAG.getConstant(N, DL, BroadcastOpVT));
+     Masked = DAG.getNode(ISD::AND, DL, BroadcastOpVT, ShiftedValue,
+diff --git a/llvm/test/CodeGen/X86/kmov.ll b/llvm/test/CodeGen/X86/kmov.ll
+index cab810d30cd77..8b1e69a97d545 100644
+--- a/llvm/test/CodeGen/X86/kmov.ll
++++ b/llvm/test/CodeGen/X86/kmov.ll
+@@ -143,6 +143,57 @@ define <8 x i1> @invert_i8_mask_extract_8(i8 %mask) {
+   ret <8 x i1> %cmp.45
+ }
+ 
++define <8 x i1> @i8_mask_extract_7(i8 %mask) {
++; X64-AVX512-LABEL: i8_mask_extract_7:
++; X64-AVX512:       # %bb.0:
++; X64-AVX512-NEXT:    shrb %dil
++; X64-AVX512-NEXT:    movzbl %dil, %eax
++; X64-AVX512-NEXT:    kmovd %eax, %k0
++; X64-AVX512-NEXT:    vpmovm2w %k0, %xmm0
++; X64-AVX512-NEXT:    retq
++;
++; X64-KNL-LABEL: i8_mask_extract_7:
++; X64-KNL:       # %bb.0:
++; X64-KNL-NEXT:    vmovd %edi, %xmm0
++; X64-KNL-NEXT:    vpbroadcastb %xmm0, %xmm0
++; X64-KNL-NEXT:    vpbroadcastq {{.*#+}} xmm1 = [2,4,8,16,32,64,128,0,2,4,8,16,32,64,128,0]
++; X64-KNL-NEXT:    vpand %xmm1, %xmm0, %xmm0
++; X64-KNL-NEXT:    vpcmpeqb %xmm1, %xmm0, %xmm0
++; X64-KNL-NEXT:    vpmovzxbw {{.*#+}} xmm0 = xmm0[0],zero,xmm0[1],zero,xmm0[2],zero,xmm0[3],zero,xmm0[4],zero,xmm0[5],zero,xmm0[6],zero,xmm0[7],zero
++; X64-KNL-NEXT:    retq
++  %.splatinsert = insertelement <8 x i8> poison, i8 %mask, i64 0
++  %.splat = shufflevector <8 x i8> %.splatinsert, <8 x i8> poison, <8 x i32> zeroinitializer
++  %1 = and <8 x i8> %.splat, <i8 2, i8 4, i8 8, i8 16, i8 32, i8 64, i8 128, i8 poison>
++  %cmp.45 = icmp ne <8 x i8> %1, zeroinitializer
++  ret <8 x i1> %cmp.45
++}
++
++define <8 x i1> @invert_i8_mask_extract_7(i8 %mask) {
++; X64-AVX512-LABEL: invert_i8_mask_extract_7:
++; X64-AVX512:       # %bb.0:
++; X64-AVX512-NEXT:    shrb %dil
++; X64-AVX512-NEXT:    movzbl %dil, %eax
++; X64-AVX512-NEXT:    kmovd %eax, %k0
++; X64-AVX512-NEXT:    knotb %k0, %k0
++; X64-AVX512-NEXT:    vpmovm2w %k0, %xmm0
++; X64-AVX512-NEXT:    retq
++;
++; X64-KNL-LABEL: invert_i8_mask_extract_7:
++; X64-KNL:       # %bb.0:
++; X64-KNL-NEXT:    vmovd %edi, %xmm0
++; X64-KNL-NEXT:    vpbroadcastb %xmm0, %xmm0
++; X64-KNL-NEXT:    vpand {{\.?LCPI[0-9]+_[0-9]+}}(%rip), %xmm0, %xmm0
++; X64-KNL-NEXT:    vpxor %xmm1, %xmm1, %xmm1
++; X64-KNL-NEXT:    vpcmpeqb %xmm1, %xmm0, %xmm0
++; X64-KNL-NEXT:    vpmovzxbw {{.*#+}} xmm0 = xmm0[0],zero,xmm0[1],zero,xmm0[2],zero,xmm0[3],zero,xmm0[4],zero,xmm0[5],zero,xmm0[6],zero,xmm0[7],zero
++; X64-KNL-NEXT:    retq
++  %.splatinsert = insertelement <8 x i8> poison, i8 %mask, i64 0
++  %.splat = shufflevector <8 x i8> %.splatinsert, <8 x i8> poison, <8 x i32> zeroinitializer
++  %1 = and <8 x i8> %.splat, <i8 2, i8 4, i8 8, i8 16, i8 32, i8 64, i8 128, i8 poison>
++  %cmp.45 = icmp eq <8 x i8> %1, zeroinitializer
++  ret <8 x i1> %cmp.45
++}
++
+ define <4 x i1> @i16_mask_extract_4(i16 %mask) {
+ ; X64-AVX512-LABEL: i16_mask_extract_4:
+ ; X64-AVX512:       # %bb.0:

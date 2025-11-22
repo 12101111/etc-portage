@@ -1,21 +1,5 @@
 app-portage/portage-bashrc-mv
 app-shells/runtitle
-
-#kde-frameworks/*
-#kde-plasma/*
-#kde-apps/*
-#kde-misc/*
-#dev-libs/kirigami-addons
-#sys-auth/polkit-qt
-#net-libs/kdsoap
-#net-libs/kdsoap-ws-discovery-client
-#dev-libs/appstream
-#media-libs/phonon
-#www-client/falkon
-#media-libs/mesa
+app-editors/zed
 app-emulation/virtualbox-kvm
 
-#dev-cpp/abseil-cpp
-#dev-libs/protobuf
-#dev-python/protobuf
-#dev-util/mesa_clc

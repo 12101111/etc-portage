@@ -1,0 +1,13 @@
+diff --git a/meson.build b/meson.build
+index cd1953c..668d034 100644
+--- a/meson.build
++++ b/meson.build
+@@ -68,8 +68,6 @@ warnings = [
+    '-Werror=format',
+ ]
+ 
+-add_project_arguments(cc.get_supported_arguments(warnings), language : 'c')
+-
+ flags = [
+    '-fvisibility=hidden',
+    '-fno-strict-aliasing',

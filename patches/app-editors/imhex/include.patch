@@ -1,0 +1,49 @@
+diff --git a/lib/external/libromfs/lib/include/romfs/romfs.hpp b/lib/external/libromfs/lib/include/romfs/romfs.hpp
+index 2f4c90b..f07d0e5 100644
+--- a/lib/external/libromfs/lib/include/romfs/romfs.hpp
++++ b/lib/external/libromfs/lib/include/romfs/romfs.hpp
+@@ -6,6 +6,7 @@
+ #include <string_view>
+ #include <span>
+ #include <vector>
++#include <type_traits>
+ 
+ #define ROMFS_CONCAT_IMPL(x, y) x##y
+ #define ROMFS_CONCAT(x, y) ROMFS_CONCAT_IMPL(x, y)
+diff --git a/lib/libimhex/include/hex/helpers/http_requests_native.hpp b/lib/libimhex/include/hex/helpers/http_requests_native.hpp
+index be35c2d..889b389 100644
+--- a/lib/libimhex/include/hex/helpers/http_requests_native.hpp
++++ b/lib/libimhex/include/hex/helpers/http_requests_native.hpp
+@@ -4,6 +4,7 @@
+ 
+     #include <string>
+     #include <future>
++    #include <mutex>
+ 
+     #include <hex/helpers/logger.hpp>
+     #include <hex/helpers/fmt.hpp>
+diff --git a/main/gui/source/messaging/linux.cpp b/main/gui/source/messaging/linux.cpp
+index a25c0f5..0668dec 100644
+--- a/main/gui/source/messaging/linux.cpp
++++ b/main/gui/source/messaging/linux.cpp
+@@ -3,6 +3,7 @@
+ #include <stdexcept>
+ #include <fcntl.h>
+ #include <sys/file.h>
++#include <unistd.h>
+ 
+ #include <hex/helpers/logger.hpp>
+ #include <hex/api/events/events_lifecycle.hpp>
+diff --git a/plugins/builtin/source/content/providers/disk_provider.cpp b/plugins/builtin/source/content/providers/disk_provider.cpp
+index 5a96873..9e13f33 100644
+--- a/plugins/builtin/source/content/providers/disk_provider.cpp
++++ b/plugins/builtin/source/content/providers/disk_provider.cpp
+@@ -44,7 +44,7 @@
+ #endif
+ 
+ #if defined(OS_LINUX) && !defined(OS_FREEBSD)
+-    #define lseek lseek64
++    //#define lseek lseek64
+ #elif defined(OS_FREEBSD)
+     #include <sys/disk.h>
+     #define DEFAULT_SECTOR_SIZE 512

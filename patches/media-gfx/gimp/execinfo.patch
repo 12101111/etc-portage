@@ -1,11 +1,11 @@
 diff --git a/app/core/meson.build b/app/core/meson.build
-index cc07adc..fc99284 100644
+index a7430da..2637f8b 100644
 --- a/app/core/meson.build
 +++ b/app/core/meson.build
-@@ -275,5 +275,6 @@ libappcore = static_library('appcore',
-     math,
+@@ -280,5 +280,6 @@ libappcore = static_library('appcore',
      dl,
      libunwind,
+     pango,
 +    dependency('libexecinfo'),
    ],
  )
