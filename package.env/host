@@ -27,6 +27,8 @@ net-libs/tdlib ccache
 dev-cpp/ada ccache
 games-emulation/yuzu ccache
 dev-util/electron ccache
+www-client/chromium ccache
+sci-electronics/verilator ccache
 
 sci-libs/openblas test
 sci-libs/lapack test
@@ -39,8 +41,8 @@ gui-libs/wlroots debug
 dev-libs/glib debug
 x11-libs/gtk+ debug
 x11-base/xwayland debug
-kde-frameworks/kio o1debug
-kde-apps/kio-extras o1debug
+kde-frameworks/kio debug
+kde-apps/kio-extras debug
 gnome-base/gnome-keyring debug
 sci-mathematics/z3 debug
 sys-libs/gcompat debug
@@ -56,4 +58,4 @@ gui-wm/gamescope debug
 llvm-runtimes/libcxx debug
 llvm-runtimes/libcxxabi debug
 llvm-runtimes/libgcc debug
-sys-process/btop o1debug
+sys-process/btop debug

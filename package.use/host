@@ -1,5 +1,4 @@
 # Compiler
-sys-devel/gcc fortran openmp jit -pgo lto -nls
 dev-lang/rust llvm-tools system-llvm system-bootstrap rustfmt wasm -nightly wasi clippy rust-analyzer rust-src profiler RUST_SYSROOTS: bpf wasm
 dev-lang/rust-bin rustfmt profiler
 virtual/rust rustfmt profiler
@@ -22,13 +21,9 @@ dev-java/openjdk gentoo-vm
 dev-lang/ghc doc ghcbootstrap elfutils
 llvm-core/clang-toolchain-symlinks gcc-symlinks
 dev-lang/python tail-call-interp
-dev-lang/python:3.14 -pgo
 */* llvm_slot_21 -llvm_slot_20 -llvm_slot_19 -llvm_slot_18
 app-editors/imhex llvm_slot_20
 dev-dotnet/dotnet-sdk llvm_slot_20
-dev-lang/deno llvm_slot_20
-dev-util/electron:36 llvm_slot_20
-app-text/doxygen llvm_slot_20
 app-crypt/sequoia-sq llvm_slot_20
 dev-util/bpftool llvm_slot_20
 dev-util/bcc llvm_slot_20 -llvm_slot_21
@@ -71,7 +66,7 @@ www-client/uget aria2 libnotify openssl -gnutls
 mail-client/mutt gdbm mbox pop gpgme
 media-video/obs-studio -vlc lua v4l truetype pipewire fdk speex python lua_single_target_luajit -ssl
 dev-vcs/git perl keyring
-dev-util/perf zstd clang lzma libpfm perl -python libtraceevent libtracefs bpf -unwind
+dev-util/perf zstd clang lzma libpfm -perl python libtraceevent libtracefs bpf -unwind capstone
 dev-qt/qt-creator clang android autotools webassembly beautifier ctfvisualizer -doc glsl meson qmlprofiler serialterminal cmake git lsp perfprofiler python webengine
 app-shells/fish doc
 app-crypt/gnupg scd-shared-access 

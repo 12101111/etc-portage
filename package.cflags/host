@@ -39,6 +39,7 @@ kde-frameworks/breeze-icons /-flto*//
 net-fs/nfs-utils /-flto*// /-Wl,*//
 dev-lang/rust /-flto*// /-Wl,*// RUSTFLAGS-=-C*lto*
 dev-qt/qttools /-flto*//
+app-text/doxygen /-O3/-O2/
 
 # flang
 sci-libs/openblas /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections//
