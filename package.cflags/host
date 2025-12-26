@@ -3,7 +3,7 @@ sys-libs/musl /-flto*/-fno-lto
 dev-lang/rust /*lto*// RUSTFLAGS-=-Clinker* RUSTFLAGS-=-Clink-arg=-f* RUSTFLAGS-=-*lto* RUSTFLAGS-=-Ctarget-cpu=znver4 RUSTFLAGS+=-Ctarget-cpu=znver3
 app-emulation/libvirt /-flto*/-fno-lto #segfault
 dev-python/libvirt-python /-flto*/-fno-lto # bus error
-media-libs/mesa /-flto*/-fno-lto #dont build
+media-libs/mesa /-flto*/-fno-lto
 media-libs/libglvnd /-flto*/-fno-lto #link error
 dev-cpp/glog /-flto*/-fno-lto
 sys-libs/libomp /-flto*/-fno-lto

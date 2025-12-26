@@ -1,5 +1,5 @@
 diff --git a/src/Backends/SDLBackend.cpp b/src/Backends/SDLBackend.cpp
-index 2bb8fb0..132b255 100644
+index 87bde7e..ec36239 100644
 --- a/src/Backends/SDLBackend.cpp
 +++ b/src/Backends/SDLBackend.cpp
 @@ -1,6 +1,7 @@
@@ -10,7 +10,7 @@ index 2bb8fb0..132b255 100644
  #include <thread>
  #include <mutex>
  #include <string>
-@@ -196,9 +197,12 @@ namespace gamescope
+@@ -199,9 +200,12 @@ namespace gamescope
  
  		std::atomic<bool> m_bApplicationGrabbed = { false };
  		std::atomic<bool> m_bApplicationVisible = { false };
@@ -73,7 +73,7 @@ index 2bb8fb0..132b255 100644
  
  						if ( m_pCursorSurface )
 diff --git a/src/Backends/WaylandBackend.cpp b/src/Backends/WaylandBackend.cpp
-index 664ed0e..735ca5a 100644
+index ab6d30c..32dedba 100644
 --- a/src/Backends/WaylandBackend.cpp
 +++ b/src/Backends/WaylandBackend.cpp
 @@ -12,6 +12,8 @@
@@ -85,7 +85,7 @@ index 664ed0e..735ca5a 100644
  #include <unordered_map>
  #include <unordered_set>
  #include <csignal>
-@@ -532,7 +534,8 @@ namespace gamescope
+@@ -560,7 +562,8 @@ namespace gamescope
          std::optional<wl_fixed_t> m_ofPendingCursorX;
          std::optional<wl_fixed_t> m_ofPendingCursorY;
  
@@ -95,7 +95,7 @@ index 664ed0e..735ca5a 100644
          std::unordered_set<uint32_t> m_uScancodesHeld;
  
          void Wayland_Registry_Global( wl_registry *pRegistry, uint32_t uName, const char *pInterface, uint32_t uVersion );
-@@ -2819,7 +2822,8 @@ namespace gamescope
+@@ -2868,7 +2871,8 @@ namespace gamescope
  
      void CWaylandInputThread::SetRelativePointer( bool bRelative )
      {
@@ -105,14 +105,57 @@ index 664ed0e..735ca5a 100644
              return;
          // This constructors/destructors the display's mutex, so should be safe to do across threads.
          if ( !bRelative )
-@@ -3008,7 +3012,9 @@ namespace gamescope
-     }
-     void CWaylandInputThread::Wayland_Pointer_Motion( wl_pointer *pPointer, uint32_t uTime, wl_fixed_t fSurfaceX, wl_fixed_t fSurfaceY )
-     {
+@@ -3057,7 +3061,8 @@ namespace gamescope
+ 		if ( !pPlane )
+ 			return;
+ 
 -        if ( m_pRelativePointer.load() != nullptr )
 +        std::shared_lock lock(m_pRelativePointer_lock);
-+
 +        if ( m_pRelativePointer != nullptr )
              return;
  
          if ( !cv_wayland_mouse_warp_without_keyboard_focus && !m_bKeyboardEntered )
+diff --git a/src/steamcompmgr.cpp b/src/steamcompmgr.cpp
+index 4968397..f4d90ae 100644
+--- a/src/steamcompmgr.cpp
++++ b/src/steamcompmgr.cpp
+@@ -1040,7 +1040,8 @@ int g_BlurRadius = 5;
+ unsigned int g_BlurFadeStartTime = 0;
+ 
+ pid_t focusWindow_pid, sdFocusWindow_pid;
+-std::atomic<std::shared_ptr<std::string>> focusWindow_engine = nullptr;
++std::shared_ptr<std::string> focusWindow_engine = nullptr;
++std::shared_mutex focusWindow_engine_lock;
+ 
+ focus_t g_steamcompmgr_xdg_focus;
+ std::vector<std::shared_ptr<steamcompmgr_win_t>> g_steamcompmgr_xdg_wins;
+@@ -6694,7 +6695,7 @@ bool handle_done_commit( steamcompmgr_win_t *w, xwayland_ctx_t *ctx, uint64_t co
+ 					if ( !cv_paint_debug_pause_base_plane )
+ 						g_HeldCommits[ HELD_COMMIT_BASE ] = w->commit_queue[ j ];
+ 					hasRepaint = true;
+-
++					std::unique_lock lock(focusWindow_engine_lock);
+ 					focusWindow_engine = w->engineName;
+ 					focusWindow_pid = w->pid;
+ 				}
+diff --git a/src/steamcompmgr.hpp b/src/steamcompmgr.hpp
+index 6734c15..a025595 100644
+--- a/src/steamcompmgr.hpp
++++ b/src/steamcompmgr.hpp
+@@ -1,5 +1,5 @@
+ #include <stdint.h>
+-
++#include <shared_mutex>
+ #include "wlr_begin.hpp"
+ #include <wlr/types/wlr_buffer.h>
+ #include <wlr/render/wlr_texture.h>
+@@ -144,7 +144,8 @@ struct wlserver_x11_surface_info *lookup_x11_surface_info_from_xid( gamescope_xw
+ 
+ extern gamescope::VBlankTime g_SteamCompMgrVBlankTime;
+ extern pid_t focusWindow_pid;
+-extern std::atomic<std::shared_ptr<std::string>> focusWindow_engine;
++extern std::shared_mutex focusWindow_engine_lock;
++extern std::shared_ptr<std::string> focusWindow_engine;
+ 
+ void init_xwayland_ctx(uint32_t serverId, gamescope_xwayland_server_t *xwayland_server);
+ void gamescope_set_selection(std::string contents, GamescopeSelection eSelection);

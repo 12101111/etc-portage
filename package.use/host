@@ -25,8 +25,7 @@ dev-lang/python tail-call-interp
 app-editors/imhex llvm_slot_20
 dev-dotnet/dotnet-sdk llvm_slot_20
 app-crypt/sequoia-sq llvm_slot_20
-dev-util/bpftool llvm_slot_20
-dev-util/bcc llvm_slot_20 -llvm_slot_21
+dev-util/bcc -llvm_slot_21 llvm_slot_20
 
 # Graphic
 media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind d3d9 osmesa vulkan-overlay zink opencl
@@ -146,6 +145,7 @@ net-dns/dnsmasq script lua tftp idn dnssec #libvirt
 sys-block/parted device-mapper # libvirt
 dev-libs/glib static-libs # qemu-user-static
 sys-libs/zlib static-libs minizip # qemu-user-static telegram
+virtual/zlib static-libs # dropbear
 sys-apps/attr static-libs # qemu-user-static
 dev-libs/libpcre static-libs # qemu-user-static
 dev-libs/libpcre2 pcre16 pcre32 static-libs # qtcore qemu-user-static

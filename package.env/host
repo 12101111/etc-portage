@@ -18,7 +18,13 @@ dev-lang/mono noccache
 dev-lang/deno ccache
 
 # no file descriptor available
-# dev-dotnet/dotnet-sdk notmpfs
+dev-dotnet/dotnet-sdk notmpfs j24
+www-client/firefox notmpfs j24
+www-client/chromium notmpfs j24
+dev-util/electron notmpfs j24
+net-libs/webkit-gtk notmpfs j16
+app-editors/zed j12
+dev-lang/deno j12
 
 dev-db/mongodb mongodb
 
