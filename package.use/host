@@ -34,7 +34,7 @@ x11-wm/awesome dbus doc gnome lua_single_target_luajit
 x11-misc/picom dbus
 media-libs/freetype harfbuzz infinality
 gui-wm/sway wallpapers tray -swaylock fish-completion seatd
-gui-apps/waybar network tray mpd wifi pulseaudio evdev experimental libinput logind mpris pipewire upower
+gui-apps/waybar backlight network tray mpd wifi pulseaudio evdev experimental libinput logind mpris pipewire upower
 
 # Apps
 www-client/firefox wasm-sandbox hwaccel clang lto pgo screencast system-png system-pipewire openh264
@@ -92,11 +92,10 @@ games-wm/gamescope pipewire
 net-firewall/iptables nftables
 app-admin/sysstat lm-sensors
 games-emulation/yuzu sdl -system-vulkan webengine
-dev-util/hotspot rust
+dev-debug/hotspot rust debuginfod
 dev-util/ghidra -lldb
 games-action/prismlauncher qt6
-# move x11-misc/rofi gui-apps/rofi-wayland
-gui-apps/rofi-wayland ime
+x11-misc/rofi ime
 dev-libs/libportal gtk
 sys-fs/android-file-transfer-linux gui
 
@@ -113,7 +112,7 @@ games-emulation/dolphin ffmpeg upnp mgba egl sdl
 app-emulation/86Box new-dynarec vnc vde
 
 # System
-sys-kernel/linux-firmware savedconfig
+sys-kernel/linux-firmware savedconfig compress-zstd
 dev-lang/python sqlite tk jit # firefox
 sys-apps/busybox math syslog savedconfig static -pam
 app-portage/portage-bashrc-mv ccache
@@ -184,7 +183,7 @@ dev-python/matplotlib gtk3 cairo qt6 -latex
 net-vpn/tor caps lzma zstd tor-hardening
 dev-qt/qtmultimedia widgets
 gui-libs/wlroots icccm x11-backend seatd tinywl liftoff xcb-errors lcms
-media-video/pipewire pulseaudio sdl aptx aac extra pipewire-alsa v4l
+media-video/pipewire libcamera pulseaudio sdl aptx aac extra pipewire-alsa v4l
 media-libs/libtgvoip pulseaudio
 media-libs/tg_owt pulseaudio
 net-im/telegram-desktop -webkit -jemalloc pulseaudio lto screencast qt6 qt6-imageformats

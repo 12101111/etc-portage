@@ -122,6 +122,7 @@ dev-util/rizin LDFLAGS+=-lexecinfo
 media-libs/libva-intel-media-driver LDFLAGS+=-lexecinfo
 dev-util/ostree LDFLAGS+=-lgpg-error
 sci-libs/gklib LDFLAGS+=-lexecinfo
+media-libs/libcamera LDFLAGS+=-lexecinfo
 
 # misc
 dev-util/colm NOLAFILEREMOVE=true
