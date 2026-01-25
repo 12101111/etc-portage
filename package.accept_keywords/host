@@ -5,7 +5,6 @@ dev-debug/lldb-mi **
 <dev-lang/rust-9999 **
 virtual/rust **
 dev-lang/zig **
-games-util/mangohud **
 <llvm-core/llvm-22.0.0.9999 **
 llvm-core/llvm-toolchain-symlinks **
 <llvm-core/mlir-22.0.0.9999 **

@@ -2,4 +2,6 @@ app-portage/portage-bashrc-mv
 app-shells/runtitle
 app-editors/zed
 app-emulation/virtualbox-kvm
+llvm-runtimes/libatomic-stub
+app-emulation/open-vm-tools
 
