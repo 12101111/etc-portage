@@ -1,2 +1,2 @@
-cross_llvm-riscv32-unknown-none-elf/compiler-rt /-flto*// /-mtune*// /-march*// LDFLAGS-=-Wl,-* C*FLAGS+="-Os -pipe -mabi=ilp32 -fomit-frame-pointer"
-cross_llvm-riscv32-unknown-none-elf/picolibc /-flto*// /-mtune*// /-march*// LDFLAGS-=-Wl,-*
+cross_llvm-riscv32-unknown-none-elf/compiler-rt /-flto*// /-mtune*// /-march*// LDFLAGS-=-Wl,-* C*FLAGS+="-Os -pipe -march=rv32imac -mabi=ilp32 -mcmodel=medany -fomit-frame-pointer"
+cross_llvm-riscv32-unknown-none-elf/picolibc /-flto*// /-mtune*// /-march*// LDFLAGS-=-Wl,-* C*FLAGS+="-Os -pipe -march=rv32imac -mabi=ilp32 -mcmodel=medany"
