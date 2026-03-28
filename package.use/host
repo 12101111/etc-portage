@@ -13,19 +13,13 @@ llvm-core/lldb debug
 llvm-core/polly debug
 llvm-core/flang debug
 llvm-core/mlir debug
-llvm-core/llvm:22 -binutils-plugin
-llvm-core/llvm-toolchain-symlinks:22 -native-symlinks
+llvm-runtimes/openmp fortran
 dev-lang/rust:9999 miri
 llvm-runtimes/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray libfuzzer profile
 dev-java/openjdk gentoo-vm
 dev-lang/ghc doc ghcbootstrap elfutils
 llvm-core/clang-toolchain-symlinks gcc-symlinks
 dev-lang/python tail-call-interp
-*/* llvm_slot_21 -llvm_slot_20 -llvm_slot_19 -llvm_slot_18
-app-editors/imhex llvm_slot_20
-dev-dotnet/dotnet-sdk llvm_slot_20
-app-crypt/sequoia-sq llvm_slot_20
-dev-util/bcc -llvm_slot_21 llvm_slot_20
 
 # Graphic
 media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind d3d9 osmesa vulkan-overlay zink opencl
@@ -55,6 +49,7 @@ www-client/otter webkit webengine
 app-text/goldendict multimedia opencc zim ffmpeg xapian
 app-office/libreoffice gstreamer pdfimport java dbus kde qt6
 net-fs/samba client syslog
+net-libs/ngtcp2 gnutls # samba
 x11-apps/igt-gpu-tools overlay
 sys-cluster/kubernetes -kube-apiserver -kube-controller-manager -kube-proxy -kube-scheduler -kubeadm -kubelet kubectl
 media-gfx/sxiv savedconfig
@@ -92,7 +87,7 @@ games-wm/gamescope pipewire
 net-firewall/iptables nftables
 app-admin/sysstat lm-sensors
 games-emulation/yuzu sdl -system-vulkan webengine
-dev-util/hotspot rust
+dev-debug/hotspot debuginfod rust
 dev-util/ghidra -lldb
 games-action/prismlauncher qt6
 # move x11-misc/rofi gui-apps/rofi-wayland
@@ -193,7 +188,7 @@ app-crypt/pinentry gnome-keyring gtk qt6
 media-libs/phonon gstreamer
 kde-frameworks/kitemmodels qml
 games-emulation/dosbox-x ffmpeg
-sci-libs/fftw threads -fortran
+sci-libs/fftw threads fortran
 dev-scheme/racket doc
 net-wireless/blueman appindicator network
 dev-qt/qtquickcontrols2 widgets # yubikey-manager-qt
@@ -203,6 +198,7 @@ media-libs/gegl cairo
 media-libs/babl introspection lcms
 media-libs/gegl introspection lcms
 kde-apps/kio-extras mtp nfs samba
+net-dns/avahi mdnsresponder-compat
 app-text/poppler lcms cjk
 kde-frameworks/prison qml
 sys-apps/util-linux caps
@@ -273,10 +269,10 @@ app-i18n/opencc python #fcitx-pinyin-zhwiki
 dev-python/qtpy -pyqt5
 dev-libs/appstream compose # flatpak-builder
 gui-libs/neatvnc gbm # wayvnc
-llvm-runtimes/openmp fortran
 sci-libs/openblas index64
 virtual/lapack index64
 sci-libs/lapack index64
+sys-apps/dtc python # uboot-tools
 */* perl_features_ithreads
 
 # Tex
@@ -334,3 +330,15 @@ app-editors/vscode savedconfig system-electron system-ripgrep builtin-extensions
 media-video/pipewire ffmpeg gstreamer sound-server
 dev-util/electron -system-allocator -libcxx gtk4 -system-png suid lto pgo hevc custom-cflags system-icu clang wayland pipewire screencast
 www-client/chromium gtk4 hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png qt6 -rar
+
+# Python 3.13 -> 3.14
+app-emulation/virt-manager python_single_target_python3_13
+app-office/libreoffice python_single_target_python3_13
+media-gfx/inkscape python_single_target_python3_13
+net-analyzer/nmap python_single_target_python3_13
+sys-apps/pcsc-lite python_single_target_python3_13
+dev-util/gtk-doc python_single_target_python3_13
+net-fs/cifs-utils python_single_target_python3_13
+sys-apps/dtc python_single_target_python3_13
+app-i18n/opencc python_single_target_python3_13
+

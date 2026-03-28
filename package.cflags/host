@@ -1,9 +1,9 @@
 # no lto
 sys-libs/musl /-flto*/-fno-lto
-dev-lang/rust /*lto*// RUSTFLAGS-=-Clinker* RUSTFLAGS-=-Clink-arg=-f* RUSTFLAGS-=-*lto* RUSTFLAGS-=-Ctarget-cpu=znver4 RUSTFLAGS+=-Ctarget-cpu=znver3
+dev-lang/rust /*lto*// RUSTFLAGS-=-Clinker* RUSTFLAGS-=-Clink-arg=-f* RUSTFLAGS-=-*lto*
 app-emulation/libvirt /-flto*/-fno-lto #segfault
 dev-python/libvirt-python /-flto*/-fno-lto # bus error
-media-libs/mesa /-flto*/-fno-lto
+media-libs/mesa /-flto*/-fno-lto RUSTFLAGS-=-*lto*
 media-libs/libglvnd /-flto*/-fno-lto #link error
 dev-cpp/glog /-flto*/-fno-lto
 sys-libs/libomp /-flto*/-fno-lto
@@ -40,6 +40,12 @@ net-fs/nfs-utils /-flto*// /-Wl,*//
 dev-lang/rust /-flto*// /-Wl,*// RUSTFLAGS-=-C*lto*
 dev-qt/qttools /-flto*//
 app-text/doxygen /-O3/-O2/
+llvm-core/llvm:21 /-flto*//
+llvm-core/llvm:20 /-ftlo*//
+llvm-core/clang:21 /-flto*//
+llvm-core/clang:20 /-flto*//
+llvm-core/lld:21 /-flto*//
+llvm-core/lld:20 /-flto*//
 
 # flang
 sci-libs/openblas /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections//
@@ -122,6 +128,7 @@ dev-util/rizin LDFLAGS+=-lexecinfo
 media-libs/libva-intel-media-driver LDFLAGS+=-lexecinfo
 dev-util/ostree LDFLAGS+=-lgpg-error
 sci-libs/gklib LDFLAGS+=-lexecinfo
+sys-process/procps LDFLAGS+=-lerror
 
 # misc
 dev-util/colm NOLAFILEREMOVE=true

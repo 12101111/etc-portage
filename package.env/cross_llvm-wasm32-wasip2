@@ -1,0 +1,14 @@
+cross_llvm-wasm32-wasip2/linux-headers cross_llvm-wasm32-wasip2/linux-headers.conf
+cross_llvm-wasm32-wasip2/linux-headers cross_llvm-wasm32-wasip2/llvm.conf
+cross_llvm-wasm32-wasip2/compiler-rt cross_llvm-wasm32-wasip2/compiler-rt.conf
+cross_llvm-wasm32-wasip2/compiler-rt cross_llvm-wasm32-wasip2/llvm.conf
+cross_llvm-wasm32-wasip2/clang-crossdev-wrappers cross_llvm-wasm32-wasip2/clang-crossdev-wrappers.conf
+cross_llvm-wasm32-wasip2/clang-crossdev-wrappers cross_llvm-wasm32-wasip2/llvm.conf
+cross_llvm-wasm32-wasip2/libcxx cross_llvm-wasm32-wasip2/libcxx.conf
+cross_llvm-wasm32-wasip2/libcxx cross_llvm-wasm32-wasip2/llvm.conf
+cross_llvm-wasm32-wasip2/libcxxabi cross_llvm-wasm32-wasip2/libcxx.conf
+cross_llvm-wasm32-wasip2/libcxxabi cross_llvm-wasm32-wasip2/llvm.conf
+cross_llvm-wasm32-wasip2/libunwind cross_llvm-wasm32-wasip2/libunwind.conf
+cross_llvm-wasm32-wasip2/libunwind cross_llvm-wasm32-wasip2/llvm.conf
+cross_llvm-wasm32-wasip2/wasi-libc cross_llvm-wasm32-wasip2/wasi-libc.conf
+cross_llvm-wasm32-wasip2/wasi-libc cross_llvm-wasm32-wasip2/llvm.conf

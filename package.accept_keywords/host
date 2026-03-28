@@ -1,12 +1,5 @@
-<media-gfx/gimp-9999 **
 dev-lang/luajit **
-games-emulation/yuzu **
 dev-debug/lldb-mi **
-<dev-lang/rust-9999 **
-virtual/rust **
+dev-lang/rust::12101111-overlay **
 dev-lang/zig **
-games-util/mangohud **
-<llvm-core/llvm-22.0.0.9999 **
-llvm-core/llvm-toolchain-symlinks **
-<llvm-core/mlir-22.0.0.9999 **
 sys-fs/zfs::12101111-overlay **

@@ -1,0 +1,12 @@
+diff --git a/src/tools/cargo/src/cargo/ops/cargo_install.rs b/src/tools/cargo/src/cargo/ops/cargo_install.rs
+index b30955432..c92a3fc16 100644
+--- a/src/tools/cargo/src/cargo/ops/cargo_install.rs
++++ b/src/tools/cargo/src/cargo/ops/cargo_install.rs
+@@ -871,7 +871,6 @@ fn make_ws_rustc_target<'gctx>(
+     if ws.requested_lockfile_path().is_some() {
+         ws.set_ignore_lock(false);
+     }
+-    ws.set_require_optional_deps(false);
+ 
+     let rustc = gctx.load_global_rustc(Some(&ws))?;
+     let target = match &opts.build_config.single_requested_kind()? {

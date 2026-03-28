@@ -1,0 +1,12 @@
+diff --git a/src/sysdep1.c b/src/sysdep1.c
+index e80fab3..e98ab37 100644
+--- a/src/sysdep1.c
++++ b/src/sysdep1.c
+@@ -30,6 +30,7 @@
+  *   jl  23.06.97  adjustable DTR downtime
+  */
+ #include <config.h>
++#define BOTHER              0x00001000
+ 
+ #include "port.h"
+ #include "sysdep.h"

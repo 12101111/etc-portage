@@ -1,0 +1,12 @@
+diff --git a/external/wcwidth/wcwidth.h b/external/wcwidth/wcwidth.h
+index 38c17ac..4ccf884 100644
+--- a/external/wcwidth/wcwidth.h
++++ b/external/wcwidth/wcwidth.h
+@@ -2,6 +2,7 @@
+ #define WCWIDTH_H_INCLUDED
+ 
+ #include <stdlib.h>
++#include <sys/cdefs.h>
+ 
+ __BEGIN_DECLS
+ 

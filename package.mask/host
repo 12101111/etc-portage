@@ -1,8 +1,7 @@
 */*::mv
 */*::pg_overlay
 
->=net-libs/nodejs-24.1.0
 dev-util/heaptrack::gentoo
 dev-dotnet/dotnet-sdk-bin::gentoo
 dev-dotnet/dotnet-sdk::gentoo
-=dev-dotnet/csharp-gentoodotnetinfo-2.0.0-r1
+<=dev-libs/capstone-6.0.0_alpha7:0/6

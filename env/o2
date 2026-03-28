@@ -1,0 +1,5 @@
+COMMON_FLAGS="-march=znver4 -mtune=znver4 -pipe -O2"
+CFLAGS="${COMMON_FLAGS}"
+CXXFLAGS="${COMMON_FLAGS}"
+RUSTFLAGS="-Copt-level=2 -Ctarget-feature=-crt-static"
+LDFLAGS="-Wl,-z,pack-relative-relocs"

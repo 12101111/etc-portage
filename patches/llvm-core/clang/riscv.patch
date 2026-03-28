@@ -1,0 +1,19 @@
+diff --git a/clang/lib/Driver/ToolChains/Linux.cpp b/clang/lib/Driver/ToolChains/Linux.cpp
+index 8ac8d4eb9181..b68b019d41f0 100644
+--- a/clang/lib/Driver/ToolChains/Linux.cpp
++++ b/clang/lib/Driver/ToolChains/Linux.cpp
+@@ -487,6 +487,14 @@ std::string Linux::getDynamicLinker(const ArgList &Args) const {
+     if (Arch == llvm::Triple::ppc &&
+         Triple.getSubArch() == llvm::Triple::PPCSubArch_spe)
+       ArchName = "powerpc-sf";
++    if (Arch == llvm::Triple::riscv64 || Arch == llvm::Triple::riscv32) {
++      const StringRef abi = tools::riscv::getRISCVABI(Args, Triple);
++      if (abi == "ilp32f" || abi == "lp64f") {
++        ArchName += "-sp";
++      } else if (abi == "ilp32" || abi == "lp64") {
++        ArchName += "-sf";
++      }
++    }
+ 
+     return "/lib/ld-musl-" + ArchName + ".so.1";
+   }

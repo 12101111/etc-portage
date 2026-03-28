@@ -1,0 +1,5 @@
+cross_llvm-wasm32-wasip2/linux-headers * ~* -amd64 -~amd64
+cross_llvm-wasm32-wasip2/compiler-rt * ~* -amd64 -~amd64
+cross_llvm-wasm32-wasip2/clang-crossdev-wrappers * ~* -amd64 -~amd64
+cross_llvm-wasm32-wasip2/libcxx * ~* -amd64 -~amd64
+cross_llvm-wasm32-wasip2/libunwind * ~* -amd64 -~amd64
