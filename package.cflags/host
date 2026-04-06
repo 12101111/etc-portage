@@ -93,6 +93,7 @@ app-text/goldendict LDFLAGS+=-Wl,-z,stack-size=0x800000
 x11-libs/pixman LDFLAGS+=-Wl,-z,stack-size=0x200000
 net-libs/libtorrent-rasterbar LDFLAGS+=-Wl,-z,stack-size=0x200000
 dev-java/openjdk LDFLAGS+=-Wl,-z,stack-size=0x800000
+dev-util/binaryen LDFLAGS+=-Wl,-z,stack-size=0x800000
 
 # no-plt
 dev-libs/nss /-fno-plt//

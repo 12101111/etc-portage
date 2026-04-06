@@ -20,6 +20,22 @@ dev-java/openjdk gentoo-vm
 dev-lang/ghc doc ghcbootstrap elfutils
 llvm-core/clang-toolchain-symlinks gcc-symlinks
 dev-lang/python tail-call-interp
+*/* llvm_slot_22 -llvm_slot_21 -llvm_slot_20
+=dev-lang/zig-9999 llvm_slot_21
+=dev-lang/zig-0.15.2 llvm_slot_20
+=dev-lang/rust-1.94.1 llvm_slot_21
+dev-util/perf llvm_slot_21
+gui-wm/niri llvm_slot_21
+sci-electronics/yosys llvm_slot_21
+sys-devel/wild llvm_slot_21
+www-client/firefox llvm_slot_21
+media-libs/mesa llvm_slot_21
+dev-util/spirv-llvm-translator:21 llvm_slot_21
+=llvm-core/libclc-21* llvm_slot_21
+<dev-util/mesa_clc-26.1.0 llvm_slot_21
+<dev-qt/qttools-6.11.0 llvm_slot_21
+app-crypt/sequoia-sq llvm_slot_21
+dev-util/electron:39 llvm_slot_21
 
 # Graphic
 media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind d3d9 osmesa vulkan-overlay zink opencl
@@ -36,6 +52,7 @@ mail-client/thunderbird hwaccel clang lto
 app-editors/emacs webp -jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars -X tree-sitter sqlite
 app-emacs/emacs-common gsettings
 app-editors/vim X python
+app-editors/zed -collab
 media-video/mpv archive cli drm libass opengl lua vaapi libmpv -vulkan lua_single_target_luajit
 net-misc/remmina rdp vnc appindicator gnome-keyring spice ssh
 media-sound/mpd flac
@@ -227,7 +244,7 @@ sys-apps/xdg-desktop-portal flatpak screencast
 net-misc/networkmanager connection-sharing -dhcpcd nftables -lto iwd
 net-wireless/wpa_supplicant ap -crda
 dev-qt/qt-docs script webengine
-dev-lang/deno static-libs denort
+dev-lang/deno -libcxx static-libs denort
 dev-util/xdelta lzma
 app-arch/brotli python
 net-libs/webkit-gtk examples keyring libnotify spell avif gamepad lcms pdf jpegxl
@@ -273,6 +290,7 @@ sci-libs/openblas index64
 virtual/lapack index64
 sci-libs/lapack index64
 sys-apps/dtc python # uboot-tools
+sys-devel/mold mimalloc
 */* perl_features_ithreads
 
 # Tex

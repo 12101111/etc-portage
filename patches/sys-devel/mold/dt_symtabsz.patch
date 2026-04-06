@@ -1,0 +1,24 @@
+diff --git a/src/elf.h b/src/elf.h
+index 81788e8d..a2ef639e 100644
+--- a/src/elf.h
++++ b/src/elf.h
+@@ -285,6 +285,7 @@ enum : u32 {
+   DT_RELRSZ = 35,
+   DT_RELR = 36,
+   DT_RELRENT = 37,
++  DT_SYMTABSZ = 39,
+   DT_GNU_HASH = 0x6ffffef5,
+   DT_DEPAUDIT = 0x6ffffefb,
+   DT_AUDIT = 0x6ffffefc,
+diff --git a/src/output-chunks.cc b/src/output-chunks.cc
+index bfbdefb9..f837838b 100644
+--- a/src/output-chunks.cc
++++ b/src/output-chunks.cc
+@@ -695,6 +695,7 @@ static std::vector<Word<E>> create_dynamic_section(Context<E> &ctx) {
+ 
+   if (ctx.dynsym->shdr.sh_size) {
+     define(DT_SYMTAB, ctx.dynsym->shdr.sh_addr);
++    define(DT_SYMTABSZ, ctx.dynsym->shdr.sh_size);
+     define(DT_SYMENT, sizeof(ElfSym<E>));
+   }
+ 
