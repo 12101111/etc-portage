@@ -17,6 +17,8 @@ dev-util/bazel noccache
 dev-lang/mono noccache
 dev-lang/deno ccache
 
+app-editors/zed o2
+
 # no file descriptor available
 # dev-dotnet/dotnet-sdk notmpfs j24
 

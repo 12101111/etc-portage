@@ -4,4 +4,6 @@ app-editors/zed
 app-emulation/virtualbox-kvm
 llvm-runtimes/libatomic-stub
 app-emulation/open-vm-tools
+dev-java/openjdk-bin
+sys-process/systemd-cron
 

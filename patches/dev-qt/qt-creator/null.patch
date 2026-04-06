@@ -1,0 +1,13 @@
+diff --git a/src/libs/utils/crashreporting.cpp b/src/libs/utils/crashreporting.cpp
+index b99cdf2..787cda9 100644
+--- a/src/libs/utils/crashreporting.cpp
++++ b/src/libs/utils/crashreporting.cpp
+@@ -262,7 +262,7 @@ void addCrashReportSettingsUi(QWidget *parent, Layouting::Grid *grid)
+         auto crashButton = new QPushButton("CRASH!!!");
+         QObject::connect(crashButton, &QPushButton::clicked, [] {
+             // do a real crash
+-            volatile int *a = reinterpret_cast<volatile int *>(NULL);
++            volatile int *a = NULL;
+             *a = 1;
+         });
+         crashDetails.addItem(crashButton);

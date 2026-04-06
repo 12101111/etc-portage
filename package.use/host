@@ -13,16 +13,29 @@ llvm-core/lldb debug
 llvm-core/polly debug
 llvm-core/flang debug
 llvm-core/mlir debug
-llvm-core/llvm:22 -binutils-plugin
-llvm-core/llvm-toolchain-symlinks:22 -native-symlinks
+llvm-runtimes/compiler-rt-sanitizers -debug
+llvm-runtimes/flang-rt -debug
+llvm-core/clang-toolchain-symlinks:22 -gcc-symlinks -native-symlinks
+llvm-core/lld-toolchain-symlinks:22 -native-symlinks
 dev-lang/rust:9999 miri
 llvm-runtimes/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray libfuzzer profile
 dev-java/openjdk gentoo-vm
 dev-lang/ghc doc ghcbootstrap elfutils
 llvm-core/clang-toolchain-symlinks gcc-symlinks
 dev-lang/python tail-call-interp
-*/* llvm_slot_21 -llvm_slot_20 -llvm_slot_19 -llvm_slot_18
-dev-dotnet/dotnet-sdk llvm_slot_20
+*/* llvm_slot_22 -llvm_slot_21 -llvm_slot_20 -llvm_slot_19 -llvm_slot_18
+dev-lang/zig llvm_slot_21
+dev-util/electron:39 llvm_slot_21
+dev-util/perf llvm_slot_21
+sci-electronics/yosys llvm_slot_21
+www-client/firefox llvm_slot_21
+media-libs/mesa llvm_slot_21
+dev-util/spirv-llvm-translator:21 llvm_slot_21
+=llvm-core/libclc-21* llvm_slot_21
+<dev-util/mesa_clc-26.1.0 llvm_slot_21
+<dev-qt/qttools-6.11.0 llvm_slot_21
+app-crypt/sequoia-sq llvm_slot_21
+dev-lang/rust:1.94.1 llvm_slot_21
 
 # Graphic
 media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind d3d9 osmesa vulkan-overlay zink opencl
@@ -38,6 +51,7 @@ www-client/firefox wasm-sandbox hwaccel clang lto pgo screencast system-png syst
 mail-client/thunderbird hwaccel clang lto
 app-editors/emacs webp -jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars -X tree-sitter sqlite
 app-emacs/emacs-common gsettings
+app-editors/zed -collab
 app-editors/vim X python
 media-video/mpv archive cli drm libass opengl lua vaapi libmpv -vulkan lua_single_target_luajit
 net-misc/remmina rdp vnc appindicator gnome-keyring spice ssh
@@ -95,6 +109,7 @@ games-action/prismlauncher qt6
 x11-misc/rofi ime
 dev-libs/libportal gtk
 sys-fs/android-file-transfer-linux gui
+sys-apps/kmscon freetype
 
 # VM / Emulator
 app-emulation/qemu udev zstd -jemalloc gtk usb usbredir spice virgl pin-upstream-blobs virtfs static-user slirp io-uring vte gnutls vhost-user-fs -plugins capstone fuse bpf nfs pipewire vde
@@ -190,7 +205,7 @@ app-crypt/pinentry gnome-keyring gtk qt6
 media-libs/phonon gstreamer
 kde-frameworks/kitemmodels qml
 games-emulation/dosbox-x ffmpeg
-sci-libs/fftw threads -fortran
+sci-libs/fftw threads fortran
 dev-scheme/racket doc
 net-wireless/blueman appindicator network
 dev-qt/qtquickcontrols2 widgets # yubikey-manager-qt
@@ -200,6 +215,8 @@ media-libs/gegl cairo
 media-libs/babl introspection lcms
 media-libs/gegl introspection lcms
 kde-apps/kio-extras mtp nfs samba
+net-libs/ngtcp2 gnutls # samba
+net-dns/avahi mdnsresponder-compat
 app-text/poppler lcms cjk
 kde-frameworks/prison qml
 sys-apps/util-linux caps
@@ -228,7 +245,7 @@ sys-apps/xdg-desktop-portal flatpak screencast
 net-misc/networkmanager connection-sharing -dhcpcd nftables -lto iwd
 net-wireless/wpa_supplicant ap -crda
 dev-qt/qt-docs script webengine
-dev-lang/deno static-libs denort
+dev-lang/deno -libcxx system-icu static-libs denort
 dev-util/xdelta lzma
 app-arch/brotli python
 net-libs/webkit-gtk examples keyring libnotify spell avif gamepad lcms pdf jpegxl
@@ -275,6 +292,7 @@ sci-libs/openblas index64
 virtual/lapack index64
 sci-libs/lapack index64
 */* perl_features_ithreads
+app-editors/imhex -desktop-portal
 
 # Tex
 app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra luatex
@@ -331,3 +349,14 @@ app-editors/vscode savedconfig system-electron system-ripgrep builtin-extensions
 media-video/pipewire ffmpeg gstreamer sound-server
 dev-util/electron -system-allocator -libcxx gtk4 -system-png suid lto pgo hevc custom-cflags system-icu clang wayland pipewire screencast
 www-client/chromium gtk4 hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png qt6 -rar
+
+# Python 3.14
+app-emulation/virt-manager python_single_target_python3_13
+app-office/libreoffice python_single_target_python3_13
+media-gfx/inkscape python_single_target_python3_13
+net-analyzer/nmap python_single_target_python3_13
+sys-apps/pcsc-lite python_single_target_python3_13
+dev-util/gtk-doc python_single_target_python3_13
+net-fs/cifs-utils python_single_target_python3_13
+sys-apps/dtc python_single_target_python3_13
+app-i18n/opencc python_single_target_python3_13

@@ -1,0 +1,12 @@
+diff --git a/lld/ELF/SyntheticSections.cpp b/lld/ELF/SyntheticSections.cpp
+index c81f649861a7..1f467674a840 100644
+--- a/lld/ELF/SyntheticSections.cpp
++++ b/lld/ELF/SyntheticSections.cpp
+@@ -1532,6 +1532,7 @@ DynamicSection<ELFT>::computeContents() {
+ 
+   addInSec(DT_SYMTAB, *part.dynSymTab);
+   addInt(DT_SYMENT, sizeof(Elf_Sym));
++  addInt(DT_SYMTABSZ, part.dynSymTab->getSize());
+   addInSec(DT_STRTAB, *part.dynStrTab);
+   addInt(DT_STRSZ, part.dynStrTab->getSize());
+   if (!ctx.arg.zText)
