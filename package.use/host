@@ -15,8 +15,7 @@ llvm-core/flang debug
 llvm-core/mlir debug
 llvm-runtimes/compiler-rt-sanitizers -debug
 llvm-runtimes/flang-rt -debug
-llvm-core/clang-toolchain-symlinks:22 -gcc-symlinks -native-symlinks
-llvm-core/lld-toolchain-symlinks:22 -native-symlinks
+llvm-runtimes/openmp fortran
 dev-lang/rust:9999 miri
 llvm-runtimes/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray libfuzzer profile
 dev-java/openjdk gentoo-vm
@@ -24,8 +23,9 @@ dev-lang/ghc doc ghcbootstrap elfutils
 llvm-core/clang-toolchain-symlinks gcc-symlinks
 dev-lang/python tail-call-interp
 */* llvm_slot_22 -llvm_slot_21 -llvm_slot_20 -llvm_slot_19 -llvm_slot_18
-dev-lang/zig llvm_slot_21
-# sci-electronics/yosys llvm_slot_21
+=dev-lang/zig-9999 llvm_slot_21
+=dev-lang/zig-0.15.2 llvm_slot_20
+=dev-lang/zig-0.16.0 llvm_slot_21
 <dev-qt/qttools-6.11.0 llvm_slot_21
 
 # Graphic
@@ -160,7 +160,7 @@ media-libs/libva utils
 app-i18n/fcitx-gtk -gtk2 gtk4
 dev-db/sqlite secure-delete # aria2[sqlite]
 dev-qt/qtwebchannel qml # zoom
-dev-qt/qtwebengine pdf jumbo-build widgets qml -system-icu
+dev-qt/qtwebengine -screencast pdf jumbo-build widgets qml -system-icu
 dev-qt/qtmultimedia gstreamer
 #app-arch/unzip natspec # GBK zip files
 app-crypt/gcr gtk
@@ -277,11 +277,13 @@ dev-python/qtpy -pyqt5
 dev-libs/appstream compose # flatpak-builder
 gui-libs/neatvnc gbm # wayvnc
 llvm-runtimes/openmp fortran
-sci-libs/openblas index64 -openmp
+sci-libs/openblas index64
 virtual/lapack index64
 sci-libs/lapack index64
 */* perl_features_ithreads
 app-editors/imhex -desktop-portal
+sys-apps/dtc python #uboot-tools
+sys-devel/mold mimalloc
 
 # Tex
 app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra luatex

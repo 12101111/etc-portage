@@ -1,0 +1,518 @@
+From 2509337f020ced9a74b747cd4f36c0019c5ee288 Mon Sep 17 00:00:00 2001
+From: Florian Hahn <flo@fhahn.com>
+Date: Tue, 14 Apr 2026 09:32:54 +0100
+Subject: [PATCH] [LV] Remove legacy selectVectorizationFactor and assert
+ (NFCI) (#190838)
+
+Almost all recipes now go through ::computeCost to properly compute
+their costs using the VPlan-based cost model. There are currently no
+known cases where the VPlan-based cost model returns an incorrect cost
+vs the legacy cost model. I check the remaining open issues with reports
+of the assertion triggering and in all cases the VPlan-based cost model
+is more accurate, which is causing the divergence.
+
+There are still some fall-back paths, mostly via precomputeCosts, but
+those cannot be easily removed without triggering the assert, as the
+VPlan-based cost model is more accurate for those cases. An example of
+this is https://github.com/llvm/llvm-project/pull/187056.
+
+Fixes https://github.com/llvm/llvm-project/issues/38575.
+Fixes https://github.com/llvm/llvm-project/issues/149651.
+Fixes https://github.com/llvm/llvm-project/issues/182646.
+Fixes https://github.com/llvm/llvm-project/issues/183739.
+Fixes https://github.com/llvm/llvm-project/issues/187523.
+
+PR: https://github.com/llvm/llvm-project/pull/190838
+---
+ .../Vectorize/LoopVectorizationPlanner.h      |   9 -
+ .../Transforms/Vectorize/LoopVectorize.cpp    | 329 ------------------
+ llvm/lib/Transforms/Vectorize/VPlanHelpers.h  |   5 -
+ .../LoopVectorize/conditional-assignment.ll   |   2 +-
+ .../Inputs/x86-loopvectorize-costmodel.ll     |   2 +-
+ .../x86-loopvectorize-costmodel.ll.expected   |  15 +-
+ .../loopvectorize-costmodel.test              |   6 +-
+ 7 files changed, 12 insertions(+), 356 deletions(-)
+
+diff --git a/llvm/lib/Transforms/Vectorize/LoopVectorizationPlanner.h b/llvm/lib/Transforms/Vectorize/LoopVectorizationPlanner.h
+index ddef767f6937..bc1478fbfb46 100644
+--- a/llvm/lib/Transforms/Vectorize/LoopVectorizationPlanner.h
++++ b/llvm/lib/Transforms/Vectorize/LoopVectorizationPlanner.h
+@@ -632,15 +632,6 @@ private:
+   void attachRuntimeChecks(VPlan &Plan, GeneratedRTChecks &RTChecks,
+                            bool HasBranchWeights) const;
+ 
+-#ifndef NDEBUG
+-  /// \return The most profitable vectorization factor for the available VPlans
+-  /// and the cost of that VF.
+-  /// This is now only used to verify the decisions by the new VPlan-based
+-  /// cost-model and will be retired once the VPlan-based cost-model is
+-  /// stabilized.
+-  VectorizationFactor selectVectorizationFactor();
+-#endif
+-
+   /// Returns true if the per-lane cost of VectorizationFactor A is lower than
+   /// that of B.
+   bool isMoreProfitable(const VectorizationFactor &A,
+diff --git a/llvm/lib/Transforms/Vectorize/LoopVectorize.cpp b/llvm/lib/Transforms/Vectorize/LoopVectorize.cpp
+index cdc6ecfa21bc..e2ebfe54910b 100644
+--- a/llvm/lib/Transforms/Vectorize/LoopVectorize.cpp
++++ b/llvm/lib/Transforms/Vectorize/LoopVectorize.cpp
+@@ -326,10 +326,6 @@ static cl::opt<bool> EnableIndVarRegisterHeur(
+     "enable-ind-var-reg-heur", cl::init(true), cl::Hidden,
+     cl::desc("Count the induction variable only once when interleaving"));
+ 
+-static cl::opt<bool> EnableCondStoresVectorization(
+-    "enable-cond-stores-vec", cl::init(true), cl::Hidden,
+-    cl::desc("Enable if predication of stores during vectorization."));
+-
+ static cl::opt<unsigned> MaxNestedScalarReductionIC(
+     "max-nested-scalar-reduction-interleave", cl::init(2), cl::Hidden,
+     cl::desc("The maximum interleave count to use when interleaving a scalar "
+@@ -1445,8 +1441,6 @@ public:
+   /// the factor width.
+   InstructionCost expectedCost(ElementCount VF);
+ 
+-  bool hasPredStores() const { return NumPredStores > 0; }
+-
+   /// Returns true if epilogue vectorization is considered profitable, and
+   /// false otherwise.
+   /// \p VF is the vectorization factor chosen for the original loop.
+@@ -4195,150 +4189,6 @@ static bool hasReplicatorRegion(VPlan &Plan) {
+                 [](auto *VPRB) { return VPRB->isReplicator(); });
+ }
+ 
+-#ifndef NDEBUG
+-VectorizationFactor LoopVectorizationPlanner::selectVectorizationFactor() {
+-  InstructionCost ExpectedCost = CM.expectedCost(ElementCount::getFixed(1));
+-  LLVM_DEBUG(dbgs() << "LV: Scalar loop costs: " << ExpectedCost << ".\n");
+-  assert(ExpectedCost.isValid() && "Unexpected invalid cost for scalar loop");
+-  assert(
+-      any_of(VPlans,
+-             [](std::unique_ptr<VPlan> &P) { return P->hasScalarVFOnly(); }) &&
+-      "Expected Scalar VF to be a candidate");
+-
+-  const VectorizationFactor ScalarCost(ElementCount::getFixed(1), ExpectedCost,
+-                                       ExpectedCost);
+-  VectorizationFactor ChosenFactor = ScalarCost;
+-
+-  bool ForceVectorization = Hints.getForce() == LoopVectorizeHints::FK_Enabled;
+-  if (ForceVectorization &&
+-      (VPlans.size() > 1 || !VPlans[0]->hasScalarVFOnly())) {
+-    // Ignore scalar width, because the user explicitly wants vectorization.
+-    // Initialize cost to max so that VF = 2 is, at least, chosen during cost
+-    // evaluation.
+-    ChosenFactor.Cost = InstructionCost::getMax();
+-  }
+-
+-  for (auto &P : VPlans) {
+-    ArrayRef<ElementCount> VFs(P->vectorFactors().begin(),
+-                               P->vectorFactors().end());
+-
+-    SmallVector<VPRegisterUsage, 8> RUs;
+-    if (any_of(VFs, [this](ElementCount VF) {
+-          return CM.shouldConsiderRegPressureForVF(VF);
+-        }))
+-      RUs = calculateRegisterUsageForPlan(*P, VFs, TTI, CM.ValuesToIgnore);
+-
+-    for (unsigned I = 0; I < VFs.size(); I++) {
+-      ElementCount VF = VFs[I];
+-      // The cost for scalar VF=1 is already calculated, so ignore it.
+-      if (VF.isScalar())
+-        continue;
+-
+-      /// If the register pressure needs to be considered for VF,
+-      /// don't consider the VF as valid if it exceeds the number
+-      /// of registers for the target.
+-      if (CM.shouldConsiderRegPressureForVF(VF) &&
+-          RUs[I].exceedsMaxNumRegs(TTI, ForceTargetNumVectorRegs))
+-        continue;
+-
+-      InstructionCost C = CM.expectedCost(VF);
+-
+-      // Add on other costs that are modelled in VPlan, but not in the legacy
+-      // cost model.
+-      VPCostContext CostCtx(CM.TTI, *CM.TLI, *P, CM, CM.CostKind, CM.PSE,
+-                            OrigLoop);
+-      VPRegionBlock *VectorRegion = P->getVectorLoopRegion();
+-      assert(VectorRegion && "Expected to have a vector region!");
+-      for (VPBasicBlock *VPBB : VPBlockUtils::blocksOnly<VPBasicBlock>(
+-               vp_depth_first_shallow(VectorRegion->getEntry()))) {
+-        for (VPRecipeBase &R : *VPBB) {
+-          auto *VPI = dyn_cast<VPInstruction>(&R);
+-          if (!VPI)
+-            continue;
+-          switch (VPI->getOpcode()) {
+-          // Selects are only modelled in the legacy cost model for safe
+-          // divisors.
+-          case Instruction::Select: {
+-            if (auto *WR =
+-                    dyn_cast_or_null<VPWidenRecipe>(VPI->getSingleUser())) {
+-              switch (WR->getOpcode()) {
+-              case Instruction::UDiv:
+-              case Instruction::SDiv:
+-              case Instruction::URem:
+-              case Instruction::SRem:
+-                continue;
+-              default:
+-                break;
+-              }
+-            }
+-            C += VPI->cost(VF, CostCtx);
+-            break;
+-          }
+-          case VPInstruction::ActiveLaneMask: {
+-            unsigned Multiplier =
+-                cast<ConstantInt>(VPI->getOperand(2)->getLiveInIRValue())
+-                    ->getZExtValue();
+-            C += VPI->cost(VF * Multiplier, CostCtx);
+-            break;
+-          }
+-          case VPInstruction::ExplicitVectorLength:
+-            C += VPI->cost(VF, CostCtx);
+-            break;
+-          default:
+-            break;
+-          }
+-        }
+-      }
+-
+-      VectorizationFactor Candidate(VF, C, ScalarCost.ScalarCost);
+-      unsigned Width =
+-          estimateElementCount(Candidate.Width, CM.getVScaleForTuning());
+-      LLVM_DEBUG(dbgs() << "LV: Vector loop of width " << VF
+-                        << " costs: " << (Candidate.Cost / Width));
+-      if (VF.isScalable())
+-        LLVM_DEBUG(dbgs() << " (assuming a minimum vscale of "
+-                          << CM.getVScaleForTuning().value_or(1) << ")");
+-      LLVM_DEBUG(dbgs() << ".\n");
+-
+-      if (!ForceVectorization && !willGenerateVectors(*P, VF, TTI)) {
+-        LLVM_DEBUG(
+-            dbgs()
+-            << "LV: Not considering vector loop of width " << VF
+-            << " because it will not generate any vector instructions.\n");
+-        continue;
+-      }
+-
+-      if (CM.OptForSize && !ForceVectorization && hasReplicatorRegion(*P)) {
+-        LLVM_DEBUG(
+-            dbgs()
+-            << "LV: Not considering vector loop of width " << VF
+-            << " because it would cause replicated blocks to be generated,"
+-            << " which isn't allowed when optimizing for size.\n");
+-        continue;
+-      }
+-
+-      if (isMoreProfitable(Candidate, ChosenFactor, P->hasScalarTail()))
+-        ChosenFactor = Candidate;
+-    }
+-  }
+-
+-  if (!EnableCondStoresVectorization && CM.hasPredStores()) {
+-    reportVectorizationFailure(
+-        "There are conditional stores.",
+-        "store that is conditionally executed prevents vectorization",
+-        "ConditionalStore", ORE, OrigLoop);
+-    ChosenFactor = ScalarCost;
+-  }
+-
+-  LLVM_DEBUG(if (ForceVectorization && !ChosenFactor.Width.isScalar() &&
+-                 !isMoreProfitable(ChosenFactor, ScalarCost,
+-                                   !CM.foldTailByMasking())) dbgs()
+-             << "LV: Vectorization seems to be not beneficial, "
+-             << "but was forced by a user.\n");
+-  return ChosenFactor;
+-}
+-#endif
+-
+ bool LoopVectorizationPlanner::isCandidateForEpilogueVectorization(
+     ElementCount VF) const {
+   // Cross iteration phis such as fixed-order recurrences and FMaxNum/FMinNum
+@@ -6832,11 +6682,6 @@ InstructionCost VPCostContext::getLegacyCost(Instruction *UI,
+   return Cost;
+ }
+ 
+-bool VPCostContext::isLegacyUniformAfterVectorization(Instruction *I,
+-                                                      ElementCount VF) const {
+-  return CM.isUniformAfterVectorization(I, VF);
+-}
+-
+ bool VPCostContext::skipCostComputation(Instruction *UI, bool IsVector) const {
+   return CM.ValuesToIgnore.contains(UI) ||
+          (IsVector && CM.VecValuesToIgnore.contains(UI)) ||
+@@ -7009,143 +6854,6 @@ InstructionCost LoopVectorizationPlanner::cost(VPlan &Plan,
+   return Cost;
+ }
+ 
+-#ifndef NDEBUG
+-/// Return true if the original loop \ TheLoop contains any instructions that do
+-/// not have corresponding recipes in \p Plan and are not marked to be ignored
+-/// in \p CostCtx. This means the VPlan contains simplification that the legacy
+-/// cost-model did not account for.
+-static bool planContainsAdditionalSimplifications(VPlan &Plan,
+-                                                  VPCostContext &CostCtx,
+-                                                  Loop *TheLoop,
+-                                                  ElementCount VF) {
+-  // First collect all instructions for the recipes in Plan.
+-  auto GetInstructionForCost = [](const VPRecipeBase *R) -> Instruction * {
+-    if (auto *S = dyn_cast<VPSingleDefRecipe>(R))
+-      return dyn_cast_or_null<Instruction>(S->getUnderlyingValue());
+-    if (auto *WidenMem = dyn_cast<VPWidenMemoryRecipe>(R))
+-      return &WidenMem->getIngredient();
+-    return nullptr;
+-  };
+-
+-  // Check if a select for a safe divisor was hoisted to the pre-header. If so,
+-  // the select doesn't need to be considered for the vector loop cost; go with
+-  // the more accurate VPlan-based cost model.
+-  for (VPRecipeBase &R : *Plan.getVectorPreheader()) {
+-    auto *VPI = dyn_cast<VPInstruction>(&R);
+-    if (!VPI || VPI->getOpcode() != Instruction::Select)
+-      continue;
+-
+-    if (auto *WR = dyn_cast_or_null<VPWidenRecipe>(VPI->getSingleUser())) {
+-      switch (WR->getOpcode()) {
+-      case Instruction::UDiv:
+-      case Instruction::SDiv:
+-      case Instruction::URem:
+-      case Instruction::SRem:
+-        return true;
+-      default:
+-        break;
+-      }
+-    }
+-  }
+-
+-  DenseSet<Instruction *> SeenInstrs;
+-  auto Iter = vp_depth_first_deep(Plan.getVectorLoopRegion()->getEntry());
+-  for (VPBasicBlock *VPBB : VPBlockUtils::blocksOnly<VPBasicBlock>(Iter)) {
+-    for (VPRecipeBase &R : *VPBB) {
+-      if (auto *IR = dyn_cast<VPInterleaveRecipe>(&R)) {
+-        auto *IG = IR->getInterleaveGroup();
+-        unsigned NumMembers = IG->getNumMembers();
+-        for (unsigned I = 0; I != NumMembers; ++I) {
+-          if (Instruction *M = IG->getMember(I))
+-            SeenInstrs.insert(M);
+-        }
+-        continue;
+-      }
+-      // Unused FOR splices are removed by VPlan transforms, so the VPlan-based
+-      // cost model won't cost it whilst the legacy will.
+-      if (auto *FOR = dyn_cast<VPFirstOrderRecurrencePHIRecipe>(&R)) {
+-        using namespace VPlanPatternMatch;
+-        if (none_of(FOR->users(),
+-                    match_fn(m_VPInstruction<
+-                             VPInstruction::FirstOrderRecurrenceSplice>())))
+-          return true;
+-      }
+-      // The VPlan-based cost model is more accurate for partial reductions and
+-      // comparing against the legacy cost isn't desirable.
+-      if (auto *VPR = dyn_cast<VPReductionRecipe>(&R))
+-        if (VPR->isPartialReduction())
+-          return true;
+-
+-      // The VPlan-based cost model can analyze if recipes are scalar
+-      // recursively, but the legacy cost model cannot.
+-      if (auto *WidenMemR = dyn_cast<VPWidenMemoryRecipe>(&R)) {
+-        auto *AddrI = dyn_cast<Instruction>(
+-            getLoadStorePointerOperand(&WidenMemR->getIngredient()));
+-        if (AddrI && vputils::isSingleScalar(WidenMemR->getAddr()) !=
+-                         CostCtx.isLegacyUniformAfterVectorization(AddrI, VF))
+-          return true;
+-
+-        if (WidenMemR->isReverse()) {
+-          // If the stored value of a reverse store is invariant, LICM will
+-          // hoist the reverse operation to the preheader. In this case, the
+-          // result of the VPlan-based cost model will diverge from that of
+-          // the legacy model.
+-          if (auto *StoreR = dyn_cast<VPWidenStoreRecipe>(WidenMemR))
+-            if (StoreR->getStoredValue()->isDefinedOutsideLoopRegions())
+-              return true;
+-
+-          if (auto *StoreR = dyn_cast<VPWidenStoreEVLRecipe>(WidenMemR))
+-            if (StoreR->getStoredValue()->isDefinedOutsideLoopRegions())
+-              return true;
+-        }
+-      }
+-
+-      // The legacy cost model costs non-header phis with a scalar VF as a phi,
+-      // but scalar unrolled VPlans will have VPBlendRecipes which emit selects.
+-      if (isa<VPBlendRecipe>(&R) &&
+-          vputils::onlyFirstLaneUsed(R.getVPSingleValue()))
+-        return true;
+-
+-      /// If a VPlan transform folded a recipe to one producing a single-scalar,
+-      /// but the original instruction wasn't uniform-after-vectorization in the
+-      /// legacy cost model, the legacy cost overestimates the actual cost.
+-      if (auto *RepR = dyn_cast<VPReplicateRecipe>(&R)) {
+-        if (RepR->isSingleScalar() &&
+-            !CostCtx.isLegacyUniformAfterVectorization(
+-                RepR->getUnderlyingInstr(), VF))
+-          return true;
+-      }
+-      if (Instruction *UI = GetInstructionForCost(&R)) {
+-        // If we adjusted the predicate of the recipe, the cost in the legacy
+-        // cost model may be different.
+-        using namespace VPlanPatternMatch;
+-        CmpPredicate Pred;
+-        if (match(&R, m_Cmp(Pred, m_VPValue(), m_VPValue())) &&
+-            cast<VPRecipeWithIRFlags>(R).getPredicate() !=
+-                cast<CmpInst>(UI)->getPredicate())
+-          return true;
+-        SeenInstrs.insert(UI);
+-      }
+-    }
+-  }
+-
+-  // Return true if the loop contains any instructions that are not also part of
+-  // the VPlan or are skipped for VPlan-based cost computations. This indicates
+-  // that the VPlan contains extra simplifications.
+-  return any_of(TheLoop->blocks(), [&SeenInstrs, &CostCtx,
+-                                    TheLoop](BasicBlock *BB) {
+-    return any_of(*BB, [&SeenInstrs, &CostCtx, TheLoop, BB](Instruction &I) {
+-      // Skip induction phis when checking for simplifications, as they may not
+-      // be lowered directly be lowered to a corresponding PHI recipe.
+-      if (isa<PHINode>(&I) && BB == TheLoop->getHeader() &&
+-          CostCtx.CM.Legal->isInductionPhi(cast<PHINode>(&I)))
+-        return false;
+-      return !SeenInstrs.contains(&I) && !CostCtx.skipCostComputation(&I, true);
+-    });
+-  });
+-}
+-#endif
+-
+ VectorizationFactor LoopVectorizationPlanner::computeBestVF() {
+   if (VPlans.empty())
+     return VectorizationFactor::Disabled();
+@@ -7232,43 +6940,6 @@ VectorizationFactor LoopVectorizationPlanner::computeBestVF() {
+   }
+ 
+ #ifndef NDEBUG
+-  // Select the optimal vectorization factor according to the legacy cost-model.
+-  // This is now only used to verify the decisions by the new VPlan-based
+-  // cost-model and will be retired once the VPlan-based cost-model is
+-  // stabilized.
+-  VectorizationFactor LegacyVF = selectVectorizationFactor();
+-  VPlan &BestPlan = getPlanFor(BestFactor.Width);
+-
+-  // Pre-compute the cost and use it to check if BestPlan contains any
+-  // simplifications not accounted for in the legacy cost model. If that's the
+-  // case, don't trigger the assertion, as the extra simplifications may cause a
+-  // different VF to be picked by the VPlan-based cost model.
+-  VPCostContext CostCtx(CM.TTI, *CM.TLI, BestPlan, CM, CM.CostKind, CM.PSE,
+-                        OrigLoop);
+-  precomputeCosts(BestPlan, BestFactor.Width, CostCtx);
+-  // Verify that the VPlan-based and legacy cost models agree, except for
+-  // * VPlans with early exits,
+-  // * VPlans with additional VPlan simplifications,
+-  // * EVL-based VPlans with gather/scatters (the VPlan-based cost model uses
+-  //   vp_scatter/vp_gather).
+-  // The legacy cost model doesn't properly model costs for such loops.
+-  bool UsesEVLGatherScatter =
+-      any_of(VPBlockUtils::blocksOnly<VPBasicBlock>(vp_depth_first_shallow(
+-                 BestPlan.getVectorLoopRegion()->getEntry())),
+-             [](VPBasicBlock *VPBB) {
+-               return any_of(*VPBB, [](VPRecipeBase &R) {
+-                 return isa<VPWidenLoadEVLRecipe, VPWidenStoreEVLRecipe>(&R) &&
+-                        !cast<VPWidenMemoryRecipe>(&R)->isConsecutive();
+-               });
+-             });
+-  assert(
+-      (BestFactor.Width == LegacyVF.Width || BestPlan.hasEarlyExit() ||
+-       !Legal->getLAI()->getSymbolicStrides().empty() || UsesEVLGatherScatter ||
+-       planContainsAdditionalSimplifications(
+-           getPlanFor(BestFactor.Width), CostCtx, OrigLoop, BestFactor.Width) ||
+-       planContainsAdditionalSimplifications(
+-           getPlanFor(LegacyVF.Width), CostCtx, OrigLoop, LegacyVF.Width)) &&
+-      " VPlan cost model and legacy cost model disagreed");
+   assert((BestFactor.Width.isScalar() || BestFactor.ScalarCost > 0) &&
+          "when vectorizing, the scalar cost must be computed.");
+ #endif
+diff --git a/llvm/lib/Transforms/Vectorize/VPlanHelpers.h b/llvm/lib/Transforms/Vectorize/VPlanHelpers.h
+index 973cbaa4944d..40fd50466063 100644
+--- a/llvm/lib/Transforms/Vectorize/VPlanHelpers.h
++++ b/llvm/lib/Transforms/Vectorize/VPlanHelpers.h
+@@ -359,11 +359,6 @@ struct VPCostContext {
+   /// Returns the OperandInfo for \p V, if it is a live-in.
+   TargetTransformInfo::OperandValueInfo getOperandInfo(VPValue *V) const;
+ 
+-  /// Return true if \p I is considered uniform-after-vectorization in the
+-  /// legacy cost model for \p VF. Only used to check for additional VPlan
+-  /// simplifications.
+-  bool isLegacyUniformAfterVectorization(Instruction *I, ElementCount VF) const;
+-
+   /// Estimate the overhead of scalarizing a recipe with result type \p ResultTy
+   /// and \p Operands with \p VF. This is a convenience wrapper for the
+   /// type-based getScalarizationOverhead API. If \p AlwaysIncludeReplicatingR
+diff --git a/llvm/test/Transforms/LoopVectorize/conditional-assignment.ll b/llvm/test/Transforms/LoopVectorize/conditional-assignment.ll
+index 9a2aa299e5d1..4836ffc6b293 100644
+--- a/llvm/test/Transforms/LoopVectorize/conditional-assignment.ll
++++ b/llvm/test/Transforms/LoopVectorize/conditional-assignment.ll
+@@ -1,4 +1,4 @@
+-; RUN: opt < %s -enable-cond-stores-vec=false -passes=loop-vectorize -S -pass-remarks-missed='loop-vectorize' -pass-remarks-analysis='loop-vectorize' 2>&1 | FileCheck %s
++; RUN: opt < %s -passes=loop-vectorize -S -pass-remarks-missed='loop-vectorize' -pass-remarks-analysis='loop-vectorize' 2>&1 | FileCheck %s
+ 
+ ; CHECK: remark: source.c:2:8: the cost-model indicates that vectorization is not beneficial
+ 
+diff --git a/llvm/test/tools/UpdateTestChecks/update_analyze_test_checks/Inputs/x86-loopvectorize-costmodel.ll b/llvm/test/tools/UpdateTestChecks/update_analyze_test_checks/Inputs/x86-loopvectorize-costmodel.ll
+index 18d8191399f8..e8b8e4bccea7 100644
+--- a/llvm/test/tools/UpdateTestChecks/update_analyze_test_checks/Inputs/x86-loopvectorize-costmodel.ll
++++ b/llvm/test/tools/UpdateTestChecks/update_analyze_test_checks/Inputs/x86-loopvectorize-costmodel.ll
+@@ -1,4 +1,4 @@
+-; NOTE: Assertions have been autogenerated by utils/update_analyze_test_checks.py UTC_ARGS: --filter "LV: Found an estimated cost of [0-9]+ for VF [0-9]+ For instruction:\s*%v0 = load float, float\* %in0, align 4"
++; NOTE: Assertions have been autogenerated by utils/update_analyze_test_checks.py UTC_ARGS: --filter "LV: Found an estimated cost of [0-9]+ for VF [0-9]+ For instruction:\s*%v0 = load float, float\* %in0, align 4" --filter "Cost of [0-9]+ for VF [0-9]+: INTERLEAVE-GROUP with factor 2 at %v0"
+ ; RUN: opt  -passes=loop-vectorize  -vectorizer-maximize-bandwidth -S -mattr=+avx512bw --debug-only=loop-vectorize < %s 2>&1 | FileCheck %s --check-prefixes=CHECK,AVX512
+ ; REQUIRES: asserts
+ 
+diff --git a/llvm/test/tools/UpdateTestChecks/update_analyze_test_checks/Inputs/x86-loopvectorize-costmodel.ll.expected b/llvm/test/tools/UpdateTestChecks/update_analyze_test_checks/Inputs/x86-loopvectorize-costmodel.ll.expected
+index 4b146a5c4bc3..d0752060a161 100644
+--- a/llvm/test/tools/UpdateTestChecks/update_analyze_test_checks/Inputs/x86-loopvectorize-costmodel.ll.expected
++++ b/llvm/test/tools/UpdateTestChecks/update_analyze_test_checks/Inputs/x86-loopvectorize-costmodel.ll.expected
+@@ -1,4 +1,4 @@
+-; NOTE: Assertions have been autogenerated by utils/update_analyze_test_checks.py UTC_ARGS: --filter "LV: Found an estimated cost of [0-9]+ for VF [0-9]+ For instruction:\s*%v0 = load float, ptr %in0, align 4" --filter "LV: Found an estimated cost of [0-9]+ for VF [0-9]+ For instruction:\s*%v0 = load float, float\* %in0, align 4"
++; NOTE: Assertions have been autogenerated by utils/update_analyze_test_checks.py UTC_ARGS: --filter "LV: Found an estimated cost of [0-9]+ for VF [0-9]+ For instruction:\s*%v0 = load float, ptr %in0, align 4" --filter "Cost of [0-9]+ for VF [0-9]+: INTERLEAVE-GROUP with factor 2 at %v0" --filter "LV: Found an estimated cost of [0-9]+ for VF [0-9]+ For instruction:\s*%v0 = load float, float\* %in0, align 4"
+ ; RUN: opt  -passes=loop-vectorize  -vectorizer-maximize-bandwidth -S -mattr=+avx512bw --debug-only=loop-vectorize < %s 2>&1 | FileCheck %s --check-prefixes=CHECK,AVX512
+ ; REQUIRES: asserts
+ 
+@@ -11,13 +11,12 @@ target triple = "x86_64-unknown-linux-gnu"
+ define void @test() {
+ ; CHECK-LABEL: 'test'
+ ; CHECK:  LV: Found an estimated cost of 1 for VF 1 For instruction: %v0 = load float, ptr %in0, align 4
+-; CHECK:  LV: Found an estimated cost of 1 for VF 1 For instruction: %v0 = load float, ptr %in0, align 4
+-; CHECK:  LV: Found an estimated cost of 3 for VF 2 For instruction: %v0 = load float, ptr %in0, align 4
+-; CHECK:  LV: Found an estimated cost of 3 for VF 4 For instruction: %v0 = load float, ptr %in0, align 4
+-; CHECK:  LV: Found an estimated cost of 3 for VF 8 For instruction: %v0 = load float, ptr %in0, align 4
+-; CHECK:  LV: Found an estimated cost of 5 for VF 16 For instruction: %v0 = load float, ptr %in0, align 4
+-; CHECK:  LV: Found an estimated cost of 22 for VF 32 For instruction: %v0 = load float, ptr %in0, align 4
+-; CHECK:  LV: Found an estimated cost of 92 for VF 64 For instruction: %v0 = load float, ptr %in0, align 4
++; CHECK:  Cost of 3 for VF 2: INTERLEAVE-GROUP with factor 2 at %v0, ir<%in0>
++; CHECK:  Cost of 3 for VF 4: INTERLEAVE-GROUP with factor 2 at %v0, ir<%in0>
++; CHECK:  Cost of 3 for VF 8: INTERLEAVE-GROUP with factor 2 at %v0, ir<%in0>
++; CHECK:  Cost of 5 for VF 16: INTERLEAVE-GROUP with factor 2 at %v0, ir<%in0>
++; CHECK:  Cost of 22 for VF 32: INTERLEAVE-GROUP with factor 2 at %v0, ir<%in0>
++; CHECK:  Cost of 92 for VF 64: INTERLEAVE-GROUP with factor 2 at %v0, ir<%in0>
+ ;
+ entry:
+   br label %for.body
+diff --git a/llvm/test/tools/UpdateTestChecks/update_analyze_test_checks/loopvectorize-costmodel.test b/llvm/test/tools/UpdateTestChecks/update_analyze_test_checks/loopvectorize-costmodel.test
+index 35bcf6c5eb32..bdfac53db2f1 100644
+--- a/llvm/test/tools/UpdateTestChecks/update_analyze_test_checks/loopvectorize-costmodel.test
++++ b/llvm/test/tools/UpdateTestChecks/update_analyze_test_checks/loopvectorize-costmodel.test
+@@ -1,11 +1,11 @@
+ # REQUIRES: x86-registered-target, asserts
+ 
+-## Check that --filter works properly.
+-# RUN: cp -f %S/Inputs/x86-loopvectorize-costmodel.ll %t.ll && %update_analyze_test_checks --filter "LV: Found an estimated cost of [0-9]+ for VF [0-9]+ For instruction:\s*%v0 = load float, ptr %in0, align 4" %t.ll
++## Check that --filter works properly with both legacy and VPlan cost model output.
++# RUN: cp -f %S/Inputs/x86-loopvectorize-costmodel.ll %t.ll && %update_analyze_test_checks --filter "LV: Found an estimated cost of [0-9]+ for VF [0-9]+ For instruction:\s*%v0 = load float, ptr %in0, align 4" --filter "Cost of [0-9]+ for VF [0-9]+: INTERLEAVE-GROUP with factor 2 at %%v0" %t.ll
+ # RUN: diff -u %t.ll %S/Inputs/x86-loopvectorize-costmodel.ll.expected
+ 
+ ## Check that running the script again does not change the result:
+-# RUN: %update_analyze_test_checks --filter "LV: Found an estimated cost of [0-9]+ for VF [0-9]+ For instruction:\s*%v0 = load float, ptr %in0, align 4" %t.ll
++# RUN: %update_analyze_test_checks --filter "LV: Found an estimated cost of [0-9]+ for VF [0-9]+ For instruction:\s*%v0 = load float, ptr %in0, align 4" --filter "Cost of [0-9]+ for VF [0-9]+: INTERLEAVE-GROUP with factor 2 at %%v0" %t.ll
+ # RUN: diff -u %t.ll %S/Inputs/x86-loopvectorize-costmodel.ll.expected
+ 
+ ## Check that running the script again, without arguments, does not change the result:
+-- 
+2.54.0
+

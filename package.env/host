@@ -17,8 +17,6 @@ dev-util/bazel noccache
 dev-lang/mono noccache
 dev-lang/deno ccache
 
-app-editors/zed o2
-
 # no file descriptor available
 # dev-dotnet/dotnet-sdk notmpfs j24
 
@@ -31,10 +29,10 @@ games-emulation/yuzu ccache
 dev-util/electron ccache
 www-client/chromium ccache
 sci-electronics/verilator ccache
+llvm-core/llvm ccache
 
 sci-libs/openblas test
 sci-libs/lapack test
-llvm-core/llvm test
 
 # debug
 sys-libs/musl debug
