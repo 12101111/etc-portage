@@ -23,8 +23,7 @@ dev-lang/python tail-call-interp
 */* llvm_slot_22 -llvm_slot_21 -llvm_slot_20
 =dev-lang/zig-9999 llvm_slot_21
 =dev-lang/zig-0.15.2 llvm_slot_20
-gui-wm/niri llvm_slot_21
-sys-devel/wild llvm_slot_21
+=dev-lang/zig-0.16.0 llvm_slot_21
 <dev-qt/qttools-6.11.0 llvm_slot_21
 
 # Graphic
@@ -37,7 +36,7 @@ gui-wm/sway wallpapers tray -swaylock fish-completion seatd
 gui-apps/waybar network tray mpd wifi pulseaudio evdev experimental libinput logind mpris pipewire upower
 
 # Apps
-www-client/firefox wasm-sandbox hwaccel clang lto pgo screencast system-png system-pipewire openh264
+www-client/firefox wasm-sandbox hwaccel clang lto pgo system-png system-pipewire openh264
 mail-client/thunderbird hwaccel clang lto
 app-editors/emacs webp -jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars -X tree-sitter sqlite
 app-emacs/emacs-common gsettings
@@ -159,7 +158,7 @@ media-libs/libva utils
 app-i18n/fcitx-gtk -gtk2 gtk4
 dev-db/sqlite secure-delete # aria2[sqlite]
 dev-qt/qtwebchannel qml # zoom
-dev-qt/qtwebengine pdf jumbo-build widgets qml -system-icu
+dev-qt/qtwebengine -screencast pdf jumbo-build widgets qml -system-icu
 dev-qt/qtmultimedia gstreamer
 #app-arch/unzip natspec # GBK zip files
 app-crypt/gcr gtk
@@ -189,8 +188,7 @@ gui-libs/wlroots icccm x11-backend seatd tinywl liftoff xcb-errors lcms
 media-video/pipewire pulseaudio sdl aptx aac extra pipewire-alsa v4l
 media-libs/libtgvoip pulseaudio
 media-libs/tg_owt pulseaudio
-net-im/telegram-desktop -webkit -jemalloc pulseaudio lto screencast qt6 qt6-imageformats
-media-libs/tg_owt screencast
+net-im/telegram-desktop -webkit -jemalloc pulseaudio lto  qt6 qt6-imageformats
 app-crypt/pinentry gnome-keyring gtk qt6
 media-libs/phonon gstreamer
 kde-frameworks/kitemmodels qml
@@ -227,10 +225,8 @@ app-misc/pax-utils -seccomp
 dev-lang/spidermonkey lto
 kde-frameworks/sonnet qml
 sys-fs/e2fsprogs -lto # don't work with clang
-kde-plasma/kwin screencast
-kde-plasma/plasma-workspace screencast
 media-libs/libsdl2 pipewire
-sys-apps/xdg-desktop-portal flatpak screencast
+sys-apps/xdg-desktop-portal flatpak
 net-misc/networkmanager connection-sharing -dhcpcd nftables -lto iwd
 net-wireless/wpa_supplicant ap -crda
 dev-qt/qt-docs script webengine
@@ -336,8 +332,8 @@ net-libs/nodejs icu inspector system-icu npm
 dev-libs/libxml2 icu
 app-editors/vscode savedconfig system-electron system-ripgrep builtin-extensions
 media-video/pipewire ffmpeg gstreamer sound-server
-dev-util/electron -system-allocator -libcxx gtk4 -system-png suid lto pgo hevc custom-cflags system-icu clang wayland pipewire screencast
-www-client/chromium gtk4 hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png qt6 -rar
+dev-util/electron -system-allocator -libcxx gtk4 -system-png suid lto pgo hevc custom-cflags system-icu clang wayland pipewire
+www-client/chromium gtk4 hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan official system-ffmpeg -system-png qt6 -rar
 
 # Python 3.13 -> 3.14
 app-i18n/opencc python_single_target_python3_13
