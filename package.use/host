@@ -23,19 +23,9 @@ dev-lang/python tail-call-interp
 */* llvm_slot_22 -llvm_slot_21 -llvm_slot_20
 =dev-lang/zig-9999 llvm_slot_21
 =dev-lang/zig-0.15.2 llvm_slot_20
-=dev-lang/rust-1.94.1 llvm_slot_21
-dev-util/perf llvm_slot_21
 gui-wm/niri llvm_slot_21
-sci-electronics/yosys llvm_slot_21
 sys-devel/wild llvm_slot_21
-www-client/firefox llvm_slot_21
-media-libs/mesa llvm_slot_21
-dev-util/spirv-llvm-translator:21 llvm_slot_21
-=llvm-core/libclc-21* llvm_slot_21
-<dev-util/mesa_clc-26.1.0 llvm_slot_21
 <dev-qt/qttools-6.11.0 llvm_slot_21
-app-crypt/sequoia-sq llvm_slot_21
-dev-util/electron:39 llvm_slot_21
 
 # Graphic
 media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind d3d9 osmesa vulkan-overlay zink opencl
@@ -244,7 +234,7 @@ sys-apps/xdg-desktop-portal flatpak screencast
 net-misc/networkmanager connection-sharing -dhcpcd nftables -lto iwd
 net-wireless/wpa_supplicant ap -crda
 dev-qt/qt-docs script webengine
-dev-lang/deno -libcxx static-libs denort
+dev-lang/deno -libcxx system-icu static-libs denort
 dev-util/xdelta lzma
 app-arch/brotli python
 net-libs/webkit-gtk examples keyring libnotify spell avif gamepad lcms pdf jpegxl
@@ -350,13 +340,5 @@ dev-util/electron -system-allocator -libcxx gtk4 -system-png suid lto pgo hevc c
 www-client/chromium gtk4 hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png qt6 -rar
 
 # Python 3.13 -> 3.14
-app-emulation/virt-manager python_single_target_python3_13
-app-office/libreoffice python_single_target_python3_13
-media-gfx/inkscape python_single_target_python3_13
-net-analyzer/nmap python_single_target_python3_13
-sys-apps/pcsc-lite python_single_target_python3_13
-dev-util/gtk-doc python_single_target_python3_13
-net-fs/cifs-utils python_single_target_python3_13
-sys-apps/dtc python_single_target_python3_13
 app-i18n/opencc python_single_target_python3_13
 

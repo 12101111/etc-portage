@@ -37,6 +37,7 @@ games-emulation/yuzu ccache
 dev-util/electron ccache
 www-client/chromium ccache
 sci-electronics/verilator ccache
+llvm-core/llvm ccache
 
 sci-libs/openblas test
 sci-libs/lapack test
