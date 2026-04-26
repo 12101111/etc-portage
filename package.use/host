@@ -25,17 +25,8 @@ llvm-core/clang-toolchain-symlinks gcc-symlinks
 dev-lang/python tail-call-interp
 */* llvm_slot_22 -llvm_slot_21 -llvm_slot_20 -llvm_slot_19 -llvm_slot_18
 dev-lang/zig llvm_slot_21
-dev-util/electron:39 llvm_slot_21
-dev-util/perf llvm_slot_21
-sci-electronics/yosys llvm_slot_21
-www-client/firefox llvm_slot_21
-media-libs/mesa llvm_slot_21
-dev-util/spirv-llvm-translator:21 llvm_slot_21
-=llvm-core/libclc-21* llvm_slot_21
-<dev-util/mesa_clc-26.1.0 llvm_slot_21
+# sci-electronics/yosys llvm_slot_21
 <dev-qt/qttools-6.11.0 llvm_slot_21
-app-crypt/sequoia-sq llvm_slot_21
-dev-lang/rust:1.94.1 llvm_slot_21
 
 # Graphic
 media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind d3d9 osmesa vulkan-overlay zink opencl
@@ -264,9 +255,7 @@ net-analyzer/nmap lua_single_target_lua5-3
 dev-libs/sexpp static-libs # mail-client/thunderbird-102.10.1::gentoo[system-librnp]
 net-libs/mbedtls cmac # yuzu
 dev-libs/boost context # yuzu
-dev-qt/qttools qml designer assistant qdoc qtattributionsscanner # qt-creator
-dev-qt/qt5compat icu # qt-creator
-dev-qt/qt5compat qml # kf6
+dev-qt/qt5compat qml icu # kf6
 dev-qt/qtwayland compositor qml # net-im/telegram-desktop[wayland,qt6,webkit]
 dev-libs/quazip qt6 -qt5
 media-libs/glfw wayland-only
@@ -288,7 +277,7 @@ dev-python/qtpy -pyqt5
 dev-libs/appstream compose # flatpak-builder
 gui-libs/neatvnc gbm # wayvnc
 llvm-runtimes/openmp fortran
-sci-libs/openblas index64
+sci-libs/openblas index64 -openmp
 virtual/lapack index64
 sci-libs/lapack index64
 */* perl_features_ithreads
@@ -351,12 +340,4 @@ dev-util/electron -system-allocator -libcxx gtk4 -system-png suid lto pgo hevc c
 www-client/chromium gtk4 hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan screencast official system-ffmpeg -system-png qt6 -rar
 
 # Python 3.14
-app-emulation/virt-manager python_single_target_python3_13
-app-office/libreoffice python_single_target_python3_13
-media-gfx/inkscape python_single_target_python3_13
-net-analyzer/nmap python_single_target_python3_13
-sys-apps/pcsc-lite python_single_target_python3_13
-dev-util/gtk-doc python_single_target_python3_13
-net-fs/cifs-utils python_single_target_python3_13
-sys-apps/dtc python_single_target_python3_13
 app-i18n/opencc python_single_target_python3_13
