@@ -15,3 +15,15 @@ index 08444fc680df..9d133634c170 100644
  }
  
  static AccelTableKind computeAccelTableKind(unsigned DwarfVersion,
+diff --git a/llvm/lib/CodeGen/AsmPrinter/DwarfExpression.h b/llvm/lib/CodeGen/AsmPrinter/DwarfExpression.h
+index c4929aed1c19..644a3c0c90bf 100644
+--- a/llvm/lib/CodeGen/AsmPrinter/DwarfExpression.h
++++ b/llvm/lib/CodeGen/AsmPrinter/DwarfExpression.h
+@@ -245,7 +245,6 @@ public:
+ 
+   /// Lock this down to become a memory location description.
+   void setMemoryLocationKind() {
+-    assert(isUnknownLocation());
+     LocationKind = Memory;
+   }
+ 
