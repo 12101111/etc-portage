@@ -24,7 +24,7 @@ dev-lang/python tail-call-interp
 =dev-lang/zig-9999 llvm_slot_21
 =dev-lang/zig-0.15.2 llvm_slot_20
 =dev-lang/zig-0.16.0 llvm_slot_21
-<dev-qt/qttools-6.11.0 llvm_slot_21
+dev-qt/qttools llvm_slot_21
 
 # Graphic
 media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind d3d9 osmesa vulkan-overlay zink opencl
@@ -33,7 +33,7 @@ x11-wm/awesome dbus doc gnome lua_single_target_luajit
 x11-misc/picom dbus
 media-libs/freetype harfbuzz infinality
 gui-wm/sway wallpapers tray -swaylock fish-completion seatd
-gui-apps/waybar network tray mpd wifi pulseaudio evdev experimental libinput logind mpris pipewire upower
+gui-apps/waybar backlight niri network tray mpd wifi pulseaudio evdev experimental libinput logind mpris pipewire upower
 
 # Apps
 www-client/firefox wasm-sandbox hwaccel clang lto pgo system-png system-pipewire openh264
@@ -100,6 +100,8 @@ games-action/prismlauncher qt6
 gui-apps/rofi-wayland ime
 dev-libs/libportal gtk
 sys-fs/android-file-transfer-linux gui
+x11-base/xwayland libei # kwin
+sci-misc/llama-cpp openblas
 
 # VM / Emulator
 app-emulation/qemu udev zstd -jemalloc gtk usb usbredir spice virgl pin-upstream-blobs virtfs static-user slirp io-uring vte gnutls vhost-user-fs -plugins capstone fuse bpf nfs pipewire vde
@@ -335,6 +337,4 @@ media-video/pipewire ffmpeg gstreamer sound-server
 dev-util/electron -system-allocator -libcxx gtk4 -system-png suid lto pgo hevc custom-cflags system-icu clang wayland pipewire
 www-client/chromium gtk4 hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan official system-ffmpeg -system-png qt6 -rar
 
-# Python 3.13 -> 3.14
-app-i18n/opencc python_single_target_python3_13
-
+app-i18n/opencc PYTHON_SINGLE_TARGET: python3_13 -python3_14

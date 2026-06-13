@@ -12,6 +12,8 @@ cross-aarch64-unknown-linux-gnu/binutils clang_dont_supports_ada
 cross-aarch64-unknown-linux-gnu/gdb clang_dont_supports_ada
 cross-aarch64-unknown-linux-gnu/gcc clang_dont_supports_ada
 
+app-text/poppler clang # scan deps
+
 dev-java/openjdk noccache
 dev-util/bazel noccache
 dev-lang/mono noccache
@@ -27,6 +29,7 @@ dev-lang/deno j12
 dev-util/cargo-c j12
 llvm-core/flang j8 # 4G per process
 dev-qt/qtwebengine notmpfs j16
+app-editors/vscode notmpfs
 
 dev-db/mongodb mongodb
 
@@ -38,6 +41,7 @@ dev-util/electron ccache
 www-client/chromium ccache
 sci-electronics/verilator ccache
 llvm-core/llvm ccache
+sci-misc/llama-cpp ccache
 
 sci-libs/openblas test
 sci-libs/lapack test

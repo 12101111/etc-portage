@@ -3,3 +3,4 @@ dev-debug/lldb-mi **
 # dev-lang/rust::12101111-overlay **
 dev-lang/zig **
 sys-fs/zfs::12101111-overlay **
+sci-misc/llama-cpp **

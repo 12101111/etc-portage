@@ -1,5 +1,6 @@
 */*::mv
 */*::pg_overlay
+*/*::stuff
 
 dev-util/heaptrack::gentoo
 dev-dotnet/dotnet-sdk-bin::gentoo
