@@ -34,5 +34,5 @@ app-portage/eix
 app-portage/gentoolkit
 app-portage/portage-bashrc-mv
 # archive
-app-arch/p7zip
+app-arch/7zip
 app-arch/zip

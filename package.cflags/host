@@ -143,6 +143,7 @@ app-cdr/cdrtools /-ffunction-sections//
 dev-lang/rust /-Coverflow-checks=on//
 media-video/ffmpeg CFLAGS+=-D__musl__
 app-i18n/fcitx CXXFLAGS+=-fexperimental-library
+net-libs/nodejs CXXFLAGS+="-include cstdlib"
 
 # LLD17
 sys-apps/keyutils LDFLAGS+=-Wl,--undefined-version

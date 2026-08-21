@@ -1,0 +1,12 @@
+--- a/tests/workloads/code_with_type.c
++++ b/tests/workloads/code_with_type.c
+@@ -4,6 +4,9 @@
+ #include <signal.h>
+ #include <unistd.h>
+ #include <linux/compiler.h>
++#ifndef uint
++#define uint unsigned
++#endif
+ #include "../tests.h"
+ 
+ extern void test_rs(uint count);
