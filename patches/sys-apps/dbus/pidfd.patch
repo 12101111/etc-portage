@@ -1,0 +1,23 @@
+diff --git a/dbus/dbus-sysdeps-unix.c b/dbus/dbus-sysdeps-unix.c
+index 40b2af3b..e4157af6 100644
+--- a/dbus/dbus-sysdeps-unix.c
++++ b/dbus/dbus-sysdeps-unix.c
+@@ -2338,7 +2338,9 @@ _dbus_read_credentials_socket  (DBusSocket       client_fd,
+ #endif
+       }
+ 
+-#ifdef SO_PEERPIDFD
++#ifndef SO_PEERPIDFD
++#define SO_PEERPIDFD 77
++#endif
+     /* If we have SO_PEERCRED we might also have SO_PEERPIDFD, which
+      * allows to pin the process ID, and is available on Linux since v6.5. */
+     cr_len = sizeof (int);
+@@ -2353,7 +2355,6 @@ _dbus_read_credentials_socket  (DBusSocket       client_fd,
+         _dbus_verbose ("Failed to getsockopt(SO_PEERPIDFD), returned %d bytes, expected %d\n",
+                        cr_len, (int) sizeof (int));
+       }
+-#endif
+ 
+ #elif defined(HAVE_UNPCBID) && defined(LOCAL_PEEREID)
+     /* Another variant of the above - used on NetBSD

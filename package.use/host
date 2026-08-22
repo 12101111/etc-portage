@@ -101,6 +101,7 @@ dev-libs/libportal gtk
 sys-fs/android-file-transfer-linux gui
 x11-base/xwayland libei # kwin
 sci-misc/llama-cpp openblas
+www-apps/zola cjk
 
 # VM / Emulator
 app-emulation/qemu udev zstd -jemalloc gtk usb usbredir spice virgl pin-upstream-blobs virtfs static-user slirp io-uring vte gnutls vhost-user-fs -plugins capstone fuse bpf nfs pipewire vde
