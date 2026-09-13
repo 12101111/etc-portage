@@ -10,3 +10,16 @@ index 124e992..55cce96 100644
  
  struct GeneratorOptions
  {
+diff --git a/tools/genutils.hpp b/tools/genutils.hpp
+index b6a8e27..210ba50 100644
+--- a/tools/genutils.hpp
++++ b/tools/genutils.hpp
+@@ -8,6 +8,8 @@
+ #include <set>
+ #include <sstream>
+ #include <string>
++#include <functional>
++#include <iterator>
+ 
+ class skip : public std::runtime_error
+ {

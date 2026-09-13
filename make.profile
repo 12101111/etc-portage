@@ -1,1 +1,1 @@
-../../usr/portage/local/profiles/clang/musl/amd64/systemd
+../../usr/portage/gentoo/profiles/default/linux/amd64/23.0/musl/llvm/systemd

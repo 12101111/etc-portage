@@ -22,3 +22,15 @@ index d537ea5..1d6601a 100644
  #include <unistd.h>
  
  #ifndef _WIN32
+diff --git a/src/sound/ymfm/ymfm.h b/src/sound/ymfm/ymfm.h
+index 062247a..816a886 100644
+--- a/src/sound/ymfm/ymfm.h
++++ b/src/sound/ymfm/ymfm.h
+@@ -46,6 +46,7 @@
+ #include <memory>
+ #include <string>
+ #include <vector>
++#include <cmath>
+ 
+ namespace ymfm
+ {

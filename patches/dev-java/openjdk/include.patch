@@ -1,0 +1,24 @@
+diff --git a/src/jdk.jpackage/linux/native/libapplauncher/Package.cpp b/src/jdk.jpackage/linux/native/libapplauncher/Package.cpp
+index 3665d7e..7f2dabd 100644
+--- a/src/jdk.jpackage/linux/native/libapplauncher/Package.cpp
++++ b/src/jdk.jpackage/linux/native/libapplauncher/Package.cpp
+@@ -23,6 +23,7 @@
+  * questions.
+  */
+ 
++#include <new>
+ #include "Package.h"
+ #include "Executor.h"
+ #include "AppLauncher.h"
+diff --git a/src/jdk.jpackage/share/native/common/SysInfo.h b/src/jdk.jpackage/share/native/common/SysInfo.h
+index 28609d0..53f750c 100644
+--- a/src/jdk.jpackage/share/native/common/SysInfo.h
++++ b/src/jdk.jpackage/share/native/common/SysInfo.h
+@@ -28,6 +28,7 @@
+ #define SYSINFO_H
+ 
+ #include "tstrings.h"
++#include <new>
+ 
+ 
+ //

@@ -1,0 +1,12 @@
+diff --git a/examples/svc_encoder_rtc.cc b/examples/svc_encoder_rtc.cc
+index 62ab44d..fc203e6 100644
+--- a/examples/svc_encoder_rtc.cc
++++ b/examples/svc_encoder_rtc.cc
+@@ -19,6 +19,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <cmath>
+ 
+ #include <memory>
+ 

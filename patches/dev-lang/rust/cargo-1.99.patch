@@ -1,0 +1,10 @@
+--- a/src/tools/cargo/src/ops/cargo_install.rs
++++ b/src/tools/cargo/src/ops/cargo_install.rs
+@@ -933,7 +933,6 @@ fn make_ws_rustc_target<'gctx>(
+     ws.set_resolve_feature_unification(FeatureUnification::Selected);
+     ws.set_ignore_lock(gctx.lock_update_allowed());
+     ws.set_requested_lockfile_path(None);
+-    ws.set_require_optional_deps(false);
+ 
+     let rustc = gctx.load_global_rustc(Some(&ws))?;
+     let target = match &opts.build_config.single_requested_kind()? {

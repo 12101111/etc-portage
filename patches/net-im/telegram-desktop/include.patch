@@ -10,3 +10,63 @@ index ff359bd..3f79604 100644
  #include "base/basic_types.h"
  #include "webview/webview_data_stream.h"
  
+diff --git a/Telegram/ThirdParty/rlottie/inc/rlottie.h b/Telegram/ThirdParty/rlottie/inc/rlottie.h
+index db81448..0d2fb49 100644
+--- a/Telegram/ThirdParty/rlottie/inc/rlottie.h
++++ b/Telegram/ThirdParty/rlottie/inc/rlottie.h
+@@ -22,6 +22,7 @@
+ #include <future>
+ #include <vector>
+ #include <memory>
++#include <functional>
+ 
+ #if defined _WIN32 || defined __CYGWIN__
+   #ifdef LOT_BUILD
+diff --git a/Telegram/ThirdParty/rlottie/src/vector/vraster.h b/Telegram/ThirdParty/rlottie/src/vector/vraster.h
+index 4f7d2ed..a801953 100644
+--- a/Telegram/ThirdParty/rlottie/src/vector/vraster.h
++++ b/Telegram/ThirdParty/rlottie/src/vector/vraster.h
+@@ -19,6 +19,7 @@
+ #ifndef VRASTER_H
+ #define VRASTER_H
+ #include <future>
++#include <memory>
+ #include "vglobal.h"
+ #include "vrect.h"
+ 
+diff --git a/Telegram/ThirdParty/rlottie/src/vector/vrle.cpp b/Telegram/ThirdParty/rlottie/src/vector/vrle.cpp
+index a5deee1..85dca0b 100644
+--- a/Telegram/ThirdParty/rlottie/src/vector/vrle.cpp
++++ b/Telegram/ThirdParty/rlottie/src/vector/vrle.cpp
+@@ -22,6 +22,7 @@
+ #include <array>
+ #include <cstdlib>
+ #include <vector>
++#include <iterator>
+ #include "vdebug.h"
+ #include "vglobal.h"
+ #include "vregion.h"
+diff --git a/Telegram/ThirdParty/tgcalls/tgcalls/group/GroupJoinPayloadInternal.cpp b/Telegram/ThirdParty/tgcalls/tgcalls/group/GroupJoinPayloadInternal.cpp
+index fce5c67..0898587 100644
+--- a/Telegram/ThirdParty/tgcalls/tgcalls/group/GroupJoinPayloadInternal.cpp
++++ b/Telegram/ThirdParty/tgcalls/tgcalls/group/GroupJoinPayloadInternal.cpp
+@@ -2,6 +2,7 @@
+ 
+ #include "third-party/json11.hpp"
+ #include <sstream>
++#include <iterator>
+ 
+ namespace tgcalls {
+ 
+diff --git a/Telegram/lib_base/base/unique_function.h b/Telegram/lib_base/base/unique_function.h
+index c101679..893aaf7 100644
+--- a/Telegram/lib_base/base/unique_function.h
++++ b/Telegram/lib_base/base/unique_function.h
+@@ -7,6 +7,7 @@
+ #pragma once
+ 
+ #include <functional>
++#include <cstdlib>
+ 
+ #ifndef Unexpected
+ #define Unexpected(message) std::abort()

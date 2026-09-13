@@ -1,0 +1,12 @@
+diff --git a/src/widgets/GraphLayout.h b/src/widgets/GraphLayout.h
+index 9c75d0a..0192c60 100644
+--- a/src/widgets/GraphLayout.h
++++ b/src/widgets/GraphLayout.h
+@@ -6,6 +6,7 @@
+ #include <QPolygonF>
+ 
+ #include <unordered_map>
++#include <vector>
+ 
+ class GraphLayout
+ {

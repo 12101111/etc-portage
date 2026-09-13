@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index a7ce160..45fa950 100644
+--- a/setup.py
++++ b/setup.py
+@@ -170,7 +170,7 @@ class BDistWheelCommand(wheel.bdist_wheel.bdist_wheel, object):
+ 
+     def initialize_options(self):
+         super(BDistWheelCommand, self).initialize_options()
+-        self.plat_name = self._determine_platform_tag()
++        #self.plat_name = self._determine_platform_tag()
+ 
+ 
+ packages = ['opencc', 'opencc.clib']

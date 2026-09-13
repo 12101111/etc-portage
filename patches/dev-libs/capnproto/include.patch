@@ -1,0 +1,10 @@
+--- a/src/capnp/dynamic.h
++++ b/src/capnp/dynamic.h
+@@ -38,6 +38,7 @@
+ #include "any.h"
+ #include "capability.h"
+ #include <kj/windows-sanity.h>  // work-around macro conflict with `VOID`
++#include <cstddef>
+ 
+ CAPNP_BEGIN_HEADER
+ 

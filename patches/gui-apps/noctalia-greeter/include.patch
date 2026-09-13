@@ -1,0 +1,23 @@
+diff --git a/src/render/programs/rect_program.cpp b/src/render/programs/rect_program.cpp
+index 8e5dd0d..3da39d9 100644
+--- a/src/render/programs/rect_program.cpp
++++ b/src/render/programs/rect_program.cpp
+@@ -2,6 +2,7 @@
+ 
+ #include <array>
+ #include <stdexcept>
++#include <algorithm>
+ 
+ namespace {
+ 
+diff --git a/src/ui/controls/image.h b/src/ui/controls/image.h
+index 1193b90..271b30a 100644
+--- a/src/ui/controls/image.h
++++ b/src/ui/controls/image.h
+@@ -1,5 +1,6 @@
+ #pragma once
+ #include "render/scene/node.h"
++#include <string>
+ class Image : public Node {
+ public:
+   Image();

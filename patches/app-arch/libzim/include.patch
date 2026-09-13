@@ -1,0 +1,36 @@
+diff --git a/include/zim/error.h b/include/zim/error.h
+index 1c6bd3b..d957e15 100644
+--- a/include/zim/error.h
++++ b/include/zim/error.h
+@@ -23,6 +23,7 @@
+ #include "zim.h"
+ #include "tools.h"
+ 
++#include <exception>
+ #include <stdexcept>
+ #include <typeinfo>
+ 
+diff --git a/src/writer/binaryfile.cpp b/src/writer/binaryfile.cpp
+index 0dbdcb9..a1bd3ce 100644
+--- a/src/writer/binaryfile.cpp
++++ b/src/writer/binaryfile.cpp
+@@ -2,6 +2,7 @@
+ 
+ #include <fcntl.h>
+ #include <cstring>
++#include <errno.h>
+ 
+ #include <stdexcept>
+ 
+diff --git a/src/writer/creatordata.h b/src/writer/creatordata.h
+index a58baa8..78847d3 100644
+--- a/src/writer/creatordata.h
++++ b/src/writer/creatordata.h
+@@ -32,6 +32,7 @@
+ #include <map>
+ #include <fstream>
+ #include <thread>
++#include <exception>
+ #include "config.h"
+ 
+ #include "../fileheader.h"

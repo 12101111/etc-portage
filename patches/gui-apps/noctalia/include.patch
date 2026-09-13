@@ -1,0 +1,47 @@
+diff --git a/third_party/luau/Compiler/src/Compiler.cpp b/third_party/luau/Compiler/src/Compiler.cpp
+index 88113e3..d326da5 100644
+--- a/third_party/luau/Compiler/src/Compiler.cpp
++++ b/third_party/luau/Compiler/src/Compiler.cpp
+@@ -20,6 +20,7 @@
+ #include <algorithm>
+ #include <bitset>
+ #include <memory>
++#include <cstdlib>
+ 
+ #include <math.h>
+ 
+diff --git a/third_party/luau/Ast/src/Parser.cpp b/third_party/luau/Ast/src/Parser.cpp
+index 6584b4c..c5fedee 100644
+--- a/third_party/luau/Ast/src/Parser.cpp
++++ b/third_party/luau/Ast/src/Parser.cpp
+@@ -10,6 +10,7 @@
+ #include <errno.h>
+ #include <limits.h>
+ #include <string.h>
++#include <cstdlib>
+ #include <unordered_set>
+ 
+ LUAU_FASTINTVARIABLE(LuauRecursionLimit, 1000)
+diff --git a/third_party/luau/Bytecode/src/BytecodeBuilder.cpp b/third_party/luau/Bytecode/src/BytecodeBuilder.cpp
+index b0559eb..922decd 100644
+--- a/third_party/luau/Bytecode/src/BytecodeBuilder.cpp
++++ b/third_party/luau/Bytecode/src/BytecodeBuilder.cpp
+@@ -7,6 +7,7 @@
+ #include <algorithm>
+ #include <string.h>
+ #include <climits>
++#include <cmath>
+ 
+ LUAU_FASTFLAG(LuauCompileDuptableConstantPack2)
+ LUAU_FASTFLAG(LuauIntegerType2)
+diff --git a/third_party/luau/Compiler/src/lcode.cpp b/third_party/luau/Compiler/src/lcode.cpp
+index 4e5b3ab..b6ae831 100644
+--- a/third_party/luau/Compiler/src/lcode.cpp
++++ b/third_party/luau/Compiler/src/lcode.cpp
+@@ -1,5 +1,6 @@
+ // This file is part of the Luau programming language and is licensed under MIT License; see LICENSE.txt for details
+ #include "luacode.h"
++#include <cstdlib>
+ 
+ #include "Luau/Compiler.h"
+ 

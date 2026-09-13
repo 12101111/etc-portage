@@ -1,0 +1,12 @@
+diff --git a/src/lib/fcitx-utils/eventloopinterface.h b/src/lib/fcitx-utils/eventloopinterface.h
+index 63183b3..921c139 100644
+--- a/src/lib/fcitx-utils/eventloopinterface.h
++++ b/src/lib/fcitx-utils/eventloopinterface.h
+@@ -14,6 +14,7 @@
+ #include <fcitx-utils/fcitxutils_export.h>
+ #include <fcitx-utils/flags.h>
+ #include <fcitx-utils/macros.h>
++#include <sys/types.h>
+ 
+ namespace fcitx {
+ 

@@ -1,6 +1,7 @@
 # no lto
 sys-libs/musl /-flto*/-fno-lto
 dev-lang/rust /*lto*// RUSTFLAGS-=-Clinker* RUSTFLAGS-=-Clink-arg=-f* RUSTFLAGS-=-*lto*
+llvm-runtimes/libcxxabi /*lto*//
 app-emulation/libvirt /-flto*/-fno-lto #segfault
 dev-python/libvirt-python /-flto*/-fno-lto # bus error
 media-libs/mesa /-flto*/-fno-lto RUSTFLAGS-=-*lto*
@@ -40,14 +41,23 @@ net-fs/nfs-utils /-flto*// /-Wl,*//
 dev-lang/rust /-flto*// /-Wl,*// RUSTFLAGS-=-C*lto*
 dev-qt/qttools /-flto*//
 app-text/doxygen /-O3/-O2/
+llvm-core/llvm:21 /-flto*//
+llvm-core/llvm:20 /-ftlo*//
+llvm-core/clang:21 /-flto*//
+llvm-core/clang:20 /-flto*//
+llvm-core/lld:21 /-flto*//
+llvm-core/lld:20 /-flto*//
 
 # flang
+*/* NOFFLAGS=true NOFCFLAGS=true NOF77FLAGS=true NOLDADD=true
 sci-libs/openblas /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections//
 llvm-runtimes/openmp /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections//
 sci-libs/lapack /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections//
 sci-libs/arpack /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections//
 dev-python/scipy /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections//
 sci-libs/flexiblas /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections// 
+sci-libs/suitesparseconfig /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections// 
+sci-libs/colamd /-pipe// /-fomit-frame-pointer// /-ffunction-sections// /-fdata-sections// 
 
 # no polly
 media-gfx/krita /-mllvm// /-polly*//

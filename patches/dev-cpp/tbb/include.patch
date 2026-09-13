@@ -1,0 +1,12 @@
+diff --git a/include/oneapi/tbb/concurrent_queue.h b/include/oneapi/tbb/concurrent_queue.h
+index c2b7a19..a83adfe 100644
+--- a/include/oneapi/tbb/concurrent_queue.h
++++ b/include/oneapi/tbb/concurrent_queue.h
+@@ -23,6 +23,7 @@
+ #include "detail/_exception.h"
+ #include "detail/_containers_helpers.h"
+ #include "cache_aligned_allocator.h"
++#include <algorithm>
+ 
+ namespace tbb {
+ namespace detail {

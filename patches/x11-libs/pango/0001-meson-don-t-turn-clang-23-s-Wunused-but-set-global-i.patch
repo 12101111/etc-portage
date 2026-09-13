@@ -1,0 +1,45 @@
+From 440b3d147165d8ceaf8420d86bd9bb1dbce1689b Mon Sep 17 00:00:00 2001
+From: Sunil Dora <sunilkumar.dora@windriver.com>
+Date: Sun, 30 Aug 2026 11:40:08 +0530
+Subject: [PATCH] meson: don't turn clang 23's -Wunused-but-set-global into an
+ error
+
+clang 23 added -Wunused-but-set-global to the -Wunused-but-set-variable
+group, so the -Werror promotion in test_cflags now makes it fatal. It
+fires on the parent_class variables that GLib's G_DEFINE_TYPE macros
+emit whenever a type does not chain up:
+
+  pango/pango-fontset.c:36:1: error: variable
+  'pango_fontset_parent_class' set but not used
+  [-Werror,-Wunused-but-set-global]
+
+That code comes from the macro, not from pango. Keep the warning
+visible but not fatal. gcc does not know this warning group, so
+cc.get_supported_arguments() drops the flag there.
+
+A GLib-side fix annotating the macro variable has been proposed
+separately; this keeps pango building with released GLib either way.
+
+Signed-off-by: Sunil Dora <sunilkumar.dora@windriver.com>
+---
+ meson.build | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/meson.build b/meson.build
+index 9a5dc9e..0fa5fc4 100644
+--- a/meson.build
++++ b/meson.build
+@@ -148,6 +148,10 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
+     '-Werror=empty-body',
+     '-Werror=write-strings',
+     '-Werror=unused-but-set-variable',
++    # clang 23 added -Wunused-but-set-global to this group; it fires on the
++    # parent_class variables emitted by GLib's G_DEFINE_TYPE macros, which
++    # pango cannot fix here. Keep it a warning.
++    '-Wno-error=unused-but-set-global',
+     '-Wundef', # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=792481
+   ]
+ 
+-- 
+2.43.0
+

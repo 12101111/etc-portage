@@ -1,0 +1,36 @@
+diff --git a/src/ReceiverMSEHandshakeCommand.cc b/src/ReceiverMSEHandshakeCommand.cc
+index 90ba558..74f24fc 100644
+--- a/src/ReceiverMSEHandshakeCommand.cc
++++ b/src/ReceiverMSEHandshakeCommand.cc
+@@ -32,6 +32,7 @@
+  * files in the program, then also delete it here.
+  */
+ /* copyright --> */
++#include <iterator>
+ #include "ReceiverMSEHandshakeCommand.h"
+ #include "PeerReceiveHandshakeCommand.h"
+ #include "PeerConnection.h"
+diff --git a/src/RpcMethodImpl.h b/src/RpcMethodImpl.h
+index de6d768..2c8f060 100644
+--- a/src/RpcMethodImpl.h
++++ b/src/RpcMethodImpl.h
+@@ -40,6 +40,7 @@
+ #include <cassert>
+ #include <deque>
+ #include <algorithm>
++#include <iterator>
+ 
+ #include "RpcRequest.h"
+ #include "ValueBase.h"
+diff --git a/src/util.h b/src/util.h
+index bb7d8d3..44ab580 100644
+--- a/src/util.h
++++ b/src/util.h
+@@ -53,6 +53,7 @@
+ #include <algorithm>
+ #include <vector>
+ #include <memory>
++#include <iterator>
+ 
+ #include "a2time.h"
+ #include "a2netcompat.h"

@@ -1,0 +1,12 @@
+diff --git a/mtp/types.h b/mtp/types.h
+index 676e180..06c3f03 100644
+--- a/mtp/types.h
++++ b/mtp/types.h
+@@ -29,6 +29,7 @@
+ #include <exception>
+ #include <stdexcept>
+ #include <string>
++#include <iterator>
+ 
+ namespace mtp
+ {

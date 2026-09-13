@@ -1,0 +1,5 @@
+CC=x86_64-pc-linux-musl-clang-22
+CXX=x86_64-pc-linux-musl-clang++-22
+CPP=x86_64-pc-linux-musl-clang-cpp-22
+LLVM_PROFDATA="/usr/lib/llvm/22/bin/llvm-profdata"
+FC="flang-22"

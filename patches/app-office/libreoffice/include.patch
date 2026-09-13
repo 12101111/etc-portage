@@ -1,0 +1,256 @@
+diff -ur libreoffice-25.2.7.2/accessibility/source/standard/vclxaccessibleradiobutton.cxx libreoffice-25.2.7.2.patch/accessibility/source/standard/vclxaccessibleradiobutton.cxx
+--- libreoffice-25.2.7.2/accessibility/source/standard/vclxaccessibleradiobutton.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/accessibility/source/standard/vclxaccessibleradiobutton.cxx	2026-09-11 23:39:24.551768519 +0800
+@@ -36,6 +36,8 @@
+ #include <vcl/event.hxx>
+ #include <vcl/vclevent.hxx>
+ 
++#include <iterator>
++
+ using namespace ::com::sun::star;
+ using namespace ::com::sun::star::uno;
+ using namespace ::com::sun::star::lang;
+diff -ur libreoffice-25.2.7.2/basic/source/comp/buffer.cxx libreoffice-25.2.7.2.patch/basic/source/comp/buffer.cxx
+--- libreoffice-25.2.7.2/basic/source/comp/buffer.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/basic/source/comp/buffer.cxx	2026-09-11 23:21:25.678418969 +0800
+@@ -19,6 +19,7 @@
+ 
+ #include <buffer.hxx>
+ #include <basic/sberrors.hxx>
++#include <iterator>
+ 
+ namespace
+ {
+diff -ur libreoffice-25.2.7.2/fpicker/source/office/contentenumeration.hxx libreoffice-25.2.7.2.patch/fpicker/source/office/contentenumeration.hxx
+--- libreoffice-25.2.7.2/fpicker/source/office/contentenumeration.hxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/fpicker/source/office/contentenumeration.hxx	2026-09-11 23:18:52.539163034 +0800
+@@ -23,6 +23,7 @@
+ 
+ #include <memory>
+ #include <mutex>
++#include <vector>
+ 
+ #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+ #include <salhelper/thread.hxx>
+diff -ur libreoffice-25.2.7.2/i18npool/source/localedata/localedata.cxx libreoffice-25.2.7.2.patch/i18npool/source/localedata/localedata.cxx
+--- libreoffice-25.2.7.2/i18npool/source/localedata/localedata.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/i18npool/source/localedata/localedata.cxx	2026-09-11 23:20:56.681556949 +0800
+@@ -20,6 +20,7 @@
+ #include <memory>
+ #include <mutex>
+ #include <string_view>
++#include <iterator>
+ #include <com/sun/star/beans/PropertyValue.hpp>
+ #include <com/sun/star/container/XIndexAccess.hpp>
+ #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+diff -ur libreoffice-25.2.7.2/i18npool/source/numberformatcode/numberformatcode.cxx libreoffice-25.2.7.2.patch/i18npool/source/numberformatcode/numberformatcode.cxx
+--- libreoffice-25.2.7.2/i18npool/source/numberformatcode/numberformatcode.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/i18npool/source/numberformatcode/numberformatcode.cxx	2026-09-11 23:17:46.368497829 +0800
+@@ -23,6 +23,7 @@
+ #include <com/sun/star/i18n/LocaleData2.hpp>
+ #include <comphelper/sequence.hxx>
+ #include <cppuhelper/supportsservice.hxx>
++#include <iterator>
+ 
+ NumberFormatCodeMapper::NumberFormatCodeMapper(
+             const css::uno::Reference < css::uno::XComponentContext >& rxContext )
+diff -ur libreoffice-25.2.7.2/i18npool/source/transliteration/ignoreDiacritics_CTL.cxx libreoffice-25.2.7.2.patch/i18npool/source/transliteration/ignoreDiacritics_CTL.cxx
+--- libreoffice-25.2.7.2/i18npool/source/transliteration/ignoreDiacritics_CTL.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/i18npool/source/transliteration/ignoreDiacritics_CTL.cxx	2026-09-11 23:16:41.621834733 +0800
+@@ -11,6 +11,7 @@
+ #include <rtl/ustrbuf.hxx>
+ #include <transliteration_Ignore.hxx>
+ #include <unicode/translit.h>
++#include <iterator>
+ 
+ namespace i18npool {
+ 
+diff -ur libreoffice-25.2.7.2/include/xmloff/GradientStyle.hxx libreoffice-25.2.7.2.patch/include/xmloff/GradientStyle.hxx
+--- libreoffice-25.2.7.2/include/xmloff/GradientStyle.hxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/include/xmloff/GradientStyle.hxx	2026-09-11 23:33:13.665302515 +0800
+@@ -20,6 +20,7 @@
+ #ifndef INCLUDED_XMLOFF_GRADIENTSTYLE_HXX
+ #define INCLUDED_XMLOFF_GRADIENTSTYLE_HXX
+ 
++#include <vector>
+ #include <sal/config.h>
+ #include <xmloff/dllapi.h>
+ #include <rtl/ustring.hxx>
+Only in libreoffice-25.2.7.2.patch: instdir
+diff -ur libreoffice-25.2.7.2/linguistic/source/misc.cxx libreoffice-25.2.7.2.patch/linguistic/source/misc.cxx
+--- libreoffice-25.2.7.2/linguistic/source/misc.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/linguistic/source/misc.cxx	2026-09-11 23:21:04.412520039 +0800
+@@ -19,6 +19,7 @@
+ 
+ #include <memory>
+ #include <optional>
++#include <iterator>
+ #include <sal/log.hxx>
+ #include <svl/lngmisc.hxx>
+ #include <ucbhelper/content.hxx>
+diff -ur libreoffice-25.2.7.2/linguistic/source/misc2.cxx libreoffice-25.2.7.2.patch/linguistic/source/misc2.cxx
+--- libreoffice-25.2.7.2/linguistic/source/misc2.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/linguistic/source/misc2.cxx	2026-09-11 23:20:00.421828363 +0800
+@@ -20,6 +20,7 @@
+ #include <sal/config.h>
+ 
+ #include <string_view>
++#include <iterator>
+ 
+ #include <tools/urlobj.hxx>
+ #include <ucbhelper/content.hxx>
+diff -ur libreoffice-25.2.7.2/linguistic/source/spelldsp.cxx libreoffice-25.2.7.2.patch/linguistic/source/spelldsp.cxx
+--- libreoffice-25.2.7.2/linguistic/source/spelldsp.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/linguistic/source/spelldsp.cxx	2026-09-11 23:21:15.942465160 +0800
+@@ -33,6 +33,7 @@
+ #include <sal/log.hxx>
+ 
+ #include <vector>
++#include <iterator>
+ 
+ #include "spelldsp.hxx"
+ #include <linguistic/spelldta.hxx>
+diff -ur libreoffice-25.2.7.2/linguistic/source/thesdsp.cxx libreoffice-25.2.7.2.patch/linguistic/source/thesdsp.cxx
+--- libreoffice-25.2.7.2/linguistic/source/thesdsp.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/linguistic/source/thesdsp.cxx	2026-09-11 23:20:15.634754467 +0800
+@@ -31,6 +31,7 @@
+ 
+ #include "thesdsp.hxx"
+ #include <linguistic/misc.hxx>
++#include <iterator>
+ 
+ using namespace osl;
+ using namespace com::sun::star;
+diff -ur libreoffice-25.2.7.2/oox/source/token/tokenmap.cxx libreoffice-25.2.7.2.patch/oox/source/token/tokenmap.cxx
+--- libreoffice-25.2.7.2/oox/source/token/tokenmap.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/oox/source/token/tokenmap.cxx	2026-09-11 23:34:48.966904831 +0800
+@@ -20,6 +20,7 @@
+ #include <sal/config.h>
+ 
+ #include <array>
++#include <iterator>
+ 
+ #include <oox/token/tokenmap.hxx>
+ 
+diff -ur libreoffice-25.2.7.2/package/inc/ZipFile.hxx libreoffice-25.2.7.2.patch/package/inc/ZipFile.hxx
+--- libreoffice-25.2.7.2/package/inc/ZipFile.hxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/package/inc/ZipFile.hxx	2026-09-11 21:48:16.916277885 +0800
+@@ -32,6 +32,7 @@
+ #include <optional>
+ #include <span>
+ #include <unordered_set>
++#include <vector>
+ 
+ class MemoryByteGrabber;
+ namespace com::sun::star {
+diff -ur libreoffice-25.2.7.2/package/source/xstor/ocompinstream.cxx libreoffice-25.2.7.2.patch/package/source/xstor/ocompinstream.cxx
+--- libreoffice-25.2.7.2/package/source/xstor/ocompinstream.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/package/source/xstor/ocompinstream.cxx	2026-09-11 23:38:43.722935838 +0800
+@@ -26,6 +26,7 @@
+ #include <osl/diagnose.h>
+ #include <sal/log.hxx>
+ #include <utility>
++#include <iterator>
+ 
+ #include "owriteablestream.hxx"
+ 
+diff -ur libreoffice-25.2.7.2/package/source/xstor/owriteablestream.cxx libreoffice-25.2.7.2.patch/package/source/xstor/owriteablestream.cxx
+--- libreoffice-25.2.7.2/package/source/xstor/owriteablestream.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/package/source/xstor/owriteablestream.cxx	2026-09-11 23:38:55.940885737 +0800
+@@ -21,6 +21,7 @@
+ 
+ #include <cassert>
+ #include <memory>
++#include <iterator>
+ #include <sal/log.hxx>
+ 
+ #include <com/sun/star/packages/NoEncryptionException.hpp>
+diff -ur libreoffice-25.2.7.2/package/source/xstor/xstorage.cxx libreoffice-25.2.7.2.patch/package/source/xstor/xstorage.cxx
+--- libreoffice-25.2.7.2/package/source/xstor/xstorage.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/package/source/xstor/xstorage.cxx	2026-09-11 23:37:47.612166300 +0800
+@@ -23,6 +23,7 @@
+ 
+ #include <cassert>
+ #include <string_view>
++#include <iterator>
+ 
+ #include <com/sun/star/beans/PropertyValue.hpp>
+ #include <com/sun/star/embed/ElementModes.hpp>
+diff -ur libreoffice-25.2.7.2/sc/inc/broadcast.hxx libreoffice-25.2.7.2.patch/sc/inc/broadcast.hxx
+--- libreoffice-25.2.7.2/sc/inc/broadcast.hxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/sc/inc/broadcast.hxx	2026-09-11 23:41:37.005227594 +0800
+@@ -11,6 +11,7 @@
+ 
+ #include "address.hxx"
+ 
++#include <vector>
+ #include <map>
+ #include <variant>
+ #include <ostream>
+diff -ur libreoffice-25.2.7.2/scripting/source/vbaevents/eventhelper.cxx libreoffice-25.2.7.2.patch/scripting/source/vbaevents/eventhelper.cxx
+--- libreoffice-25.2.7.2/scripting/source/vbaevents/eventhelper.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/scripting/source/vbaevents/eventhelper.cxx	2026-09-11 23:36:06.548583113 +0800
+@@ -70,6 +70,7 @@
+ 
+ #include <vector>
+ #include <unordered_map>
++#include <iterator>
+ 
+ using namespace ::com::sun::star;
+ using namespace ::com::sun::star::script;
+diff -ur libreoffice-25.2.7.2/sfx2/source/sidebar/ResourceManager.cxx libreoffice-25.2.7.2.patch/sfx2/source/sidebar/ResourceManager.cxx
+--- libreoffice-25.2.7.2/sfx2/source/sidebar/ResourceManager.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/sfx2/source/sidebar/ResourceManager.cxx	2026-09-11 23:22:28.567123755 +0800
+@@ -40,6 +40,7 @@
+ #include <com/sun/star/ui/XSidebarPanel.hpp>
+ #include <com/sun/star/ui/XUpdateModel.hpp>
+ 
++#include <iterator>
+ #include <map>
+ 
+ using namespace css;
+diff -ur libreoffice-25.2.7.2/stoc/source/simpleregistry/simpleregistry.cxx libreoffice-25.2.7.2.patch/stoc/source/simpleregistry/simpleregistry.cxx
+--- libreoffice-25.2.7.2/stoc/source/simpleregistry/simpleregistry.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/stoc/source/simpleregistry/simpleregistry.cxx	2026-09-11 21:46:48.415948727 +0800
+@@ -24,6 +24,7 @@
+ #include <optional>
+ #include <utility>
+ #include <vector>
++#include <iterator>
+ 
+ #include <com/sun/star/lang/XServiceInfo.hpp>
+ #include <com/sun/star/registry/InvalidRegistryException.hpp>
+diff -ur libreoffice-25.2.7.2/sw/source/ui/vba/vbavariables.cxx libreoffice-25.2.7.2.patch/sw/source/ui/vba/vbavariables.cxx
+--- libreoffice-25.2.7.2/sw/source/ui/vba/vbavariables.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/sw/source/ui/vba/vbavariables.cxx	2026-09-11 23:46:26.956199420 +0800
+@@ -20,6 +20,7 @@
+ #include "vbavariable.hxx"
+ #include <com/sun/star/beans/XPropertyContainer.hpp>
+ #include <com/sun/star/beans/PropertyAttribute.hpp>
++#include <iterator>
+ 
+ using namespace ::ooo::vba;
+ using namespace ::com::sun::star;
+Only in libreoffice-25.2.7.2.patch: workdir
+diff -ur libreoffice-25.2.7.2/xmloff/source/chart/SchXMLParagraphContext.hxx libreoffice-25.2.7.2.patch/xmloff/source/chart/SchXMLParagraphContext.hxx
+--- libreoffice-25.2.7.2/xmloff/source/chart/SchXMLParagraphContext.hxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/xmloff/source/chart/SchXMLParagraphContext.hxx	2026-09-11 23:30:38.625956747 +0800
+@@ -18,6 +18,7 @@
+  */
+ #pragma once
+ 
++#include <vector>
+ #include <xmloff/xmlictxt.hxx>
+ #include <rtl/ustring.hxx>
+ #include <rtl/ustrbuf.hxx>
+diff -ur libreoffice-25.2.7.2/xmloff/source/core/fasttokenhandler.cxx libreoffice-25.2.7.2.patch/xmloff/source/core/fasttokenhandler.cxx
+--- libreoffice-25.2.7.2/xmloff/source/core/fasttokenhandler.cxx	2025-10-24 23:29:01.000000000 +0800
++++ libreoffice-25.2.7.2.patch/xmloff/source/core/fasttokenhandler.cxx	2026-09-11 23:31:03.583850728 +0800
+@@ -10,6 +10,7 @@
+ #include <fasttokenhandler.hxx>
+ 
+ #include <xmloff/token/tokens.hxx>
++#include <iterator>
+ 
+ namespace xmloff {
+ 

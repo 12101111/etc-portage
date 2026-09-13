@@ -1,0 +1,12 @@
+--- a/netcat.c
++++ b/netcat.c
+@@ -89,6 +89,9 @@
+ # define	IPTOS_DSCP_EF		0xb8
+ #endif /* IPTOS_DSCP_EF */
+ 
++#ifndef IPTOS_DSCP_VA
++# define	IPTOS_DSCP_VA		0xb0
++#endif /* IPTOS_DSCP_VA */
+ 
+ #include <ctype.h>
+ #include <err.h>

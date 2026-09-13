@@ -1,0 +1,24 @@
+diff --git a/deps/LIEF/third-party/frozen/include/frozen/map.h b/deps/LIEF/third-party/frozen/include/frozen/map.h
+index fd4f7f9..81bc43a 100644
+--- a/deps/LIEF/third-party/frozen/include/frozen/map.h
++++ b/deps/LIEF/third-party/frozen/include/frozen/map.h
+@@ -30,6 +30,7 @@
+ #include "frozen/bits/version.h"
+ 
+ #include <utility>
++#include <functional>
+ 
+ namespace frozen {
+ 
+diff --git a/deps/ncrypto/ncrypto.cc b/deps/ncrypto/ncrypto.cc
+index fb74465..823d9a1 100644
+--- a/deps/ncrypto/ncrypto.cc
++++ b/deps/ncrypto/ncrypto.cc
+@@ -17,6 +17,7 @@
+ #include <climits>
+ #include <cstring>
+ #include <string_view>
++#include <vector>
+ #if OPENSSL_VERSION_MAJOR >= 3
+ #include <openssl/core_names.h>
+ #include <openssl/params.h>

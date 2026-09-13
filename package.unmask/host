@@ -6,4 +6,5 @@ llvm-runtimes/libatomic-stub
 app-emulation/open-vm-tools
 dev-java/openjdk-bin
 sys-process/systemd-cron
+sci-misc/llama-cpp::stuff
 

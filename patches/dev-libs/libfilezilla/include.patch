@@ -1,0 +1,36 @@
+diff --git a/lib/libfilezilla/libfilezilla.hpp b/lib/libfilezilla/libfilezilla.hpp
+index 276b5d9..a31b737 100644
+--- a/lib/libfilezilla/libfilezilla.hpp
++++ b/lib/libfilezilla/libfilezilla.hpp
+@@ -5,6 +5,7 @@
+ #include "private/visibility.hpp"
+ 
+ #include "string.hpp"
++#include <cstdlib>
+ 
+ /** \file
+  * \brief Sets some global macros and further includes \ref string.hpp
+diff --git a/lib/unix/poller.hpp b/lib/unix/poller.hpp
+index a386e5a..411a937 100644
+--- a/lib/unix/poller.hpp
++++ b/lib/unix/poller.hpp
+@@ -3,6 +3,7 @@
+ 
+ #include "../libfilezilla/libfilezilla.hpp"
+ #include "../libfilezilla/mutex.hpp"
++#include <cerrno>
+ 
+ #if !FZ_WINDOWS
+ 
+diff --git a/lib/util.cpp b/lib/util.cpp
+index 42a5e41..c014d4f 100644
+--- a/lib/util.cpp
++++ b/lib/util.cpp
+@@ -27,6 +27,7 @@
+ 	#include "libfilezilla/file.hpp"
+ 	#include <stdio.h>
+ 	#include <sys/stat.h>
++	#include <cerrno>
+ #endif
+ 
+ namespace fz {
