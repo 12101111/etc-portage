@@ -47,6 +47,7 @@ llvm-core/clang:21 /-flto*//
 llvm-core/clang:20 /-flto*//
 llvm-core/lld:21 /-flto*//
 llvm-core/lld:20 /-flto*//
+www-client/firefox RUSTFLAGS-=-Clinker-plugin-lto 'unset CARGO_PROFILE_RELEASE_LTO'
 
 # flang
 */* NOFFLAGS=true NOFCFLAGS=true NOF77FLAGS=true NOLDADD=true

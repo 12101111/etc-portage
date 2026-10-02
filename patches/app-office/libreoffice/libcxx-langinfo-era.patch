@@ -1,0 +1,107 @@
+Fix build with clang+libc++ on musl: libc++'s locale support
+(__locale_dir/support/linux.h) includes <langinfo.h>, which on musl
+unconditionally defines ERA as a macro (0x2002C). That clashes with
+the generated UNO constants i18n::CalendarFieldIndex::ERA and
+i18n::CalendarDisplayIndex::ERA (offapi constants whose names are
+fixed API), breaking i18npool/svl/vcl/sc compilation.
+
+Two-level fix:
+ 1. cppumaker emits '#undef ERA' in generated constant-group .hdl
+    files that declare an ERA constant (fixes the declarations).
+ 2. The .cxx files that *use* CalendarFieldIndex::ERA undef it
+    after their include blocks (fixes the use sites regardless of
+    include order; langinfo.h cannot re-define it due to its guard).
+
+--- a/codemaker/source/cppumaker/cpputype.cxx
++++ b/codemaker/source/cppumaker/cpputype.cxx
+@@ -1678,6 +1678,15 @@
+     addDefaultHIncludes(includes);
+     includes.dump(out, nullptr, true);
+     out << "\n";
++    // <langinfo.h> (pulled in by libc++'s locale support headers) defines ERA
++    // as a macro, which clashes with a constant of that name (i18n/CalendarFieldIndex.idl,
++    // i18n/CalendarDisplayIndex.idl):
++    for (const unoidl::ConstantGroupEntity::Member& member : entity_->getMembers()) {
++        if (member.name == u"ERA") {
++            out << "#ifdef ERA\n#undef ERA\n#endif\n\n";
++            break;
++        }
++    }
+     if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, true)) {
+         out << "\n";
+     }
+--- a/i18npool/source/calendar/calendar_gregorian.cxx
++++ b/i18npool/source/calendar/calendar_gregorian.cxx
+@@ -34,6 +34,12 @@
+ #include <stdio.h>
+ #include <string.h>
+ 
++// <langinfo.h> (pulled in by libc++'s locale support headers) defines ERA as
++// a macro, which clashes with i18n::CalendarFieldIndex::ERA:
++#ifdef ERA
++#undef ERA
++#endif
++
+ #define erDUMP_ICU_CALENDAR 0
+ #define erDUMP_I18N_CALENDAR 0
+ #if erDUMP_ICU_CALENDAR || erDUMP_I18N_CALENDAR
+--- a/i18npool/source/calendar/calendar_hijri.cxx
++++ b/i18npool/source/calendar/calendar_hijri.cxx
+@@ -26,6 +26,12 @@
+ #include <tools/long.hxx>
+ #include <basegfx/numeric/ftools.hxx>
+ 
++// <langinfo.h> (pulled in by libc++'s locale support headers) defines ERA as
++// a macro, which clashes with i18n::CalendarFieldIndex::ERA:
++#ifdef ERA
++#undef ERA
++#endif
++
+ using namespace ::com::sun::star::i18n;
+ 
+ namespace i18npool {
+--- a/i18npool/source/calendar/calendar_jewish.cxx
++++ b/i18npool/source/calendar/calendar_jewish.cxx
+@@ -24,6 +24,12 @@
+ #include <com/sun/star/i18n/CalendarDisplayCode.hpp>
+ #include <com/sun/star/i18n/NativeNumberMode.hpp>
+ 
++// <langinfo.h> (pulled in by libc++'s locale support headers) defines ERA as
++// a macro, which clashes with i18n::CalendarFieldIndex::ERA:
++#ifdef ERA
++#undef ERA
++#endif
++
+ using namespace ::com::sun::star::i18n;
+ 
+ namespace i18npool {
+--- a/svl/source/numbers/zformat.cxx
++++ b/svl/source/numbers/zformat.cxx
+@@ -48,6 +48,12 @@
+ #include <cmath>
+ #include <array>
+ 
++// <langinfo.h> (pulled in by libc++'s locale support headers) defines ERA as
++// a macro, which clashes with i18n::CalendarFieldIndex::ERA:
++#ifdef ERA
++#undef ERA
++#endif
++
+ using namespace svt;
+ 
+ namespace {
+--- a/svl/source/numbers/zforfind.cxx
++++ b/svl/source/numbers/zforfind.cxx
+@@ -42,6 +42,12 @@
+ 
+ #include "zforfind.hxx"
+ 
++// <langinfo.h> (pulled in by libc++'s locale support headers) defines ERA as
++// a macro, which clashes with i18n::CalendarFieldIndex::ERA:
++#ifdef ERA
++#undef ERA
++#endif
++
+ #ifndef DBG_UTIL
+ #define NF_TEST_CALENDAR 0
+ #else

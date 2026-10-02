@@ -23,22 +23,15 @@ dev-lang/ghc doc ghcbootstrap elfutils
 llvm-core/clang-toolchain-symlinks gcc-symlinks
 dev-lang/python tail-call-interp
 */* llvm_slot_23 -llvm_slot_22 -llvm_slot_21 -llvm_slot_20 -llvm_slot_19 -llvm_slot_18
-dev-util/electron llvm_slot_22
-#app-crypt/sequoia-sq llvm_slot_22
 dev-util/mesa_clc llvm_slot_22
 app-text/doxygen llvm_slot_22
-www-client/firefox llvm_slot_22
+#www-client/firefox llvm_slot_22
 www-client/chromium llvm_slot_22
-#sys-devel/wild llvm_slot_22
-#sys-apps/uutils-coreutils llvm_slot_22
-#sci-electronics/yosys llvm_slot_22
-#gui-apps/xwayland-satellite llvm_slot_22
 dev-util/perf llvm_slot_22
 cross_llvm-wasm32-wasi-threads/wasi-libc llvm_slot_22
 cross_llvm-wasm32-wasip1/wasi-libc llvm_slot_22
 dev-lang/deno llvm_slot_22
 media-libs/mesa llvm_slot_22
-app-editors/zed llvm_slot_22
 =dev-lang/zig-0.15.2 llvm_slot_20
 =dev-lang/zig-0.16.0 llvm_slot_21
 
@@ -58,7 +51,7 @@ app-editors/emacs webp -jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfi
 app-emacs/emacs-common gsettings
 app-editors/zed -collab
 app-editors/vim X python
-media-video/mpv archive cli drm libass opengl lua vaapi libmpv -vulkan lua_single_target_luajit
+media-video/mpv -sdl archive cli drm libass opengl lua vaapi libmpv vulkan lua_single_target_luajit
 net-misc/remmina rdp vnc appindicator gnome-keyring spice ssh
 media-sound/mpd flac
 media-video/ffmpeg -vulkan dav1d fontconfig truetype openh264 xcb jpeg2k libaom libass libdrm openssl opus v4l mp3 webp x264 x265 vaapi vpx
@@ -103,7 +96,7 @@ www-client/luakit LUA_SINGLE_TARGET: luajit
 gnome-extra/nm-applet appindicator
 gui-apps/swaybg gdk-pixbuf
 games-util/mangohud gamescope mangoapp mangohudctl mangoplot
-games-wm/gamescope pipewire
+gui-wm/gamescope libei
 net-firewall/iptables nftables
 app-admin/sysstat lm-sensors
 games-emulation/yuzu sdl -system-vulkan webengine
@@ -186,7 +179,7 @@ virtual/imagemagick-tools tiff
 app-text/poppler cairo # materia-theme
 sys-apps/dbus user-session # mako
 media-plugins/gst-plugins-meta vorbis ogg mp3 aac flac ffmpeg
-dev-libs/libdbusmenu gtk3
+dev-libs/libdbusmenu -gtk gtk3 # disable gtk2
 net-misc/curl http2 # rust
 media-libs/harfbuzz icu # tex electron
 app-text/poppler qt6 nss #okular
@@ -216,7 +209,7 @@ net-wireless/blueman appindicator network
 dev-qt/qtquickcontrols2 widgets # yubikey-manager-qt
 net-libs/gnutls pkcs11
 dev-python/qtpy gui printsupport #jupyter
-media-libs/gegl cairo
+media-libs/gegl cairo -sdl
 media-libs/babl introspection lcms
 media-libs/gegl introspection lcms
 kde-apps/kio-extras mtp nfs samba
@@ -349,6 +342,8 @@ media-video/pipewire -X
 gui-wm/cage -X
 gui-apps/noctalia -jemalloc
 dev-libs/libutf8proc -cjk
+sys-apps/pcsc-tools -gui
+dev-util/perf -gtk
 
 # chromium and electron
 media-libs/libvpx svc

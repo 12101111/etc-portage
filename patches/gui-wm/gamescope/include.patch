@@ -1,0 +1,60 @@
+diff --git a/layer/VkLayer_FROG_gamescope_wsi.cpp b/layer/VkLayer_FROG_gamescope_wsi.cpp
+index 50bdb236..4534433e 100644
+--- a/layer/VkLayer_FROG_gamescope_wsi.cpp
++++ b/layer/VkLayer_FROG_gamescope_wsi.cpp
+@@ -21,6 +21,7 @@
+ #include <functional>
+ #include <unordered_map>
+ #include <optional>
++#include <string>
+ 
+ #include <poll.h>
+ #include <sys/stat.h>
+diff --git a/src/Apps/gamescope_hotkey_example.cpp b/src/Apps/gamescope_hotkey_example.cpp
+index dd8458f0..dfc52698 100644
+--- a/src/Apps/gamescope_hotkey_example.cpp
++++ b/src/Apps/gamescope_hotkey_example.cpp
+@@ -1,4 +1,5 @@
+ #include <cstdio>
++#include <cstdlib>
+ #include <cstring>
+ #include <string>
+ #include <vector>
+diff --git a/src/Apps/gamescopectl.cpp b/src/Apps/gamescopectl.cpp
+index a7a017a7..69dcbe38 100644
+--- a/src/Apps/gamescopectl.cpp
++++ b/src/Apps/gamescopectl.cpp
+@@ -1,6 +1,7 @@
+ #include <cstdio>
+ #include <cstring>
+ #include <string>
++#include <cstdlib>
+ #include <vector>
+ #include <span>
+ #include <optional>
+diff --git a/src/Utils/DirHelpers.cpp b/src/Utils/DirHelpers.cpp
+index df0cf34f..223b2a2d 100644
+--- a/src/Utils/DirHelpers.cpp
++++ b/src/Utils/DirHelpers.cpp
+@@ -3,6 +3,7 @@
+ #include <sys/types.h>
+ #include <pwd.h>
+ #include <unistd.h>
++#include <stdlib.h>
+ 
+ namespace gamescope {
+     std::string_view GetHomeDir()
+diff --git a/src/waitable.h b/src/waitable.h
+index be54d46e..c77dfc98 100644
+--- a/src/waitable.h
++++ b/src/waitable.h
+@@ -1,7 +1,9 @@
+ #pragma once
+ 
++#include <vector>
+ #include <thread>
+ #include <stdint.h>
++#include <stdlib.h>
+ #include <fcntl.h>
+ #include <unistd.h>
+ #include <sys/epoll.h>
