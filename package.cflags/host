@@ -31,10 +31,6 @@ dev-lang/ghc /-flto*// LDFLAGS-=-Wl,* HCFLAGS+=-fPIC
 net-fs/nfs-utils /-flto*//
 sys-fs/xfsprogs /-flto*//
 net-misc/networkmanager /-flto*//
-cross_llvm-loongarch64-unknown-linux-musl/compiler-rt /-flto*//
-cross_llvm-wasm32-wasi/compiler-rt /-flto*//
-cross_llvm-wasm32-wasip1/compiler-rt /-flto*//
-cross_llvm-arm-unknown-linux-musleabihf/compiler-rt /-flto*// /-march*// /-mtune*//
 kde-frameworks/breeze-icons /-flto*//
 net-fs/nfs-utils /-flto*// /-Wl,*//
 dev-qt/qttools /-flto*//
