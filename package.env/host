@@ -17,8 +17,7 @@ dev-util/bazel noccache
 dev-lang/mono noccache
 dev-lang/deno ccache
 
-# no file descriptor available
-# dev-dotnet/dotnet-sdk notmpfs j24
+dev-lang/rust rustc
 
 dev-db/mongodb mongodb
 

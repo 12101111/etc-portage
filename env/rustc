@@ -1,0 +1,18 @@
+COMMON_FLAGS="-march=znver4 -mtune=znver4 -O3 -pipe -fomit-frame-pointer -ffunction-sections -fdata-sections"
+CFLAGS="${COMMON_FLAGS}"
+CXXFLAGS="${COMMON_FLAGS}"
+RUSTFLAGS="-Ccodegen-units=1"
+LDFLAGS="-Wl,--as-needed -Wl,-z,pack-relative-relocs"
+
+CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUSTFLAGS="-Ctarget-cpu=znver4 -Copt-level=3 -Ccodegen-units=1 -Clinker=clang -Clink-arg=-fuse-ld=lld -Clink-arg=-Wl,-z,pack-relative-relocs"
+CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_RUSTFLAGS="-Ctarget-cpu=lime1 -Copt-level=s -Ccodegen-units=1"
+CARGO_TARGET_WASM32_WASIP1_RUSTFLAGS="-Ctarget-cpu=lime1 -Copt-level=s -Ccodegen-units=1"
+CARGO_TARGET_WASM32_WASIP2_RUSTFLAGS="-Ctarget-cpu=lime1 -Copt-level=s -Ccodegen-units=1"
+CARGO_TARGET_WASM32_WASIP3_RUSTFLAGS="-Ctarget-cpu=lime1 -Copt-level=s -Ccodegen-units=1"
+
+CFLAGS_x86_64_unknown_linux_musl="${COMMON_FLAGS}"
+CFLAGS_wasm32_unknown_unknown="-Os -pipe -mcpu=lime1"
+CFLAGS_wasm32_wasip1="-Os -pipe -mcpu=lime1"
+CFLAGS_wasm32_wasip2="-Os -pipe -mcpu=lime1"
+CFLAGS_wasm32_wasip3="-Os -pipe -mcpu=lime1"
+

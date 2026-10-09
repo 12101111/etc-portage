@@ -1,10 +1,9 @@
 # no lto
 sys-libs/musl /-flto*/-fno-lto
-dev-lang/rust /*lto*// RUSTFLAGS-=-Clinker* RUSTFLAGS-=-Clink-arg=-f* RUSTFLAGS-=-*lto*
 llvm-runtimes/libcxxabi /*lto*//
 app-emulation/libvirt /-flto*/-fno-lto #segfault
 dev-python/libvirt-python /-flto*/-fno-lto # bus error
-media-libs/mesa /-flto*/-fno-lto RUSTFLAGS-=-*lto*
+media-libs/mesa /-flto*// RUSTFLAGS-=-*lto*
 media-libs/libglvnd /-flto*/-fno-lto #link error
 dev-cpp/glog /-flto*/-fno-lto
 sys-libs/libomp /-flto*/-fno-lto
@@ -38,7 +37,6 @@ cross_llvm-wasm32-wasip1/compiler-rt /-flto*//
 cross_llvm-arm-unknown-linux-musleabihf/compiler-rt /-flto*// /-march*// /-mtune*//
 kde-frameworks/breeze-icons /-flto*//
 net-fs/nfs-utils /-flto*// /-Wl,*//
-dev-lang/rust /-flto*// /-Wl,*// RUSTFLAGS-=-C*lto*
 dev-qt/qttools /-flto*//
 app-text/doxygen /-O3/-O2/
 llvm-core/llvm:21 /-flto*//
@@ -48,6 +46,7 @@ llvm-core/clang:20 /-flto*//
 llvm-core/lld:21 /-flto*//
 llvm-core/lld:20 /-flto*//
 www-client/firefox RUSTFLAGS-=-Clinker-plugin-lto 'unset CARGO_PROFILE_RELEASE_LTO'
+dev-lang/rust 'unset CARGO_PROFILE_RELEASE_LTO'
 
 # flang
 */* NOFFLAGS=true NOFCFLAGS=true NOF77FLAGS=true NOLDADD=true
