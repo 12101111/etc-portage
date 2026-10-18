@@ -1,5 +1,5 @@
 diff --git a/src/Backends/SDLBackend.cpp b/src/Backends/SDLBackend.cpp
-index 87bde7e..ec36239 100644
+index 58af1509..77b9eb84 100644
 --- a/src/Backends/SDLBackend.cpp
 +++ b/src/Backends/SDLBackend.cpp
 @@ -1,6 +1,7 @@
@@ -10,7 +10,7 @@ index 87bde7e..ec36239 100644
  #include <thread>
  #include <mutex>
  #include <string>
-@@ -199,9 +200,12 @@ namespace gamescope
+@@ -200,9 +201,12 @@ namespace gamescope
  
  		std::atomic<bool> m_bApplicationGrabbed = { false };
  		std::atomic<bool> m_bApplicationVisible = { false };
@@ -26,7 +26,7 @@ index 87bde7e..ec36239 100644
  		SDL_Surface *m_pIconSurface = nullptr;
  		SDL_Surface *m_pCursorSurface = nullptr;
  		SDL_Cursor *m_pCursor = nullptr;
-@@ -523,6 +527,7 @@ namespace gamescope
+@@ -531,6 +535,7 @@ namespace gamescope
  
  	void CSDLBackend::SetCursorImage( std::shared_ptr<INestedHints::CursorInfo> info )
  	{
@@ -34,7 +34,7 @@ index 87bde7e..ec36239 100644
  		m_pApplicationCursor = info;
  		PushUserEvent( GAMESCOPE_SDL_EVENT_CURSOR );
  	}
-@@ -538,11 +543,13 @@ namespace gamescope
+@@ -546,11 +551,13 @@ namespace gamescope
  	}
  	void CSDLBackend::SetTitle( std::shared_ptr<std::string> szTitle )
  	{
@@ -48,7 +48,7 @@ index 87bde7e..ec36239 100644
  		m_pApplicationIcon = uIconPixels;
  		PushUserEvent( GAMESCOPE_SDL_EVENT_ICON );
  	}
-@@ -887,6 +894,7 @@ namespace gamescope
+@@ -896,6 +903,7 @@ namespace gamescope
  					}
  					else if ( event.type == GetUserEventIndex( GAMESCOPE_SDL_EVENT_TITLE ) )
  					{
@@ -56,7 +56,7 @@ index 87bde7e..ec36239 100644
  						std::shared_ptr<std::string> pAppTitle = m_pApplicationTitle;
  
  						std::string szTitle = pAppTitle ? *pAppTitle : "gamescope";
-@@ -900,6 +908,7 @@ namespace gamescope
+@@ -909,6 +917,7 @@ namespace gamescope
  					}
  					else if ( event.type == GetUserEventIndex( GAMESCOPE_SDL_EVENT_ICON ) )
  					{
@@ -64,7 +64,7 @@ index 87bde7e..ec36239 100644
  						std::shared_ptr<std::vector<uint32_t>> pIcon = m_pApplicationIcon;
  
  						if ( m_pIconSurface )
-@@ -928,6 +937,7 @@ namespace gamescope
+@@ -937,6 +946,7 @@ namespace gamescope
  					}
  					else if ( event.type == GetUserEventIndex( GAMESCOPE_SDL_EVENT_CURSOR ) )
  					{
@@ -73,7 +73,7 @@ index 87bde7e..ec36239 100644
  
  						if ( m_pCursorSurface )
 diff --git a/src/Backends/WaylandBackend.cpp b/src/Backends/WaylandBackend.cpp
-index ab6d30c..32dedba 100644
+index d74268be..2b3a03db 100644
 --- a/src/Backends/WaylandBackend.cpp
 +++ b/src/Backends/WaylandBackend.cpp
 @@ -12,6 +12,8 @@
@@ -85,7 +85,7 @@ index ab6d30c..32dedba 100644
  #include <unordered_map>
  #include <unordered_set>
  #include <csignal>
-@@ -560,7 +562,8 @@ namespace gamescope
+@@ -571,7 +573,8 @@ namespace gamescope
          std::optional<wl_fixed_t> m_ofPendingCursorX;
          std::optional<wl_fixed_t> m_ofPendingCursorY;
  
@@ -95,7 +95,7 @@ index ab6d30c..32dedba 100644
          std::unordered_set<uint32_t> m_uScancodesHeld;
  
          void Wayland_Registry_Global( wl_registry *pRegistry, uint32_t uName, const char *pInterface, uint32_t uVersion );
-@@ -2868,7 +2871,8 @@ namespace gamescope
+@@ -2916,7 +2919,8 @@ namespace gamescope
  
      void CWaylandInputThread::SetRelativePointer( bool bRelative )
      {
@@ -105,7 +105,7 @@ index ab6d30c..32dedba 100644
              return;
          // This constructors/destructors the display's mutex, so should be safe to do across threads.
          if ( !bRelative )
-@@ -3057,7 +3061,8 @@ namespace gamescope
+@@ -3106,7 +3110,8 @@ namespace gamescope
  		if ( !pPlane )
  			return;
  
@@ -115,11 +115,65 @@ index ab6d30c..32dedba 100644
              return;
  
          if ( !cv_wayland_mouse_warp_without_keyboard_focus && !m_bKeyboardEntered )
+diff --git a/src/mangoapp.cpp b/src/mangoapp.cpp
+index e7c7ede5..eacef7ad 100644
+--- a/src/mangoapp.cpp
++++ b/src/mangoapp.cpp
+@@ -205,6 +205,7 @@ void mangoapp_update( uint64_t visible_frametime, uint64_t app_frametime_ns, uin
+         snapshot.nOutputRefreshmHz = g_nOutputRefresh;
+         snapshot.bAppWantsHDR = g_bAppWantsHDRCached;
+         snapshot.bSteamFocused = g_focusedBaseAppId == 769;
++        std::shared_lock lock( focusWindow_engine_lock );
+         snapshot.pEngineName = focusWindow_engine;
+     }
+     else
 diff --git a/src/steamcompmgr.cpp b/src/steamcompmgr.cpp
-index 4968397..f4d90ae 100644
+index 18b799e0..2f7a82f9 100644
 --- a/src/steamcompmgr.cpp
 +++ b/src/steamcompmgr.cpp
-@@ -1040,7 +1040,8 @@ int g_BlurRadius = 5;
+@@ -42,6 +42,7 @@
+ #include <thread>
+ #include <condition_variable>
+ #include <mutex>
++#include <shared_mutex>
+ #include <atomic>
+ #include <algorithm>
+ #include <array>
+@@ -147,7 +148,8 @@ std::atomic<uint64_t> g_FocusedVROverlayKeyboard;
+ gamescope_color_mgmt_tracker_t g_ColorMgmt{};
+ 
+ static gamescope_color_mgmt_luts g_ColorMgmtLutsOverride[ EOTF_Count ];
+-std::atomic<std::shared_ptr<lut3d_t>> g_ColorMgmtLooks[EOTF_Count];
++std::shared_mutex g_ColorMgmtLooks_lock;
++std::shared_ptr<lut3d_t> g_ColorMgmtLooks[EOTF_Count];
+ 
+ 
+ gamescope_color_mgmt_luts g_ColorMgmtLuts[ EOTF_Count ];
+@@ -356,6 +358,7 @@ create_color_mgmt_luts(const gamescope_color_mgmt_t& newColorMgmt, gamescope_col
+ 
+ 			EOTF inputEOTF = static_cast<EOTF>( nInputEOTF );
+ 			float flGain = 1.f;
++			std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 			std::shared_ptr<lut3d_t> pSharedLook = g_ColorMgmtLooks[ nInputEOTF ];
+ 			lut3d_t * pLook = pSharedLook && pSharedLook->lutEdgeSize > 0 ? pSharedLook.get() : nullptr;
+ 
+@@ -905,6 +908,7 @@ bool set_color_shaperlut_override(const char *path)
+ bool set_color_look_pq(const char *path)
+ {
+ 	bool bRaisesBlackLevelFloor = false;
++	std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 	g_ColorMgmtLooks[EOTF_PQ] = LoadCubeLut( path, bRaisesBlackLevelFloor );
+ 	cv_overlay_unmultiplied_alpha = bRaisesBlackLevelFloor;
+ 	g_ColorMgmt.pending.externalDirtyCtr++;
+@@ -914,6 +918,7 @@ bool set_color_look_pq(const char *path)
+ bool set_color_look_g22(const char *path)
+ {
+ 	bool bRaisesBlackLevelFloor = false;
++	std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 	g_ColorMgmtLooks[EOTF_Gamma22] = LoadCubeLut( path, bRaisesBlackLevelFloor );
+ 	cv_overlay_unmultiplied_alpha = bRaisesBlackLevelFloor;
+ 	g_ColorMgmt.pending.externalDirtyCtr++;
+@@ -1310,7 +1315,8 @@ int g_BlurRadius = 5;
  unsigned int g_BlurFadeStartTime = 0;
  
  pid_t focusWindow_pid, sdFocusWindow_pid;
@@ -129,17 +183,16 @@ index 4968397..f4d90ae 100644
  
  focus_t g_steamcompmgr_xdg_focus;
  std::vector<std::shared_ptr<steamcompmgr_win_t>> g_steamcompmgr_xdg_wins;
-@@ -6694,7 +6695,7 @@ bool handle_done_commit( steamcompmgr_win_t *w, xwayland_ctx_t *ctx, uint64_t co
- 					if ( !cv_paint_debug_pause_base_plane )
- 						g_HeldCommits[ HELD_COMMIT_BASE ] = w->commit_queue[ j ];
- 					hasRepaint = true;
--
-+					std::unique_lock lock(focusWindow_engine_lock);
- 					focusWindow_engine = w->engineName;
- 					focusWindow_pid = w->pid;
- 				}
+@@ -9643,6 +9649,7 @@ static void publish_mangoapp_snapshot()
+ 	if ( !pFocus )
+ 		return;
+ 
++	std::unique_lock lock(focusWindow_engine_lock);
+ 	g_eActiveUpscaler = pFocus->eActiveUpscaler;
+ 	g_eWantedUpscaler = g_wantedUpscaleFilter;
+ 	g_nActiveUpscaleSharpness = pFocus->nUpscaleSharpness;
 diff --git a/src/steamcompmgr.hpp b/src/steamcompmgr.hpp
-index 6734c15..a025595 100644
+index c428784c..c1137186 100644
 --- a/src/steamcompmgr.hpp
 +++ b/src/steamcompmgr.hpp
 @@ -1,5 +1,5 @@
@@ -149,7 +202,7 @@ index 6734c15..a025595 100644
  #include "wlr_begin.hpp"
  #include <wlr/types/wlr_buffer.h>
  #include <wlr/render/wlr_texture.h>
-@@ -144,7 +144,8 @@ struct wlserver_x11_surface_info *lookup_x11_surface_info_from_xid( gamescope_xw
+@@ -187,7 +187,8 @@ struct wlserver_x11_surface_info *lookup_x11_surface_info_from_xid( gamescope_xw
  
  extern gamescope::VBlankTime g_SteamCompMgrVBlankTime;
  extern pid_t focusWindow_pid;
@@ -159,3 +212,62 @@ index 6734c15..a025595 100644
  
  void init_xwayland_ctx(uint32_t serverId, gamescope_xwayland_server_t *xwayland_server);
  void gamescope_set_selection(std::string contents, GamescopeSelection eSelection);
+diff --git a/src/wlserver.cpp b/src/wlserver.cpp
+index 9655dfd2..b1b816d2 100644
+--- a/src/wlserver.cpp
++++ b/src/wlserver.cpp
+@@ -1,3 +1,4 @@
++#include <shared_mutex>
+ #include <xkbcommon/xkbcommon-keysyms.h>
+ #define _GNU_SOURCE 1
+ 
+@@ -1235,7 +1236,8 @@ static void gamescope_control_display_sleep( struct wl_client *client, struct wl
+ }
+ 
+ extern gamescope::ConVar<bool> cv_overlay_unmultiplied_alpha;
+-extern std::atomic<std::shared_ptr<lut3d_t>> g_ColorMgmtLooks[EOTF_Count];
++extern std::shared_mutex g_ColorMgmtLooks_lock;
++extern std::shared_ptr<lut3d_t> g_ColorMgmtLooks[EOTF_Count];
+ 
+ static gamescope::ConCommand cc_set_look("set_look", "Set a look for a specific EOTF. Eg. set_look mylook.cube (g22 only), set_look pq mylook.cube, set_look mylook_g22.cube mylook_pq.cube",
+ []( std::span<std::string_view> args )
+@@ -1244,6 +1246,7 @@ static gamescope::ConCommand cc_set_look("set_look", "Set a look for a specific
+ 	{
+ 		std::string arg1 = std::string{ args[1] };
+ 		bool bRaisesBlackLevelFloor = false;
++		std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 		g_ColorMgmtLooks[ EOTF_Gamma22 ] = LoadCubeLut( arg1.c_str(), bRaisesBlackLevelFloor );
+ 		cv_overlay_unmultiplied_alpha = bRaisesBlackLevelFloor;
+ 		g_ColorMgmt.pending.externalDirtyCtr++;
+@@ -1253,6 +1256,7 @@ static gamescope::ConCommand cc_set_look("set_look", "Set a look for a specific
+ 	{
+ 		std::string arg2 = std::string{ args[2] };
+ 
++		std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 		bool bRaisesBlackLevelFloor = false;
+ 		if ( args[1] == "g22" || args[1] == "G22")
+ 		{
+@@ -1282,6 +1286,7 @@ static gamescope::ConCommand cc_set_look("set_look", "Set a look for a specific
+ 	}
+ 	else
+ 	{
++		std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 		cv_overlay_unmultiplied_alpha = false;
+ 		g_ColorMgmtLooks[ EOTF_Gamma22 ] = nullptr;
+ 		g_ColorMgmtLooks[ EOTF_PQ ] = nullptr;
+@@ -1331,6 +1336,7 @@ static void gamescope_control_set_look( struct wl_client *client, struct wl_reso
+ 		pq_fd = -1;
+ 	}
+ 
++	std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 	cv_overlay_unmultiplied_alpha = bRaisesBlackLevelFloor;
+ 	g_ColorMgmtLooks[ EOTF_Gamma22 ] = pG22LUT;
+ 	g_ColorMgmtLooks[ EOTF_PQ ] = pPQLUT;
+@@ -1341,6 +1347,7 @@ static void gamescope_control_set_look( struct wl_client *client, struct wl_reso
+ static void gamescope_control_unset_look( struct wl_client *client, struct wl_resource *resource )
+ {
+ 	cv_overlay_unmultiplied_alpha = false;
++	std::unique_lock lock(g_ColorMgmtLooks_lock);
+ 	g_ColorMgmtLooks[ EOTF_Gamma22 ] = nullptr;
+ 	g_ColorMgmtLooks[ EOTF_PQ ] = nullptr;
+ 	g_ColorMgmt.pending.externalDirtyCtr++;

@@ -1,0 +1,12 @@
+diff --git a/src/gallium/frontends/rusticl/meson.build b/src/gallium/frontends/rusticl/meson.build
+index e6d1cd4..3bff49e 100644
+--- a/src/gallium/frontends/rusticl/meson.build
++++ b/src/gallium/frontends/rusticl/meson.build
+@@ -194,6 +194,7 @@ rusticl_llvm_bindings_rs = rust.bindgen(
+   c_args : [
+     rusticl_bindgen_c_args,
+     pre_args,
++    '-D_LIBCPP___TYPE_TRAITS_ALIGNED_UNION_H',
+   ],
+   dependencies : [
+     dep_clang,

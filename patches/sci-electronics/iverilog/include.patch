@@ -1,0 +1,12 @@
+diff --git a/tgt-vhdl/stmt.cc b/tgt-vhdl/stmt.cc
+index 0971da7..464e2ea 100644
+--- a/tgt-vhdl/stmt.cc
++++ b/tgt-vhdl/stmt.cc
+@@ -29,6 +29,7 @@
+ #include <limits>
+ #include <set>
+ #include <algorithm>
++#include <iterator>
+ 
+ using namespace std;
+ 

@@ -1,0 +1,25 @@
+diff --git a/src/stc/scintilla/src/SplitVector.h b/src/stc/scintilla/src/SplitVector.h
+index 610d179..3b3353a 100644
+--- a/src/stc/scintilla/src/SplitVector.h
++++ b/src/stc/scintilla/src/SplitVector.h
+@@ -9,6 +9,8 @@
+ #ifndef SPLITVECTOR_H
+ #define SPLITVECTOR_H
+ 
++#include <algorithm>
++
+ #ifdef __GNUC__
+ #if __GNUC__ >= 13
+ #pragma GCC diagnostic push
+diff --git a/src/stc/scintilla/src/XPM.cxx b/src/stc/scintilla/src/XPM.cxx
+index 4841e4f..cadc6de 100644
+--- a/src/stc/scintilla/src/XPM.cxx
++++ b/src/stc/scintilla/src/XPM.cxx
+@@ -7,6 +7,7 @@
+ 
+ #include <stdlib.h>
+ #include <string.h>
++#include <algorithm>
+ 
+ #include <stdexcept>
+ #include <vector>

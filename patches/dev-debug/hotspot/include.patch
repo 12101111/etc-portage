@@ -1,0 +1,12 @@
+diff --git a/3rdparty/PrefixTickLabels/src/PrefixTickLabels.cpp b/3rdparty/PrefixTickLabels/src/PrefixTickLabels.cpp
+index b013f20..cf3e86d 100644
+--- a/3rdparty/PrefixTickLabels/src/PrefixTickLabels.cpp
++++ b/3rdparty/PrefixTickLabels/src/PrefixTickLabels.cpp
+@@ -1,6 +1,7 @@
+ #include "PrefixTickLabels.h"
+ 
+ #include <cmath>
++#include <vector>
+ 
+ namespace {
+ QString unitSpace()

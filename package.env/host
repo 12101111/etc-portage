@@ -31,6 +31,8 @@ llvm-core/flang j8 # 4G per process
 dev-qt/qtwebengine notmpfs j16
 app-editors/vscode notmpfs
 
+dev-lang/rust rustc
+
 dev-db/mongodb mongodb
 
 dev-db/sqlite ccache
@@ -40,7 +42,7 @@ games-emulation/yuzu ccache
 dev-util/electron ccache
 www-client/chromium ccache
 sci-electronics/verilator ccache
-llvm-core/llvm ccache
+llvm-core/llvm ccache debug
 sci-misc/llama-cpp ccache
 
 sci-libs/openblas test

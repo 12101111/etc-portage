@@ -6,3 +6,4 @@ cross_llvm-riscv64-unknown-linux-musl/compiler-rt cross_llvm-riscv64-unknown-lin
 cross_llvm-riscv64-unknown-linux-musl/compiler-rt cross_llvm-riscv64-unknown-linux-musl/llvm.conf
 cross_llvm-riscv64-unknown-linux-musl/clang-crossdev-wrappers cross_llvm-riscv64-unknown-linux-musl/clang-crossdev-wrappers.conf
 cross_llvm-riscv64-unknown-linux-musl/clang-crossdev-wrappers cross_llvm-riscv64-unknown-linux-musl/llvm.conf
+cross_llvm-riscv64-unknown-linux-musl/rust-std rustc

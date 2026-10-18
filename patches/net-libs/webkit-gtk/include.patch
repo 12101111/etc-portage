@@ -1,0 +1,12 @@
+diff --git a/Source/WebCore/platform/graphics/texmap/TextureMapperLayer3DRenderingContext.cpp b/Source/WebCore/platform/graphics/texmap/TextureMapperLayer3DRenderingContext.cpp
+index 9f88f7d..6833732 100644
+--- a/Source/WebCore/platform/graphics/texmap/TextureMapperLayer3DRenderingContext.cpp
++++ b/Source/WebCore/platform/graphics/texmap/TextureMapperLayer3DRenderingContext.cpp
+@@ -35,6 +35,7 @@
+ #include "TextureMapperGPUBuffer.h"
+ #include "TextureMapperLayer.h"
+ #include <numeric>
++#include <vector>
+ #include <wtf/TZoneMallocInlines.h>
+ 
+ namespace WebCore {

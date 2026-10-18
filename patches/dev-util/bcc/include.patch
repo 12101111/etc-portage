@@ -1,0 +1,25 @@
+diff --git a/src/cc/bcc_btf.cc b/src/cc/bcc_btf.cc
+index be24861..bfa120e 100644
+--- a/src/cc/bcc_btf.cc
++++ b/src/cc/bcc_btf.cc
+@@ -22,6 +22,8 @@
+ #include "bcc_libbpf_inc.h"
+ #include <vector>
+ #include <byteswap.h>
++#include <cerrno>
++#include <cstdlib>
+ 
+ #define BCC_MAX_ERRNO       4095
+ #define BCC_IS_ERR_VALUE(x) ((x) >= (unsigned long)-BCC_MAX_ERRNO)
+diff --git a/tests/cc/test_c_api.cc b/tests/cc/test_c_api.cc
+index 83cd30c..0277b71 100644
+--- a/tests/cc/test_c_api.cc
++++ b/tests/cc/test_c_api.cc
+@@ -25,6 +25,7 @@
+ #include <sys/types.h>
+ #include <sys/wait.h>
+ #include <unistd.h>
++#include <sched.h>
+ 
+ #include <cstdlib>
+ 

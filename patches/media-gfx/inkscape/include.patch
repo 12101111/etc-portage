@@ -12,3 +12,27 @@ index 2b17b09..1673711 100644
  
  /*
   * Do not change order of attributes and properties. Attribute and
+diff --git a/src/io/stream/gzipstream.cpp b/src/io/stream/gzipstream.cpp
+index d1aa760..952bebc 100644
+--- a/src/io/stream/gzipstream.cpp
++++ b/src/io/stream/gzipstream.cpp
+@@ -21,6 +21,7 @@
+ #include <cstdlib>
+ #include <cstring>
+ #include <string>
++#include <new>
+ 
+ namespace Inkscape
+ {
+diff --git a/src/util/longest-common-suffix.h b/src/util/longest-common-suffix.h
+index 1f7b228..ca8db76 100644
+--- a/src/util/longest-common-suffix.h
++++ b/src/util/longest-common-suffix.h
+@@ -13,6 +13,7 @@
+ #ifndef SEEN_INKSCAPE_ALGORITHMS_NEAREST_COMMON_ANCESTOR_H
+ #define SEEN_INKSCAPE_ALGORITHMS_NEAREST_COMMON_ANCESTOR_H
+ 
++#include <vector>
+ #include <iterator>
+ #include <functional>
+ 

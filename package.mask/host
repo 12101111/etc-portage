@@ -1,8 +1,4 @@
 */*::mv
 */*::pg_overlay
 */*::stuff
-
-dev-util/heaptrack::gentoo
-dev-dotnet/dotnet-sdk-bin::gentoo
-dev-dotnet/dotnet-sdk::gentoo
-<=dev-libs/capstone-6.0.0_alpha7:0/6
+*/*::pf4public

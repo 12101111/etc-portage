@@ -1,6 +1,5 @@
 dev-lang/luajit **
 dev-debug/lldb-mi **
-# dev-lang/rust::12101111-overlay **
-sys-fs/zfs::12101111-overlay **
 sci-misc/llama-cpp **
 <gui-apps/noctalia-9999 **
+<dev-lang/rust-9999 **

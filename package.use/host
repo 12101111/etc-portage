@@ -13,6 +13,8 @@ llvm-core/lldb debug
 llvm-core/polly debug
 llvm-core/flang debug
 llvm-core/mlir debug
+llvm-runtimes/compiler-rt-sanitizers -debug
+llvm-runtimes/flang-rt -debug
 llvm-runtimes/openmp fortran
 dev-lang/rust:9999 miri
 llvm-runtimes/compiler-rt-sanitizers asan cfi dfsan -gwp-asan -hwasan msan safestack scudo tsan ubsan xray libfuzzer profile
@@ -20,11 +22,15 @@ dev-java/openjdk gentoo-vm
 dev-lang/ghc doc ghcbootstrap elfutils
 llvm-core/clang-toolchain-symlinks gcc-symlinks
 dev-lang/python tail-call-interp
-*/* llvm_slot_22 -llvm_slot_21 -llvm_slot_20
+*/* llvm_slot_23 -llvm_slot_22 -llvm_slot_21 -llvm_slot_20 -llvm_slot_19 -llvm_slot_18
+dev-util/mesa_clc llvm_slot_22
+app-text/doxygen llvm_slot_22
+dev-util/perf llvm_slot_22
+media-libs/mesa llvm_slot_22
+<dev-qt/qttools-6.12.0 llvm_slot_22
 =dev-lang/zig-9999 llvm_slot_21
 =dev-lang/zig-0.15.2 llvm_slot_20
 =dev-lang/zig-0.16.0 llvm_slot_21
-dev-qt/qttools llvm_slot_21
 
 # Graphic
 media-libs/mesa vulkan lm-sensors libglvnd llvm vaapi unwind d3d9 osmesa vulkan-overlay zink opencl
@@ -34,15 +40,16 @@ x11-misc/picom dbus
 media-libs/freetype harfbuzz infinality
 gui-wm/sway wallpapers tray -swaylock fish-completion seatd
 gui-apps/waybar backlight niri network tray mpd wifi pulseaudio evdev experimental libinput logind mpris pipewire upower
+gui-wm/cage -X
 
 # Apps
 www-client/firefox wasm-sandbox hwaccel clang lto pgo system-png system-pipewire openh264
 mail-client/thunderbird hwaccel clang lto
 app-editors/emacs webp -jit pgtk gui xwidgets cairo dbus dynamic-loading gtk gfile gsettings harfbuzz json imagemagick libxml2 sound tiff toolkit-scroll-bars -X tree-sitter sqlite
 app-emacs/emacs-common gsettings
-app-editors/vim X python
 app-editors/zed -collab
-media-video/mpv archive cli drm libass opengl lua vaapi libmpv -vulkan lua_single_target_luajit
+app-editors/vim X python
+media-video/mpv -sdl archive cli drm libass opengl lua vaapi libmpv vulkan lua_single_target_luajit
 net-misc/remmina rdp vnc appindicator gnome-keyring spice ssh
 media-sound/mpd flac
 media-video/ffmpeg -vulkan dav1d fontconfig truetype openh264 xcb jpeg2k libaom libass libdrm openssl opus v4l mp3 webp x264 x265 vaapi vpx
@@ -66,7 +73,7 @@ www-client/uget aria2 libnotify openssl -gnutls
 mail-client/mutt gdbm mbox pop gpgme
 media-video/obs-studio -vlc lua v4l truetype pipewire fdk speex python lua_single_target_luajit -ssl
 dev-vcs/git perl keyring
-dev-util/perf zstd clang lzma libpfm -perl python libtraceevent libtracefs bpf -unwind capstone
+dev-util/perf zstd clang lzma libpfm -perl python libtraceevent libtracefs bpf -unwind -capstone
 dev-qt/qt-creator clang android autotools webassembly beautifier ctfvisualizer -doc glsl meson qmlprofiler serialterminal cmake git lsp perfprofiler python webengine
 app-shells/fish doc
 app-crypt/gnupg scd-shared-access 
@@ -89,19 +96,22 @@ www-client/luakit LUA_SINGLE_TARGET: luajit
 gnome-extra/nm-applet appindicator
 gui-apps/swaybg gdk-pixbuf
 games-util/mangohud gamescope mangoapp mangohudctl mangoplot
-games-wm/gamescope pipewire
+gui-wm/gamescope libei
 net-firewall/iptables nftables
 app-admin/sysstat lm-sensors
 games-emulation/yuzu sdl -system-vulkan webengine
 dev-debug/hotspot debuginfod rust
 dev-util/ghidra -lldb
 games-action/prismlauncher qt6
-gui-apps/rofi-wayland ime
+x11-misc/rofi ime
 dev-libs/libportal gtk
 sys-fs/android-file-transfer-linux gui
 x11-base/xwayland libei # kwin
 sci-misc/llama-cpp openblas
 www-apps/zola cjk
+sys-apps/kmscon freetype
+sys-apps/smartmontools daemon
+net-im/telegram-desktop webkit
 
 # VM / Emulator
 app-emulation/qemu udev zstd -jemalloc gtk usb usbredir spice virgl pin-upstream-blobs virtfs static-user slirp io-uring vte gnutls vhost-user-fs -plugins capstone fuse bpf nfs pipewire vde
@@ -116,7 +126,7 @@ games-emulation/dolphin ffmpeg upnp mgba egl sdl
 app-emulation/86Box new-dynarec vnc vde
 
 # System
-sys-kernel/linux-firmware savedconfig
+sys-kernel/linux-firmware savedconfig compress-zstd
 dev-lang/python sqlite tk jit # firefox
 sys-apps/busybox math syslog savedconfig static -pam
 app-portage/portage-bashrc-mv ccache
@@ -160,7 +170,7 @@ media-libs/libva utils
 app-i18n/fcitx-gtk -gtk2 gtk4
 dev-db/sqlite secure-delete # aria2[sqlite]
 dev-qt/qtwebchannel qml # zoom
-dev-qt/qtwebengine -screencast pdf jumbo-build widgets qml -system-icu
+dev-qt/qtwebengine pdf jumbo-build widgets qml -system-icu
 dev-qt/qtmultimedia gstreamer
 #app-arch/unzip natspec # GBK zip files
 app-crypt/gcr gtk
@@ -171,7 +181,7 @@ virtual/imagemagick-tools tiff
 app-text/poppler cairo # materia-theme
 sys-apps/dbus user-session # mako
 media-plugins/gst-plugins-meta vorbis ogg mp3 aac flac ffmpeg
-dev-libs/libdbusmenu gtk3
+dev-libs/libdbusmenu gtk3 -gtk # disable gtk2
 net-misc/curl http2 # rust
 media-libs/harfbuzz icu # tex electron
 app-text/poppler qt6 nss #okular
@@ -186,11 +196,11 @@ kde-apps/yakuake absolute-position
 dev-python/matplotlib gtk3 cairo qt6 -latex
 net-vpn/tor caps lzma zstd tor-hardening
 dev-qt/qtmultimedia widgets
-gui-libs/wlroots icccm x11-backend seatd tinywl liftoff xcb-errors lcms
-media-video/pipewire pulseaudio sdl aptx aac extra pipewire-alsa v4l
+gui-libs/wlroots icccm -x11-backend seatd tinywl liftoff xcb-errors lcms
+media-video/pipewire libcamera pulseaudio sdl aptx aac extra pipewire-alsa v4l
 media-libs/libtgvoip pulseaudio
 media-libs/tg_owt pulseaudio
-net-im/telegram-desktop -webkit -jemalloc pulseaudio lto  qt6 qt6-imageformats
+net-im/telegram-desktop -jemalloc pulseaudio lto  qt6 qt6-imageformats
 app-crypt/pinentry gnome-keyring gtk qt6
 media-libs/phonon gstreamer
 kde-frameworks/kitemmodels qml
@@ -201,7 +211,7 @@ net-wireless/blueman appindicator network
 dev-qt/qtquickcontrols2 widgets # yubikey-manager-qt
 net-libs/gnutls pkcs11
 dev-python/qtpy gui printsupport #jupyter
-media-libs/gegl cairo
+media-libs/gegl cairo -sdl
 media-libs/babl introspection lcms
 media-libs/gegl introspection lcms
 kde-apps/kio-extras mtp nfs samba
@@ -279,8 +289,10 @@ virtual/lapack index64
 sci-libs/lapack index64
 sys-apps/dtc python # uboot-tools
 sys-devel/mold mimalloc
-*/* perl_features_ithreads
 net-firewall/nftables json # podman
+app-editors/imhex -desktop-portal
+x11-base/xwayland libei # kwin
+dev-cpp/simdutf atomic-base64 # nodejs
 
 # Tex
 app-text/texlive cjk xetex graphics l10n_zh science truetype publishers extra luatex
@@ -303,7 +315,6 @@ app-editors/vim-core -nls
 net-misc/socat -tcpd
 dev-java/openjdk -javafx
 x11-themes/gtk-engines-murrine -themes
-sys-apps/smartmontools -daemon
 kde-frameworks/* -handbook
 kde-apps/* -handbook
 sys-apps/findutils -nls
@@ -329,6 +340,9 @@ app-arch/xz-utils -pgo
 kde-frameworks/kio:5 -kwallet
 media-video/pipewire -X
 gui-apps/noctalia -jemalloc
+dev-libs/libutf8proc -cjk
+sys-apps/pcsc-tools -gui
+dev-util/perf -gtk
 
 # chromium and electron
 media-libs/libvpx svc
@@ -338,5 +352,3 @@ app-editors/vscode savedconfig system-electron system-ripgrep builtin-extensions
 media-video/pipewire ffmpeg gstreamer sound-server
 dev-util/electron -system-allocator -libcxx gtk4 -system-png suid lto pgo hevc custom-cflags system-icu clang wayland pipewire
 www-client/chromium gtk4 hevc wayland lto custom-cflags pgo vaapi swiftshader vulkan official system-ffmpeg -system-png qt6 -rar
-
-app-i18n/opencc PYTHON_SINGLE_TARGET: python3_13 -python3_14

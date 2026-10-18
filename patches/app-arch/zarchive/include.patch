@@ -1,0 +1,12 @@
+diff --git a/src/zarchivewriter.cpp b/src/zarchivewriter.cpp
+index b4ee074..be3b103 100644
+--- a/src/zarchivewriter.cpp
++++ b/src/zarchivewriter.cpp
+@@ -4,6 +4,7 @@
+ #include <string>
+ #include <string_view>
+ #include <queue>
++#include <cstdlib>
+ 
+ #include <zstd.h>
+ 

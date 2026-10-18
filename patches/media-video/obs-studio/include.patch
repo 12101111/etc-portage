@@ -1,0 +1,43 @@
+diff --git a/frontend/OBSApp.cpp b/frontend/OBSApp.cpp
+index 0d6d0e2..4e38c23 100644
+--- a/frontend/OBSApp.cpp
++++ b/frontend/OBSApp.cpp
+@@ -48,9 +48,9 @@
+ #endif
+ 
+ #include <chrono>
++#include <sstream>
+ 
+ #ifdef _WIN32
+-#include <sstream>
+ #define WIN32_LEAN_AND_MEAN
+ #include <windows.h>
+ #else
+diff --git a/frontend/widgets/OBSBasic.cpp b/frontend/widgets/OBSBasic.cpp
+index b6f5445..68300d7 100644
+--- a/frontend/widgets/OBSBasic.cpp
++++ b/frontend/widgets/OBSBasic.cpp
+@@ -61,9 +61,7 @@
+ #include <QWidgetAction>
+ 
+ #include <mutex>
+-#ifdef _WIN32
+ #include <sstream>
+-#endif
+ #include <string>
+ #include <unordered_set>
+ 
+diff --git a/frontend/widgets/OBSBasic_MainControls.cpp b/frontend/widgets/OBSBasic_MainControls.cpp
+index 40b3aef..5f15029 100644
+--- a/frontend/widgets/OBSBasic_MainControls.cpp
++++ b/frontend/widgets/OBSBasic_MainControls.cpp
+@@ -50,9 +50,7 @@
+ #include <nlohmann/json.hpp>
+ #include <QDesktopServices>
+ 
+-#ifdef _WIN32
+ #include <sstream>
+-#endif
+ 
+ extern bool restart;
+ extern bool restart_safe;

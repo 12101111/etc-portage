@@ -13,3 +13,27 @@ index 5012b50..eb59dd0 100644
  #include <stdio.h>
  #include <stdlib.h>
  #include <string.h>
+diff --git a/vendor/adb/fdevent/fdevent.h b/vendor/adb/fdevent/fdevent.h
+index 61d5698..653d226 100644
+--- a/vendor/adb/fdevent/fdevent.h
++++ b/vendor/adb/fdevent/fdevent.h
+@@ -29,6 +29,7 @@
+ #include <optional>
+ #include <set>
+ #include <variant>
++#include <vector>
+ 
+ #include <android-base/thread_annotations.h>
+ #include <android-base/threads.h>
+diff --git a/vendor/core/fastboot/fastboot_driver_interface.h b/vendor/core/fastboot/fastboot_driver_interface.h
+index 9b04ade..f86aeee 100644
+--- a/vendor/core/fastboot/fastboot_driver_interface.h
++++ b/vendor/core/fastboot/fastboot_driver_interface.h
+@@ -18,6 +18,7 @@
+ #include <stdint.h>
+ 
+ #include <string>
++#include <vector>
+ 
+ #include <sparse/sparse.h>
+ #include "android-base/unique_fd.h"

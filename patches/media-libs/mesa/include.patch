@@ -1,0 +1,12 @@
+diff --git a/src/amd/compiler/aco_util.h b/src/amd/compiler/aco_util.h
+index 82d754f..f079a31 100644
+--- a/src/amd/compiler/aco_util.h
++++ b/src/amd/compiler/aco_util.h
+@@ -22,6 +22,7 @@
+ #include <type_traits>
+ #include <unordered_map>
+ #include <unordered_set>
++#include <algorithm>
+ 
+ namespace aco {
+ 

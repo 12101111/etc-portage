@@ -1,0 +1,12 @@
+diff --git a/gtk3/utils.h b/gtk3/utils.h
+index 6caf408..38587df 100644
+--- a/gtk3/utils.h
++++ b/gtk3/utils.h
+@@ -12,6 +12,7 @@
+ #include <glib-object.h>
+ #include <memory>
+ #include <utility>
++#include <cstdlib>
+ 
+ namespace fcitx::gtk {
+ 

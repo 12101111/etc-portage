@@ -1,0 +1,12 @@
+diff --git a/src/roff/troff/env.cpp b/src/roff/troff/env.cpp
+index 90880c3..7545d52 100644
+--- a/src/roff/troff/env.cpp
++++ b/src/roff/troff/env.cpp
+@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
+ 
+ #include <vector>
+ #include <algorithm> // find()
++#include <stdlib.h>
+ 
+ #include "troff.h"
+ #include "dictionary.h"

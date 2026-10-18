@@ -1,0 +1,12 @@
+diff --git a/tesseract/src/arch/simddetect.cpp b/tesseract/src/arch/simddetect.cpp
+index 81d7c07..ab437a5 100644
+--- a/tesseract/src/arch/simddetect.cpp
++++ b/tesseract/src/arch/simddetect.cpp
+@@ -24,6 +24,7 @@
+ #include "params.h"        // for STRING_VAR
+ #include "simddetect.h"
+ #include "tprintf.h" // for tprintf
++#include <cstdlib>
+ 
+ #if !defined(__clang__) && defined(__GNUC__) && (__GNUC__ < 12)
+ // The GNU compiler g++ fails to compile with the Accelerate framework

@@ -1,0 +1,24 @@
+diff --git a/src/FileFinder.cpp b/src/FileFinder.cpp
+index 9ba1443..8c3bc67 100644
+--- a/src/FileFinder.cpp
++++ b/src/FileFinder.cpp
+@@ -26,6 +26,7 @@
+ 	extern "C" {
+ 	#endif
+ 		#include <kpathsea/kpathsea.h>
++		#undef isblank
+ 	#ifdef KPSE_CXX_UNSAFE
+ 	}
+ 	#endif
+diff --git a/src/PDFParser.cpp b/src/PDFParser.cpp
+index 7d604a4..fa604e6 100644
+--- a/src/PDFParser.cpp
++++ b/src/PDFParser.cpp
+@@ -23,6 +23,7 @@
+ #include <ostream>
+ #include <sstream>
+ #include <stdexcept>
++#include <iterator>
+ #include "InputReader.hpp"
+ #include "PDFParser.hpp"
+ #include "utility.hpp"

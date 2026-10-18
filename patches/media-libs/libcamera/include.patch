@@ -1,0 +1,12 @@
+diff --git a/include/libcamera/internal/process.h b/include/libcamera/internal/process.h
+index 27d4b92..e306dd3 100644
+--- a/include/libcamera/internal/process.h
++++ b/include/libcamera/internal/process.h
+@@ -8,6 +8,7 @@
+ #pragma once
+ 
+ #include <string>
++#include <sys/types.h>
+ 
+ #include <libcamera/base/class.h>
+ #include <libcamera/base/signal.h>

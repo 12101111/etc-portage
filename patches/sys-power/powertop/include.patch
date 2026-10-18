@@ -1,0 +1,12 @@
+diff --git a/src/lib.h b/src/lib.h
+index 6d85eb6..62d297e 100644
+--- a/src/lib.h
++++ b/src/lib.h
+@@ -25,6 +25,7 @@
+ #ifndef INCLUDE_GUARD_LIB_H
+ #define INCLUDE_GUARD_LIB_H
+ 
++#include <new>
+ #include <libintl.h>
+ #include <stdint.h>
+ #include <stdlib.h>
